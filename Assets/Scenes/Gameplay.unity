@@ -158,7 +158,7 @@ MonoBehaviour:
   minDamage: 1
   maxDamage: 10
   minSpawnInterval: 0.05
-  maxSpawnInterval: 1
+  maxSpawnInterval: 0.6
   spikeFrequency: 30
   spawnInterval: 2
   elevation: 1
@@ -539,7 +539,7 @@ GameObject:
   - component: {fileID: 951167559}
   m_Layer: 0
   m_Name: wall_L (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -553,8 +553,8 @@ Transform:
   m_GameObject: {fileID: 951167557}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 0}
-  m_LocalScale: {x: 0.4335, y: 1, z: 10.0142}
+  m_LocalPosition: {x: 5, y: 2, z: 0}
+  m_LocalScale: {x: 0.4335, y: 4, z: 10.0142}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1334536357}
@@ -649,7 +649,7 @@ GameObject:
   - component: {fileID: 1222108323}
   m_Layer: 0
   m_Name: wall_L (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -663,8 +663,8 @@ Transform:
   m_GameObject: {fileID: 1222108321}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
-  m_LocalScale: {x: 0.4335, y: 1, z: 10.0142}
+  m_LocalPosition: {x: 0, y: 2, z: -5}
+  m_LocalScale: {x: 0.4335, y: 4, z: 10.0142}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1334536357}
@@ -873,7 +873,7 @@ GameObject:
   - component: {fileID: 1512924983}
   m_Layer: 0
   m_Name: wall_L (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -887,8 +887,8 @@ Transform:
   m_GameObject: {fileID: 1512924981}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
-  m_LocalScale: {x: 0.4335, y: 1, z: 10.0142}
+  m_LocalPosition: {x: 0, y: 2, z: 5}
+  m_LocalScale: {x: 0.4335, y: 4, z: 10.0142}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1334536357}
@@ -978,7 +978,7 @@ GameObject:
   - component: {fileID: 1642443445}
   m_Layer: 0
   m_Name: wall_L
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -992,8 +992,8 @@ Transform:
   m_GameObject: {fileID: 1642443443}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 0, z: 0}
-  m_LocalScale: {x: 0.4335, y: 1, z: 10.0142}
+  m_LocalPosition: {x: -5, y: 2, z: 0}
+  m_LocalScale: {x: 0.4335, y: 4, z: 10.0142}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1334536357}
