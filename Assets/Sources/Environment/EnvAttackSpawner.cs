@@ -5,7 +5,7 @@ using CDreyer;
 using Sources.Enemy;
 using UnityEngine;
 
-public class EnvironmentAttack : Spawner<EnvAreaAttack>
+public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 {
     private Vector3[] randomPositions;
 

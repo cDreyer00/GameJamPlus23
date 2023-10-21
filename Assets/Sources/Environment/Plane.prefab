@@ -447,11 +447,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd54f4c692d3dcc468c54d8121187213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  difficultySpike: 0
+  minInstanceCount: 3
   maxInstanceCount: 10
+  minDamage: 1
+  maxDamage: 10
+  minSpawnInterval: 0.1
+  maxSpawnInterval: 1
+  spikeFrequency: 30
   spawnInterval: 3
   elevation: 0.1
   instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
-  mr: {fileID: 6093873769978811990}
+  mr: {fileID: 0}
 --- !u!1 &8316622404697592657
 GameObject:
   m_ObjectHideFlags: 0

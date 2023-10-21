@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4535385451199531282}
   - component: {fileID: 5638384850566437663}
   - component: {fileID: 6149097040413329676}
-  - component: {fileID: 9023559400280563692}
   m_Layer: 0
   m_Name: Raycastable_plane
   m_TagString: Untagged
@@ -107,20 +106,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &9023559400280563692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8841493622060863123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd54f4c692d3dcc468c54d8121187213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxInstanceCount: 10
-  spawnInterval: 3
-  elevation: 0.1
-  instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
-  mr: {fileID: 0}
