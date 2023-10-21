@@ -9,6 +9,7 @@ public class EnvironmentAttack : Spawner<EnvAreaAttack>
 {
     public override void OnAfterSpawn(EnvAreaAttack instance)
     {
+        print("Spawned");
         instance.Init();
     }
 }

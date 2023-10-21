@@ -12,7 +12,15 @@ namespace Sources.Enemy
 {
     public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
     {
+        public float difficultySpike;
+        
+        public int minInstanceCount = 1;
         public int maxInstanceCount = 10;
+        public int minDamage = 1;
+        public int maxDamage = 10;
+        public float minSpawnInterval = 0.1f;
+        public float maxSpawnInterval = 1f;
+        public float spikeFrequency = 60f;
         public float spawnInterval = 1f;
 
         public float elevation = 1;
@@ -44,11 +52,11 @@ namespace Sources.Enemy
                 }
 
                 yield return Helpers.GetWait(spawnInterval);
-                SpawnEnemy();
+                SpawnInstance();
             }
         }
 
-        private void SpawnEnemy()
+        private void SpawnInstance()
         {
             float randX = UnityEngine.Random.Range(mr.bounds.max.x, mr.bounds.min.x);
             float randZ = UnityEngine.Random.Range(mr.bounds.max.z, mr.bounds.min.z);
@@ -59,9 +67,16 @@ namespace Sources.Enemy
             OnAfterSpawn(instance);
         }
 
-        protected virtual void Update()
+        private void Update()
         {
+            float spike = GetDifficultySpike();
+            spawnInterval = Mathf.Clamp(1 - spike / 10, minSpawnInterval, maxSpawnInterval);
+            maxInstanceCount = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
+        }
 
+        public float GetDifficultySpike()
+        {
+            return difficultySpike = Time.time / spikeFrequency;
         }
 
         public abstract void OnAfterSpawn(T instance);
