@@ -14,8 +14,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] Camera cam;
 
-    Vector3 mouseDelta = Vector3.zero;
-    Vector3 lastMousePos = Vector3.zero;
     float curDelay;
 
     private void Awake()
@@ -33,21 +31,21 @@ public class PlayerController : MonoBehaviour
                 Shoot();
                 curDelay = 0;
             }
-
-            lastMousePos = Vector3.zero;
         }
 
         if (Input.GetMouseButton(0))
-        {
             Rotate();
-        }
     }
 
     void Rotate()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 100))
-            transform.LookAt(hit.point, Vector3.up);
+        {
+            Vector3 lookAtPos = hit.point;
+            lookAtPos.y = rotTf.position.y;
+            rotTf.LookAt(lookAtPos, Vector3.up);
+        }
     }
 
     void Shoot()
