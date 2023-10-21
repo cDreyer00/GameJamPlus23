@@ -29,23 +29,23 @@ public class PlayerController : MonoBehaviour
         // Debug.DrawLine(transform.position, Forward, color);
     }
 
-    // void Rotate()
-    // {
-    //     if (lastMousePos == Vector3.zero)
-    //         lastMousePos = Input.mousePosition;
-
-    //     mouseDelta = Input.mousePosition - lastMousePos;
-    //     rotTf.transform.eulerAngles += Vector3.up * mouseDelta.x;
-
-    //     lastMousePos = Input.mousePosition;
-    // }
-
-
     void Rotate()
     {
-        Vector3 mousePostToWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        rotTf.transform.LookAt(mousePostToWorld, Vector3.forward);
+        if (lastMousePos == Vector3.zero)
+            lastMousePos = Input.mousePosition;
+
+        mouseDelta = Input.mousePosition - lastMousePos;
+        rotTf.transform.eulerAngles += Vector3.up * mouseDelta.x;
+
+        lastMousePos = Input.mousePosition;
     }
+
+
+    // void Rotate()
+    // {
+    //     Vector3 mousePostToWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //     rotTf.transform.LookAt(mousePostToWorld, Vector3.forward);
+    // }
 
     void Shoot()
     {
