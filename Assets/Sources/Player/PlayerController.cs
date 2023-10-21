@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject model;
     [SerializeField] Projectile projPrefab;
-    [SerializeField] Transform rotTf;
+    [SerializeField] Transform anchor;
     [SerializeField] float dashForce = 3;
     [SerializeField] float shootDelay = 1.3f;
     [SerializeField] Rigidbody rb;
@@ -43,14 +43,14 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, 100))
         {
             Vector3 lookAtPos = hit.point;
-            lookAtPos.y = rotTf.position.y;
-            rotTf.LookAt(lookAtPos, Vector3.up);
+            lookAtPos.y = anchor.position.y;
+            anchor.LookAt(lookAtPos, Vector3.up);
         }
     }
 
     void Shoot()
     {
-        Projectile proj = Instantiate(projPrefab, transform.position, rotTf.rotation);
+        Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
         Dash(-proj.transform.forward);
     }
 
