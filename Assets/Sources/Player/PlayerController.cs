@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour, IPlayer
         PowerBar.Instance.onPowerChanged += OnPowerChanged;
         cam = CameraController.Instance.Cam;
         baseDrag = rb.drag;
+
+        GameManager.Instance.RegisterPlayer(this);
     }
 
     void Update()

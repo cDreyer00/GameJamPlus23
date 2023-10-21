@@ -14,12 +14,10 @@ public sealed class EnemySpawner : Spawner<EnemyMono>
     public int minDamage = 1;
     public int maxDamage = 10;
 
-    [SerializeField] private PlayerController target;
-
     public override void OnAfterSpawn(EnemyMono instance)
     {
         instance.OnDied += () => instances.Remove(instance);
-        instance.target = target;
+        instance.target = GameManager.Instance.Player;
         float spike = GetDifficultySpike();
         instance.powerScore = Mathf.Clamp((int)(spike * 10), 1, 10);
         instance.damage = Mathf.Clamp((int)(spike * maxDamage), minDamage, maxDamage);
