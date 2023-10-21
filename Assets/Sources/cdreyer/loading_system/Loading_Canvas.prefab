@@ -272,7 +272,7 @@ MonoBehaviour:
   fade: {fileID: 2977994819385251691}
   fadeTimer: 0.3
   loadingPanel: {fileID: 2416358954227153649}
-  loadingOnAwake: 1
+  loadingOnAwake: 0
 --- !u!1 &6395120967675792974
 GameObject:
   m_ObjectHideFlags: 0

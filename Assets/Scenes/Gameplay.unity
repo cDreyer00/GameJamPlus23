@@ -259,13 +259,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2416358954227153649, guid: 2831cbb9b4406bc47be0a95fba3bce0e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4123601805382014581, guid: 2831cbb9b4406bc47be0a95fba3bce0e, type: 3}
+      propertyPath: loadingOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812227757815801147, guid: 2831cbb9b4406bc47be0a95fba3bce0e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6064522050829293574, guid: 2831cbb9b4406bc47be0a95fba3bce0e, type: 3}
       propertyPath: m_Name
       value: Loading_Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 6064522050829293574, guid: 2831cbb9b4406bc47be0a95fba3bce0e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -748,11 +760,11 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 705507995}
-  - {fileID: 483093717}
-  - {fileID: 1334536357}
-  - {fileID: 2069724834106283427}
-  - {fileID: 231675863}
-  - {fileID: 4674151972180916947}
-  - {fileID: 761285154}
   - {fileID: 4610102325873806883}
+  - {fileID: 761285154}
+  - {fileID: 4674151972180916947}
+  - {fileID: 2069724834106283427}
+  - {fileID: 483093717}
+  - {fileID: 705507995}
+  - {fileID: 1334536357}
+  - {fileID: 231675863}
