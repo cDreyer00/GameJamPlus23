@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Sources.Enemy;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public sealed class EnemySpawner : Spawner<EnemyMono>
 {
-    public float difficultySpike;
-    
-    public int minEnemyCount = 1;
-    public int maxEnemyCount = 10;
-    public float minSpawnInterval = 0.1f;
-    public float maxSpawnInterval = 1f;
-    public int minDamage = 1;
-    public int maxDamage = 10;
+    public float minSpeed = 1f;
+    public float maxSpeed = 10f;
 
     public override void OnAfterSpawn(EnemyMono instance)
     {
@@ -21,18 +16,7 @@ public sealed class EnemySpawner : Spawner<EnemyMono>
         float spike = GetDifficultySpike();
         instance.powerScore = Mathf.Clamp((int)(spike * 10), 1, 10);
         instance.damage = Mathf.Clamp((int)(spike * maxDamage), minDamage, maxDamage);
+        var agent = instance.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent.speed = Mathf.Clamp(spike * maxSpeed, minSpeed, maxSpeed);
     }
-
-    public float GetDifficultySpike()
-    {
-        return difficultySpike = Time.time / 60;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        float spike = GetDifficultySpike();
-        spawnInterval = Mathf.Clamp(1 - spike / 10, minSpawnInterval, maxSpawnInterval);
-        maxInstanceCount = Mathf.Clamp((int)(spike * maxEnemyCount), minEnemyCount, maxEnemyCount);
-    }
-}
+}  
