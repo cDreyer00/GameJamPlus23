@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +14,7 @@ public class CameraController : Singleton<CameraController>
     Vector3 curEuler = Vector3.zero;
 
     public Camera Cam => cam;
-    
+
     public void RotateLeft()
     {
         curEuler += Vector3.up * 90;
@@ -30,12 +29,9 @@ public class CameraController : Singleton<CameraController>
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
     }
 
-    private void Update()
+    public void SetRotation(int rotId)
     {
-        var ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out var hit))
-        {
-            if (hit.transform.
-        }
+        curEuler = new(0, 90 * rotId, 0);
+        camAnchor.DOLocalRotate(curEuler, rotDuration, rotateMode);
     }
 }
