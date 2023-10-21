@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sources.Enemy;
+using Sources.Player;
 using UnityEngine;
 
 public sealed class EnemySpawner : Spawner<EnemyMono>

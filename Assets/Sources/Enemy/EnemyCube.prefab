@@ -132,6 +132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerScore: 4
+  damage: 10
+  attackDelay: 1.19
+  agent: {fileID: 0}
   health: 10
 --- !u!54 &1516845875696123519
 Rigidbody:

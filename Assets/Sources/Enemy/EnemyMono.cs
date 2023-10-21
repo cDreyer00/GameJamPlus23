@@ -8,6 +8,10 @@ namespace Sources.Enemy
     {
         public static int nextId;
         public int powerScore = 1;
+        public int damage = 1;
+        public float attackDelay = 1f;
+        float curDelay;
+        bool canAttack = true;
         public int Identifier { get; private set; }
 
         [SerializeField] private NavMeshAgent agent;
@@ -33,6 +37,16 @@ namespace Sources.Enemy
 
         private void Update()
         {
+            if (!canAttack)
+            {
+                curDelay += Time.deltaTime;
+                if (curDelay >= attackDelay)
+                {
+                    canAttack = true;
+                    curDelay = 0;
+                }
+            }
+
             agent.SetDestination(target.Pos);
         }
 
@@ -46,6 +60,15 @@ namespace Sources.Enemy
                 OnDied?.Invoke();
                 PowerBar.Instance.UpdatePower(powerScore);
             }
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (!canAttack) return;
+            
+            var player = other.gameObject.GetComponent<IPlayer>();
+            player?.TakeDamage(damage);
+            canAttack = false;
         }
     }
 }

@@ -14,6 +14,7 @@ public class PowerBar : Singleton<PowerBar>
     [SerializeField] float power = 0;
     [SerializeField] int powerLevel = 0;
 
+    public float Power => power;
     public event Action<PowerBarEventArgs> onPowerChanged;
 
     public int DiscretePowerLevel()

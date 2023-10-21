@@ -17,13 +17,13 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.R))
             ReloadScene();
-
     }
 
     public void ReloadScene()
     {
         LoadingManager.Instance.FadeIn(() =>
-                        LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY)
-                    );
+        {
+            LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
+        });
     }
 }
