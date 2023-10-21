@@ -84,4 +84,10 @@ public class PlayerController : MonoBehaviour, IPlayer
     {
 
     }
+
+    void OnCollisionEnter()
+    {
+        
+    }
+
 }
