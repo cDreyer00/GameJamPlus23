@@ -14,7 +14,7 @@ public class CameraController : Singleton<CameraController>
     Vector3 curEuler = Vector3.zero;
 
     public Camera Cam => cam;
-    
+
     public void RotateLeft()
     {
         curEuler += Vector3.up * 90;
@@ -27,5 +27,11 @@ public class CameraController : Singleton<CameraController>
         curEuler += Vector3.down * 90;
         Vector3 endValue = new(0, curEuler.y, 0);
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
+    }
+
+    public void SetRotation(int rotId)
+    {
+        curEuler = new(0, 90 * rotId, 0);
+        camAnchor.DOLocalRotate(curEuler, rotDuration, rotateMode);
     }
 }

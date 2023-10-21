@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public IPlayer Player {get; private set;}
+    public IPlayer Player { get; private set; }
     public void RegisterPlayer(IPlayer p) => Player = p;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
@@ -20,6 +20,15 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.R))
             ReloadScene();
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            CameraController.Instance.SetRotation(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            CameraController.Instance.SetRotation(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            CameraController.Instance.SetRotation(2);
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            CameraController.Instance.SetRotation(3);
     }
 
     public void ReloadScene()
