@@ -124,7 +124,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5129084880681926588}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 304af8b0ab228f543bb8d482422b23ad, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -189,10 +189,10 @@ MonoBehaviour:
   model: {fileID: 431440245209478586}
   projPrefab: {fileID: 3364622944419438653, guid: 60c1de177ea8327488190c0b31cb34c6, type: 3}
   anchor: {fileID: 2030193239284623269}
+  rb: {fileID: 2799235822207906874}
   dashForce: 6
   shootDelay: 1.3
-  rb: {fileID: 2799235822207906874}
-  cam: {fileID: 0}
+  shootDelayDelta: 0.15
 --- !u!54 &2799235822207906874
 Rigidbody:
   m_ObjectHideFlags: 0
