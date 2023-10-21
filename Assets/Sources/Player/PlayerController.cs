@@ -29,15 +29,22 @@ public class PlayerController : MonoBehaviour
         // Debug.DrawLine(transform.position, Forward, color);
     }
 
+    // void Rotate()
+    // {
+    //     if (lastMousePos == Vector3.zero)
+    //         lastMousePos = Input.mousePosition;
+
+    //     mouseDelta = Input.mousePosition - lastMousePos;
+    //     rotTf.transform.eulerAngles += Vector3.up * mouseDelta.x;
+
+    //     lastMousePos = Input.mousePosition;
+    // }
+
+
     void Rotate()
     {
-        if (lastMousePos == Vector3.zero)
-            lastMousePos = Input.mousePosition;
-
-        mouseDelta = Input.mousePosition - lastMousePos;
-        rotTf.transform.eulerAngles += Vector3.up * mouseDelta.x;
-
-        lastMousePos = Input.mousePosition;
+        Vector3 mousePostToWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        rotTf.transform.LookAt(mousePostToWorld, Vector3.forward);
     }
 
     void Shoot()
@@ -48,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
     void Dash(Vector3 dir)
     {
+        rb.velocity = Vector3.zero;
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
 }
