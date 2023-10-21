@@ -7,9 +7,9 @@ public class GameManager : Singleton<GameManager>
 {
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
             CameraController.Instance.RotateLeft();
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.E))
             CameraController.Instance.RotateRight();
 
         if (Input.GetKeyDown(KeyCode.R))

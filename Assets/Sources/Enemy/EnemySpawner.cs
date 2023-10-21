@@ -5,9 +5,11 @@ using UnityEngine;
 
 public sealed class EnemySpawner : Spawner<EnemyMono>
 {
+    [SerializeField] private PlayerController target;
+    
     public override void OnAfterSpawn(EnemyMono instance)
     {
-        var enemy = instance.GetComponent<IEnemy>();
-        enemy.OnDied += () => base.instances.Remove(instance);
+        instance.OnDied += () => instances.Remove(instance);
+        instance.target = target;
     }
 }
