@@ -5,7 +5,8 @@ namespace Sources.Enemy
 {
     public class EnemyMono : MonoBehaviour, IEnemy
     {
-        public static int NextId;
+        public static int nextId;
+        public int powerScore = 1;
         public int Identifier { get; private set; }
 
         public event Action OnDied;
@@ -20,7 +21,7 @@ namespace Sources.Enemy
 
         private void Awake()
         {
-            Identifier = NextId++;
+            Identifier = nextId++;
         }
 
 
@@ -32,6 +33,7 @@ namespace Sources.Enemy
             {
                 Destroy(gameObject);
                 OnDied?.Invoke();
+                PowerBar.Instance.AddPower(powerScore);
             }
         }
     }
