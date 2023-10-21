@@ -10,20 +10,20 @@ using Random = System.Random;
 
 namespace Sources.Enemy
 {
-    public abstract class Spawner : MonoBehaviour
+    public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
     {
         public int maxInstanceCount = 10;
         public float spawnInterval = 1f;
 
         public float elevation = 1;
 
-        public GameObject instancePrefab;
+        public T instancePrefab;
 
-        protected List<GameObject> instances;
+        protected List<T> instances;
 
         private void Awake()
         {
-            instances = new List<GameObject>();
+            instances = new List<T>();
         }
 
         private void Start()
@@ -52,11 +52,11 @@ namespace Sources.Enemy
             int randZ = UnityEngine.Random.Range(-10, 10);
             var randomPosition = new Vector3(randX, elevation, randZ);
             var newPoint = transform.position + randomPosition;
-            var instance = Instantiate(instancePrefab, newPoint, Quaternion.identity);
+            T instance = Instantiate(instancePrefab, newPoint, Quaternion.identity);
             instances.Add(instance);
             OnAfterSpawn(instance);
         }
 
-        public abstract void OnAfterSpawn(GameObject instance);
+        public abstract void OnAfterSpawn(T instance);
     }
 }

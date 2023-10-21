@@ -24,9 +24,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
             Rotate();
-
-        // Color color = Color.red;
-        // Debug.DrawLine(transform.position, Forward, color);
     }
 
     void Rotate()
@@ -39,7 +36,6 @@ public class PlayerController : MonoBehaviour
 
         lastMousePos = Input.mousePosition;
     }
-
 
     // void Rotate()
     // {
