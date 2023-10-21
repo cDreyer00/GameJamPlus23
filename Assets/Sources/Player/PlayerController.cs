@@ -6,6 +6,10 @@ using CDreyer;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject model;
+    [SerializeField] Projectile projPrefab;
+    [SerializeField] Transform rotTf;
+    [SerializeField] float dashForce = 3;
+    [SerializeField] Rigidbody rb;
 
     Vector3 mouseDelta = Vector3.zero;
     Vector3 lastMousePos = Vector3.zero;
@@ -20,22 +24,30 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
             Rotate();
+
+        // Color color = Color.red;
+        // Debug.DrawLine(transform.position, Forward, color);
     }
 
     void Rotate()
     {
         if (lastMousePos == Vector3.zero)
             lastMousePos = Input.mousePosition;
-            
+
         mouseDelta = Input.mousePosition - lastMousePos;
-        GameLogger.Log(mouseDelta.x);
-        model.transform.eulerAngles += Vector3.up * mouseDelta.x;
+        rotTf.transform.eulerAngles += Vector3.up * mouseDelta.x;
 
         lastMousePos = Input.mousePosition;
     }
 
     void Shoot()
     {
+        Projectile proj = Instantiate(projPrefab, transform.position, rotTf.rotation);
+        Dash(-proj.transform.forward);
+    }
 
+    void Dash(Vector3 dir)
+    {
+        rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
 }
