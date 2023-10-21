@@ -13,15 +13,6 @@ public class CameraController : Singleton<CameraController>
 
     Vector3 curEuler = Vector3.zero;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-            RotateLeft();
-        if (Input.GetKeyDown(KeyCode.D))
-            RotateRight();
-    }
-
-    [ContextMenu("Rotate left")]
     public void RotateLeft()
     {
         curEuler += Vector3.up * 90;
@@ -29,7 +20,6 @@ public class CameraController : Singleton<CameraController>
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
     }
 
-    [ContextMenu("Rotate Right")]
     public void RotateRight()
     {
         curEuler += Vector3.down * 90;

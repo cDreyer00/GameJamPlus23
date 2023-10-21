@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CDreyer;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPlayer
 {
     [SerializeField] GameObject model;
     [SerializeField] Projectile projPrefab;
@@ -58,5 +58,10 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = Vector3.zero;
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        throw new NotImplementedException();
     }
 }
