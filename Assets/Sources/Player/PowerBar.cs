@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using CDreyer;
 using UnityEngine;
-using Unity.UI;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PowerBar : Singleton<PowerBar>
