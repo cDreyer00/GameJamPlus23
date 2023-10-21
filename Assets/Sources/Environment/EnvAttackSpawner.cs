@@ -7,12 +7,9 @@ using UnityEngine;
 
 public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 {
-    private Vector3[] randomPositions;
-
     protected override void Awake()
     {
         base.Awake();
-        randomPositions = new Vector3[10];
     }
 
     public override void OnAfterSpawn(EnvAreaAttack instance)
@@ -29,33 +26,16 @@ public class EnvAttackSpawner : Spawner<EnvAreaAttack>
         return randomPosition;
     }
 
-    void GetRandomPositions(Vector3[] positions)
+    Vector3 GetRandomPositionAroundOrigin(Vector3 origin, float radius)
     {
-        for (int i = 0; i < positions.Length; i++)
-        {
-            positions[i] = GetRandomPosition();
-        }
+        var randomPosition = Random.insideUnitSphere * radius;
+        randomPosition += origin;
+        randomPosition.y = elevation;
+        return randomPosition;
     }
-
     protected override void SpawnInstance()
     {
-        float closeToPLayerBias = 0.7f;
-        float rand = Random.Range(0f, 1f);
-        GetRandomPositions(randomPositions);
-        Vector3 vec;
-        if (rand < closeToPLayerBias)
-        {
-            var closest = randomPositions
-                .OrderBy(p => Vector3.Distance(p, GameManager.Instance.Player.Pos))
-                .First();
-            vec = closest;
-        }
-        else
-        {
-            var first = randomPositions.First();
-            vec = first;
-        }
-        
+        var vec = GetRandomPositionAroundOrigin(transform.position, 10f);
         var instance = Instantiate(instancePrefab, vec, Quaternion.identity);
         instances.Add(instance);
         OnAfterSpawn(instance);
