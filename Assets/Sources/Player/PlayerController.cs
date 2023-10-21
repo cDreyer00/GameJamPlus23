@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour, IPlayer
     public void TakeDamage(int amount)
     {
         float power = PowerBar.Instance.Power;
-        if (power <= 0 && amount > 0)
+        if (power <= 0)
         {
             GameManager.Instance.ReloadScene();
             return;
