@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Sources.Player
 {
@@ -12,10 +13,12 @@ namespace Sources.Player
         [SerializeField] float dashForce = 3;
         [SerializeField] float shootDelay = 1.3f;
         [SerializeField] float shootDelayDelta = 0.15f;
+        [SerializeField] float breakDrag = 5f;
 
         Camera cam;
         float initShootDelay;
         float curDelay;
+        float baseDrag;
 
         public Vector3 Pos => transform.position;
 
@@ -28,6 +31,7 @@ namespace Sources.Player
         {
             PowerBar.Instance.onPowerChanged += OnPowerChanged;
             cam = CameraController.Instance.Cam;
+            baseDrag = rb.drag;
         }
 
         void Update()
@@ -47,6 +51,15 @@ namespace Sources.Player
 
             if (transform.position.y <= -1)
                 GameManager.Instance.ReloadScene();
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                rb.drag = baseDrag * breakDrag;
+            }
+            else
+            {
+                rb.drag = baseDrag;
+            }
         }
 
         void Rotate()
@@ -85,6 +98,7 @@ namespace Sources.Player
                 GameManager.Instance.ReloadScene();
                 return;
             }
+
             PowerBar.Instance.UpdatePower(-amount);
         }
     }

@@ -133,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerScore: 4
   damage: 10
-  attackDelay: 1.19
+  attackDelay: 0.5
   agent: {fileID: 0}
   health: 10
 --- !u!54 &1516845875696123519
@@ -170,7 +170,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6089110235842682470}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 304af8b0ab228f543bb8d482422b23ad, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -196,7 +196,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

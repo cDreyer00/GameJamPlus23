@@ -62,7 +62,7 @@ namespace Sources.Enemy
             }
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnCollisionStay(Collision other)
         {
             if (!canAttack) return;
             
