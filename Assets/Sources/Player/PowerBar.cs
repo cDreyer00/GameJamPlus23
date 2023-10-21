@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using CDreyer;
 using UnityEngine;
-using Unity.UI;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PowerBar : Singleton<PowerBar>
@@ -16,6 +14,7 @@ public class PowerBar : Singleton<PowerBar>
     [SerializeField] float power = 0;
     [SerializeField] int powerLevel = 0;
 
+    public float Power => power;
     public event Action<PowerBarEventArgs> onPowerChanged;
 
     public int DiscretePowerLevel()

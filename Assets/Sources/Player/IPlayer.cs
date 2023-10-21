@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IPlayer
 {
+    Vector3 Pos { get; }
     void TakeDamage(int amount);
 }

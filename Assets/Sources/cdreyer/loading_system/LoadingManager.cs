@@ -105,7 +105,6 @@ namespace CDreyer
 
     public enum SceneType
     {
-        MAIN_MENU = 0,
-        GAMEPLAY = 1
+        GAMEPLAY = 0
     }
 }

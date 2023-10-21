@@ -5,22 +5,25 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
+    bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (RotateLeft)
             CameraController.Instance.RotateLeft();
-        if (Input.GetKeyDown(KeyCode.D))
+        if (RotateRight)
             CameraController.Instance.RotateRight();
 
         if (Input.GetKeyDown(KeyCode.R))
             ReloadScene();
-
     }
 
     public void ReloadScene()
     {
         LoadingManager.Instance.FadeIn(() =>
-                        LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY)
-                    );
+        {
+            LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
+        });
     }
 }
