@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace cdreyer
+namespace CDreyer
 {
     public class GameLogger : Singleton<GameLogger>
     {

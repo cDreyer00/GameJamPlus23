@@ -8,7 +8,7 @@ using DG.Tweening;
 public enum ButtonAnimation { Shake, Punch, Yoyo }
 public enum InteractionType { ClickUp, ClickDown, Enter, Exit }
 
-namespace cdreyer
+namespace CDreyer
 {
 
     public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler

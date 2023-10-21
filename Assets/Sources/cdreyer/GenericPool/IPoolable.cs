@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace cdreyer
+namespace CDreyer
 {
     public interface IPoolable<T> where T : MonoBehaviour
     {

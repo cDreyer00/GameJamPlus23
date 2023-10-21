@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace cdreyer
+namespace CDreyer
 {
     [Serializable]
     public abstract class GenericPool<T> where T : MonoBehaviour

@@ -2,21 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace cdreyer
+namespace CDreyer
 {
     [Serializable]
-    public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
+    public class QueuePool<T> : GenericPool<T> where T : MonoBehaviour
     {
-        public Stack<T> s = new();
+        public Queue<T> q = new();
 
-        public StackPool(T original, int amount, Transform parent = null) : base(original, amount, parent)
+        public QueuePool(T original, int amount, Transform parent = null) : base(original, amount, parent)
         {
 
         }
 
         protected override void CreateObjects(T original, int amount, Transform parent = null, bool active = false)
         {
-            if (s == null) s = new();
+            if (q == null) q = new();
 
             for (int i = 0; i < amount; i++)
             {
@@ -28,18 +28,18 @@ namespace cdreyer
                     poolable.OnCreated();
                 }
 
-                s.Push(obj);
+                q.Enqueue(obj);
             }
         }
 
         public override T Get(Vector3 position, Quaternion rotation)
         {
-            if (s.Count == 0)
+            if (q.Count == 0)
             {
                 CreateObjects(Original, 1, parent);
             }
 
-            T t = s.Pop();
+            T t = q.Dequeue();
 
             t.transform.SetParent(null);
 
@@ -58,12 +58,12 @@ namespace cdreyer
 
         public override T Get(Transform parent)
         {
-            if (s.Count == 0)
+            if (q.Count == 0)
             {
                 CreateObjects(Original, 1, parent);
             }
 
-            T t = s.Pop();
+            T t = q.Dequeue();
 
             t.transform.SetParent(parent);
 
@@ -80,26 +80,28 @@ namespace cdreyer
             return t;
         }
 
+        T obj;
         public override void Release(T obj)
         {
-            obj.gameObject.SetActive(false);
-            obj.transform.SetParent(parent);
+            this.obj = obj;
+            this.obj.gameObject.SetActive(false);
+            this.obj.transform.SetParent(parent);
 
-            if (obj is IPoolable<T> poolable)
+            if (this.obj is IPoolable<T> poolable)
             {
                 poolable.OnRelease();
             }
 
-            s.Push(obj);
+            q.Enqueue(this.obj);
         }
 
         public override void Dispose()
         {
-            if (s == null || s.Count == 0) return;
+            if (q == null || q.Count == 0) return;
 
-            while (s.Count > 0)
+            while (q.Count > 0)
             {
-                T t = s.Pop();
+                T t = q.Dequeue();
                 UnityEngine.Object.Destroy(t.gameObject);
             }
         }

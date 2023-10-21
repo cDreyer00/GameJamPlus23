@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using TMPro;
 
 
-namespace cdreyer
+namespace CDreyer
 {
     public class UILog : MonoBehaviour
     {

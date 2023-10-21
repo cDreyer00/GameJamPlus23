@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace cdreyer
+namespace CDreyer
 {
     public abstract class SingletonAddressableSO<T> : ScriptableObject where T : SingletonAddressableSO<T>
     {
