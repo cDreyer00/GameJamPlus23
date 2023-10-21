@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CDreyer;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PowerBar : Singleton<PowerBar>
@@ -11,23 +12,22 @@ public class PowerBar : Singleton<PowerBar>
     [SerializeField] float decaySpeed = 0.1f;
     [SerializeField] float decayAmount = 1f;
     [SerializeField] float maxPower = 100f;
-    [SerializeField] float power = 0;
-    [SerializeField] int powerLevel = 0;
-
+    [SerializeField] float power;
+    [SerializeField] float extraDecayMod = 1.1f;
+    [SerializeField] int powerLevel;
+    [SerializeField] private float[] powerTrashHolds;
     public float Power => power;
     public event Action<PowerBarEventArgs> onPowerChanged;
 
     public int DiscretePowerLevel()
     {
-        return power switch
+        for (int i = 0; i < powerTrashHolds.Length; i++)
         {
-            < 15 => 0,
-            < 40 => 1,
-            < 60 => 2,
-            < 80 => 3,
-            < 95 => 4,
-            _ => 5
-        };
+            if (power < powerTrashHolds[i])
+                return i;
+        }
+
+        return powerTrashHolds.Length;
     }
 
     public IEnumerator DecayPower()
@@ -35,7 +35,7 @@ public class PowerBar : Singleton<PowerBar>
         while (true)
         {
             yield return Helpers.GetWait(decaySpeed);
-            UpdatePower(-decayAmount);
+            UpdatePower(-decayAmount * (extraDecayMod * powerLevel));
         }
     }
 

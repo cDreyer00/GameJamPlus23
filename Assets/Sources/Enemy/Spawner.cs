@@ -22,14 +22,13 @@ namespace Sources.Enemy
         public float maxSpawnInterval = 1f;
         public float spikeFrequency = 60f;
         public float spawnInterval = 1f;
-
         public float elevation = 1;
 
         public T instancePrefab;
 
         protected List<T> instances;
 
-        [SerializeField] MeshRenderer mr;
+        [SerializeField] protected MeshRenderer mr;
 
         protected virtual void Awake()
         {
@@ -56,7 +55,7 @@ namespace Sources.Enemy
             }
         }
 
-        private void SpawnInstance()
+        protected virtual void SpawnInstance()
         {
             float randX = UnityEngine.Random.Range(mr.bounds.max.x, mr.bounds.min.x);
             float randZ = UnityEngine.Random.Range(mr.bounds.max.z, mr.bounds.min.z);

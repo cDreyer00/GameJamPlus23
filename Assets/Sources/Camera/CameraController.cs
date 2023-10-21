@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,5 +28,14 @@ public class CameraController : Singleton<CameraController>
         curEuler += Vector3.down * 90;
         Vector3 endValue = new(0, curEuler.y, 0);
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
+    }
+
+    private void Update()
+    {
+        var ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out var hit))
+        {
+            if (hit.transform.
+        }
     }
 }

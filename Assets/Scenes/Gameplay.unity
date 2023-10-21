@@ -153,11 +153,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   difficultySpike: 0
-  minInstanceCount: 1
+  minInstanceCount: 3
   maxInstanceCount: 10
   minDamage: 1
   maxDamage: 10
-  minSpawnInterval: 0.1
+  minSpawnInterval: 0.05
   maxSpawnInterval: 1
   spikeFrequency: 30
   spawnInterval: 2
@@ -165,7 +165,7 @@ MonoBehaviour:
   instancePrefab: {fileID: 8135059297603922165, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
   mr: {fileID: 1334536355}
   minSpeed: 2
-  maxSpeed: 4
+  maxSpeed: 5
 --- !u!4 &231675863
 Transform:
   m_ObjectHideFlags: 0
@@ -400,6 +400,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: decayAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: extraDecayMod
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: powerTrashHolds.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: powerTrashHolds.Array.data[0]
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: powerTrashHolds.Array.data[1]
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: powerTrashHolds.Array.data[2]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: powerTrashHolds.Array.data[3]
+      value: 95
+      objectReference: {fileID: 0}
     - target: {fileID: 301364948408241717, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1283,6 +1311,10 @@ PrefabInstance:
     - target: {fileID: 9023559400280563692, guid: 697ebb29309de8945bcbeb685d594a0f, type: 3}
       propertyPath: spikeFrequency
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9023559400280563692, guid: 697ebb29309de8945bcbeb685d594a0f, type: 3}
+      propertyPath: minInstanceCount
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnvAreaAttack : MonoBehaviour
@@ -19,9 +20,13 @@ public class EnvAreaAttack : MonoBehaviour
 
     public void DealDamage()
     {
+        if (this.IsDestroyed()) return;
+        
         IPlayer player = GameManager.Instance.Player;
         if (Vector3.Distance(player.Pos, transform.position) < range)
+        {
             player.TakeDamage((int)damage);
+        }
 
         onExplode?.Invoke(this);
         Destroy(gameObject);
