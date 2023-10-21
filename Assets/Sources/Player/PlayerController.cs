@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
     Vector3 lastMousePos = Vector3.zero;
     float curDelay;
 
-
     private void Awake()
     {
         cam = cam != null ? cam : Camera.main;
@@ -34,28 +33,21 @@ public class PlayerController : MonoBehaviour
                 Shoot();
                 curDelay = 0;
             }
-            
+
             lastMousePos = Vector3.zero;
         }
 
-        var mouse = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane);
-        var mouseToWorld = cam.ScreenToWorldPoint(mouse);
-        mouseToWorld.y = rotTf.position.y;
-        rotTf.LookAt(mouseToWorld, Vector3.up);
-
-        // if (Input.GetMouseButton(0))
-        //Rotate();
+        if (Input.GetMouseButton(0))
+        {
+            Rotate();
+        }
     }
 
     void Rotate()
     {
-        if (lastMousePos == Vector3.zero)
-            lastMousePos = Input.mousePosition;
-
-        mouseDelta = Input.mousePosition - lastMousePos;
-        rotTf.transform.eulerAngles += Vector3.up * mouseDelta.x;
-
-        lastMousePos = Input.mousePosition;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 100))
+            transform.LookAt(hit.point, Vector3.up);
     }
 
     void Shoot()
