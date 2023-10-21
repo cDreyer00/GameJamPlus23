@@ -21,12 +21,16 @@ namespace Sources.Enemy
 
         protected List<T> instances;
 
-        private void Awake()
+        protected virtual void Update()
+        {
+            
+        }
+        protected virtual void Awake()
         {
             instances = new List<T>();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             StartCoroutine(WaitAndSpawn());
         }
