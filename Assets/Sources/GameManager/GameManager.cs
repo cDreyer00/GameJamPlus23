@@ -20,15 +20,6 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.R))
             ReloadScene();
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            CameraController.Instance.SetRotation(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            CameraController.Instance.SetRotation(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            CameraController.Instance.SetRotation(2);
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            CameraController.Instance.SetRotation(3);
     }
 
     public void ReloadScene()
@@ -37,5 +28,39 @@ public class GameManager : Singleton<GameManager>
         {
             LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
         });
+    }
+
+    int GetCamId()
+    {
+        Vector3 magnitudeVector = Player.Pos;
+        Vector3 normalizedVector = magnitudeVector.normalized;
+
+        float maxAbsValue = Mathf.Max(Mathf.Abs(normalizedVector.x), Mathf.Abs(normalizedVector.y), Mathf.Abs(normalizedVector.z));
+
+        Vector3 closestDirectionVector;
+
+        if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.x)))
+        {
+            closestDirectionVector = new Vector3(Mathf.Sign(normalizedVector.x), 0, 0);
+        }
+        else if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.y)))
+        {
+            closestDirectionVector = new Vector3(0, Mathf.Sign(normalizedVector.y), 0);
+        }
+        else
+        {
+            closestDirectionVector = new Vector3(0, 0, Mathf.Sign(normalizedVector.z));
+        }
+
+        if (closestDirectionVector.x == -1)
+            return 1;
+        if (closestDirectionVector.z == 1)
+            return 2;
+        if (closestDirectionVector.x == 1)
+            return 3;
+        if (closestDirectionVector.z == -1)
+            return 0;
+
+        return 0;
     }
 }
