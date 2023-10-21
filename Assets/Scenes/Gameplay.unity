@@ -123,6 +123,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &231675861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 231675863}
+  - component: {fileID: 231675862}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &231675862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231675861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6222209b55c50074db25563dd4541b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxInstanceCount: 10
+  spawnInterval: 0.5
+  elevation: 1
+  instancePrefab: {fileID: 6089110235842682470, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
+--- !u!4 &231675863
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231675861}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &334015374
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +560,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.70710933, y: -0, z: -0, w: 0.7071043}
-  m_LocalPosition: {x: 0, y: 10.41, z: 0.04500413}
+  m_LocalPosition: {x: 0, y: 15.41, z: 0.05}
   m_LocalScale: {x: 1, y: 1.5000006, z: 0.6666667}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -764,7 +812,7 @@ MonoBehaviour:
   model: {fileID: 2141137647}
   projPrefab: {fileID: 3364622944419438653, guid: 60c1de177ea8327488190c0b31cb34c6, type: 3}
   rotTf: {fileID: 2141137648}
-  dashForce: 3
+  dashForce: 6
   rb: {fileID: 2021296711}
 --- !u!4 &2021296710
 Transform:
@@ -850,3 +898,4 @@ SceneRoots:
   - {fileID: 483093717}
   - {fileID: 1334536357}
   - {fileID: 2021296710}
+  - {fileID: 231675863}
