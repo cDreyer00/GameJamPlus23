@@ -7,16 +7,16 @@ using Unity.UI;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-// ReSharper disable IteratorNeverReturns
-
 public class PowerBar : Singleton<PowerBar>
 {
-    public Slider slider;
-    public float decaySpeed = 0.1f;
-    public float decayAmount = 1f;
-    public float maxPower = 100f;
-    public float power;
-    public int powerLevel;
+    [SerializeField] Slider slider;
+    [SerializeField] float decaySpeed = 0.1f;
+    [SerializeField] float decayAmount = 1f;
+    [SerializeField] float maxPower = 100f;
+    [SerializeField] float power = 0;
+    [SerializeField] int powerLevel = 0;
+
+    public event Action<PowerBarEventArgs> onPowerChanged;
 
     public int DiscretePowerLevel()
     {
@@ -36,7 +36,7 @@ public class PowerBar : Singleton<PowerBar>
         while (true)
         {
             yield return Helpers.GetWait(decaySpeed);
-            slider.value -= decayAmount;
+            UpdatePower(-decayAmount);
         }
     }
 
@@ -47,14 +47,25 @@ public class PowerBar : Singleton<PowerBar>
         StartCoroutine(DecayPower());
     }
 
-    private void Update()
+    public void UpdatePower(float amount)
     {
-        power = slider.value;
+        power += amount;
+        power = Math.Clamp(power, 0, maxPower);
+        slider.value = power;
         powerLevel = DiscretePowerLevel();
-    }
 
-    public void AddPower(float amount)
+        onPowerChanged?.Invoke(new(power, powerLevel));
+    }
+}
+
+public class PowerBarEventArgs
+{
+    public float Power { get; }
+    public int PowerLevel { get; }
+
+    public PowerBarEventArgs(float power, int powerLevel)
     {
-        slider.value += amount;
+        Power = power;
+        PowerLevel = powerLevel;
     }
 }

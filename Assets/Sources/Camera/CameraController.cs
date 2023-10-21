@@ -13,6 +13,8 @@ public class CameraController : Singleton<CameraController>
 
     Vector3 curEuler = Vector3.zero;
 
+    public Camera Cam => cam;
+    
     public void RotateLeft()
     {
         curEuler += Vector3.up * 90;

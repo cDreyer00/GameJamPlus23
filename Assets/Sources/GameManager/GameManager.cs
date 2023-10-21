@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CDreyer;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     void Update()
     {
@@ -13,8 +13,14 @@ public class GameManager : MonoBehaviour
             CameraController.Instance.RotateRight();
 
         if (Input.GetKeyDown(KeyCode.R))
-            LoadingManager.Instance.FadeIn(() =>
-                LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY)
-            );
+            ReloadScene();
+
+    }
+
+    public void ReloadScene()
+    {
+        LoadingManager.Instance.FadeIn(() =>
+                        LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY)
+                    );
     }
 }

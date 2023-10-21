@@ -3,22 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CDreyer;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour, IPlayer
 {
     [SerializeField] GameObject model;
     [SerializeField] Projectile projPrefab;
     [SerializeField] Transform anchor;
+    [SerializeField] Rigidbody rb;
     [SerializeField] float dashForce = 3;
     [SerializeField] float shootDelay = 1.3f;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] Camera cam;
+    [SerializeField] float shootDelayDelta = 0.15f;
 
+    Camera cam;
+    float initShootDelay;
     float curDelay;
 
     private void Awake()
     {
-        cam = cam != null ? cam : Camera.main;
+        initShootDelay = shootDelay;
+        cam = CameraController.Instance.Cam;
+    }
+
+    void Start()
+    {
+        PowerBar.Instance.onPowerChanged += OnPowerChanged;
     }
 
     void Update()
@@ -35,6 +45,9 @@ public class PlayerController : MonoBehaviour, IPlayer
 
         if (Input.GetMouseButton(0))
             Rotate();
+
+        if (transform.position.y <= -1)
+            GameManager.Instance.ReloadScene();
     }
 
     void Rotate()
@@ -60,8 +73,13 @@ public class PlayerController : MonoBehaviour, IPlayer
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
 
+    void OnPowerChanged(PowerBarEventArgs args)
+    {
+        shootDelay = initShootDelay - args.PowerLevel * shootDelayDelta;
+    }
+
     public void TakeDamage(int amount)
     {
-        throw new NotImplementedException();
+
     }
 }

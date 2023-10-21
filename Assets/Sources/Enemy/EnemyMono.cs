@@ -33,7 +33,7 @@ namespace Sources.Enemy
             {
                 Destroy(gameObject);
                 OnDied?.Invoke();
-                PowerBar.Instance.AddPower(powerScore);
+                PowerBar.Instance.UpdatePower(powerScore);
             }
         }
     }
