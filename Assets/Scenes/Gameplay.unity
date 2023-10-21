@@ -559,13 +559,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.70710933, y: -0, z: -0, w: 0.7071043}
-  m_LocalPosition: {x: 0, y: 15.41, z: 0.05}
-  m_LocalScale: {x: 1, y: 1.5000006, z: 0.6666667}
+  m_LocalRotation: {x: 0.40276524, y: -0, z: -0, w: 0.91530335}
+  m_LocalPosition: {x: 0, y: 12.8, z: -14.6}
+  m_LocalScale: {x: 1, y: 1.5000011, z: 0.6666668}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2021296710}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 47.502, y: 0, z: 0}
 --- !u!1 &1334536353
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,7 +667,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -813,6 +813,7 @@ MonoBehaviour:
   projPrefab: {fileID: 3364622944419438653, guid: 60c1de177ea8327488190c0b31cb34c6, type: 3}
   rotTf: {fileID: 2141137648}
   dashForce: 6
+  shootDelay: 1.3
   rb: {fileID: 2021296711}
 --- !u!4 &2021296710
 Transform:
@@ -823,12 +824,11 @@ Transform:
   m_GameObject: {fileID: 2021296707}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2141137648}
-  - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2021296711
@@ -899,3 +899,4 @@ SceneRoots:
   - {fileID: 1334536357}
   - {fileID: 2021296710}
   - {fileID: 231675863}
+  - {fileID: 963194228}
