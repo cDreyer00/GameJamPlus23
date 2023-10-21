@@ -9,16 +9,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Projectile projPrefab;
     [SerializeField] Transform rotTf;
     [SerializeField] float dashForce = 3;
+    [SerializeField] float shootDelay = 1.3f;
     [SerializeField] Rigidbody rb;
 
     Vector3 mouseDelta = Vector3.zero;
     Vector3 lastMousePos = Vector3.zero;
+    float curDelay;
 
     void Update()
     {
+        curDelay += Time.deltaTime;
         if (Input.GetMouseButtonUp(0))
         {
-            Shoot();
+            if (curDelay >= shootDelay)
+            {
+                Shoot();
+                curDelay = 0;
+            }
+            
             lastMousePos = Vector3.zero;
         }
 
@@ -36,12 +44,6 @@ public class PlayerController : MonoBehaviour
 
         lastMousePos = Input.mousePosition;
     }
-
-    // void Rotate()
-    // {
-    //     Vector3 mousePostToWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //     rotTf.transform.LookAt(mousePostToWorld, Vector3.forward);
-    // }
 
     void Shoot()
     {

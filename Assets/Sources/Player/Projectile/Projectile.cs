@@ -30,5 +30,6 @@ public class Projectile : MonoBehaviour
         if (!col.TryGetComponent<IEnemy>(out var enemy)) return;
 
         enemy.TakeDamage(damage);
+        Destroy(gameObject);
     }
 }
