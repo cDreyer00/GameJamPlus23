@@ -223,7 +223,7 @@ MonoBehaviour:
   maxInstanceCount: 10
   spawnInterval: 0.5
   elevation: 1
-  instancePrefab: {fileID: 6089110235842682470, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
+  instancePrefab: {fileID: 8135059297603922165, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
 --- !u!4 &231675863
 Transform:
   m_ObjectHideFlags: 0
@@ -719,6 +719,7 @@ GameObject:
   m_Component:
   - component: {fileID: 989796020}
   - component: {fileID: 989796021}
+  - component: {fileID: 989796022}
   m_Layer: 5
   m_Name: PowerBar
   m_TagString: Untagged
@@ -798,6 +799,25 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &989796022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989796019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee913cb3afa8bdf4683b5a88c04dd4a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  slider: {fileID: 989796021}
+  decaySpeed: 0.5
+  decayAmount: 0.15
+  maxPower: 100
+  power: 0
+  powerLevel: 0
 --- !u!1 &1274697673
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,7 +1249,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2021296710}
   - component: {fileID: 2021296708}
-  - component: {fileID: 2021296712}
   - component: {fileID: 2021296711}
   m_Layer: 0
   m_Name: Player
@@ -1255,6 +1274,7 @@ MonoBehaviour:
   rotTf: {fileID: 2141137648}
   dashForce: 6
   rb: {fileID: 2021296711}
+  cam: {fileID: 0}
 --- !u!4 &2021296710
 Transform:
   m_ObjectHideFlags: 0
@@ -1299,21 +1319,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &2021296712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2021296707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee913cb3afa8bdf4683b5a88c04dd4a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slider: {fileID: 989796021}
-  increaseSpeed: 0.1
-  decreaseSpeed: 0.1
 --- !u!1 &2141137647
 GameObject:
   m_ObjectHideFlags: 0

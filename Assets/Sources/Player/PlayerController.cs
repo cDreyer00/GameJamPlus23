@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +11,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform rotTf;
     [SerializeField] float dashForce = 3;
     [SerializeField] Rigidbody rb;
+    [SerializeField] Camera cam;
 
     Vector3 mouseDelta = Vector3.zero;
     Vector3 lastMousePos = Vector3.zero;
+
+
+    private void Awake()
+    {
+        cam = cam != null ? cam : Camera.main;
+    }
 
     void Update()
     {
@@ -22,8 +30,13 @@ public class PlayerController : MonoBehaviour
             lastMousePos = Vector3.zero;
         }
 
-        if (Input.GetMouseButton(0))
-            Rotate();
+        var mouse = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane);
+        var mouseToWorld = cam.ScreenToWorldPoint(mouse);
+        mouseToWorld.y = rotTf.position.y;
+        rotTf.LookAt(mouseToWorld, Vector3.up);
+
+        // if (Input.GetMouseButton(0))
+        //Rotate();
     }
 
     void Rotate()
