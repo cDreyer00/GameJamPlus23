@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour, IPlayer
     float initShootDelay;
     float curDelay;
 
+    public Vector3 Pos => transform.position;
+
     private void Awake()
     {
         initShootDelay = shootDelay;
@@ -43,8 +45,8 @@ public class PlayerController : MonoBehaviour, IPlayer
             }
         }
 
-        if (Input.GetMouseButton(0))
-            Rotate();
+        // if (Input.GetMouseButton(0))
+        Rotate();
 
         if (transform.position.y <= -1)
             GameManager.Instance.ReloadScene();
