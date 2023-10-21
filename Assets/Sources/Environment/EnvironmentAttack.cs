@@ -10,5 +10,6 @@ public class EnvironmentAttack : Spawner<EnvAreaAttack>
     public override void OnAfterSpawn(EnvAreaAttack instance)
     {
         instance.Init();
+        instance.onExplode += (i) => instances.Remove(i);
     }
 }

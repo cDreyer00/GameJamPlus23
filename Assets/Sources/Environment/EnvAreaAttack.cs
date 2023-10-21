@@ -9,6 +9,8 @@ public class EnvAreaAttack : MonoBehaviour
     [SerializeField] float range;
     [SerializeField] float timer;
 
+    public event Action<EnvAreaAttack> onExplode;
+
     public void Init()
     {
         Helpers.ActionCallback(DealDamage, timer);
@@ -18,9 +20,10 @@ public class EnvAreaAttack : MonoBehaviour
     public void DealDamage()
     {
         IPlayer player = GameManager.Instance.Player;
-        if(Vector3.Distance(player.Pos, transform.position) < range)
+        if (Vector3.Distance(player.Pos, transform.position) < range)
             player.TakeDamage((int)damage);
 
+        onExplode?.Invoke(this);
         Destroy(gameObject);
     }
 }
