@@ -23,12 +23,12 @@ namespace Sources.Enemy
 
         [SerializeField] MeshRenderer mr;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             instances = new List<T>();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             StartCoroutine(WaitAndSpawn());
         }
@@ -57,6 +57,11 @@ namespace Sources.Enemy
             T instance = Instantiate(instancePrefab, newPoint, Quaternion.identity);
             instances.Add(instance);
             OnAfterSpawn(instance);
+        }
+
+        protected virtual void Update()
+        {
+
         }
 
         public abstract void OnAfterSpawn(T instance);
