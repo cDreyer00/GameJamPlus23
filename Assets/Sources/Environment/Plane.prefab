@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2619847806828604864}
   m_Layer: 0
   m_Name: wall_L (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 8658892594968306841}
   m_Layer: 0
   m_Name: wall_L
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 8111514143303556366}
   m_Layer: 0
   m_Name: wall_L (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -458,7 +458,7 @@ MonoBehaviour:
   spawnInterval: 3
   elevation: 0.1
   instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
-  mr: {fileID: 0}
+  mr: {fileID: 6093873769978811990}
 --- !u!1 &8316622404697592657
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,7 +473,7 @@ GameObject:
   - component: {fileID: 9101963797895605019}
   m_Layer: 0
   m_Name: wall_L (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

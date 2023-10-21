@@ -163,7 +163,7 @@ MonoBehaviour:
   spawnInterval: 2
   elevation: 1
   instancePrefab: {fileID: 8135059297603922165, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
-  mr: {fileID: 0}
+  mr: {fileID: 2020544449}
   minSpeed: 2
   maxSpeed: 5
 --- !u!4 &231675863
@@ -587,6 +587,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1387716175178405914, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
   m_PrefabInstance: {fileID: 4674151972180916947}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &2020544449 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6093873769978811990, guid: 04d8e7f3a7d0e2049956da92bcbecb98, type: 3}
+  m_PrefabInstance: {fileID: 250207656}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2069724834106283427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -717,6 +722,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 503827931854381814, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3221490120522370547, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
       propertyPath: m_Name
       value: CameraController
