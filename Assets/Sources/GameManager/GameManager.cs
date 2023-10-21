@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    public IPlayer Player {get; private set;}
+    public void RegisterPlayer(IPlayer p) => Player = p;
+
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 

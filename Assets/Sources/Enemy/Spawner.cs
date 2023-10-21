@@ -21,6 +21,8 @@ namespace Sources.Enemy
 
         protected List<T> instances;
 
+        [SerializeField] MeshRenderer mr;
+
         private void Awake()
         {
             instances = new List<T>();
@@ -48,8 +50,8 @@ namespace Sources.Enemy
 
         private void SpawnEnemy()
         {
-            int randX = UnityEngine.Random.Range(-10, 10);
-            int randZ = UnityEngine.Random.Range(-10, 10);
+            float randX = UnityEngine.Random.Range(mr.bounds.max.x, mr.bounds.min.x);
+            float randZ = UnityEngine.Random.Range(mr.bounds.max.z, mr.bounds.min.z);
             var randomPosition = new Vector3(randX, elevation, randZ);
             var newPoint = transform.position + randomPosition;
             T instance = Instantiate(instancePrefab, newPoint, Quaternion.identity);

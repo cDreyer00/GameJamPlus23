@@ -712,12 +712,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd54f4c692d3dcc468c54d8121187213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xRange: {x: -5, y: 5}
-  zRange: {x: -5, y: 5}
-  damage: 1
-  delay: 5
-  attackRange: 5
-  attackTimer: 3
+  maxInstanceCount: 10
+  spawnInterval: 3
+  elevation: 0.1
+  instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
 --- !u!4 &1217842831 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1387716175178405914, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
@@ -1177,10 +1175,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 167829896736789762, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 167829896736789762, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1220,10 +1214,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2799235822207906874, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_Drag
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 4648811874107556195, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: cam
       value: 
@@ -1231,10 +1221,6 @@ PrefabInstance:
     - target: {fileID: 6087302238658029148, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: shootDelay
-      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
