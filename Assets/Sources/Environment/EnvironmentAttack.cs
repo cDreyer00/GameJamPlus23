@@ -11,5 +11,6 @@ public class EnvironmentAttack : Spawner<EnvAreaAttack>
     {
         print("Spawned");
         instance.Init();
+        instance.onExplode += (i) => instances.Remove(i);
     }
 }
