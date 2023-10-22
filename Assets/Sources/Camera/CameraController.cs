@@ -26,7 +26,7 @@ public class CameraController : Singleton<CameraController>
     HashSet<Transform> hitWalls = new();
     
     
-    public Direction Direction => (Direction) Math.Abs((camAnchor.eulerAngles.y / 90));
+    public Direction Direction => (Direction) Math.Abs(camAnchor.eulerAngles.y / 90);
 
     
     public Direction Dir; 
