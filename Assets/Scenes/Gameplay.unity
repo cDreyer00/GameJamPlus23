@@ -3089,6 +3089,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1398542645540301883, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: time
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7300560191355610728, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -7504,6 +7508,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7785691028745626150, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7943912860507824474, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -7552,6 +7560,10 @@ PrefabInstance:
       propertyPath: groundMr
       value: 
       objectReference: {fileID: 4930184713420487661}
+    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
+      propertyPath: endGameCanvas
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: dontDestroyOnLoad
       value: 0

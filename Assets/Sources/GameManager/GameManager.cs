@@ -6,14 +6,23 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
+    [SerializeField] Canvas endGameCanvas;
 
     public IPlayer Player { get; private set; }
+    
+    public  static bool IsGameOver { get; private set; }
+    
     public void RegisterPlayer(IPlayer p) => Player = p;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
-    public Bounds GameBounds { get => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds; }
+    bool fading;
+
+    public Bounds GameBounds
+    {
+        get => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
+    }
 
     float _initTime;
     public float GameElapsedTime => Time.time - _initTime;
@@ -30,18 +39,33 @@ public class GameManager : Singleton<GameManager>
         if (RotateRight)
             CameraController.Instance.RotateRight();
 
-        if (Input.GetKeyDown(KeyCode.R))
-            ReloadScene();
+        if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
 
     public void ReloadScene()
     {
+        if (fading) return;
+        
+        fading = true;
         LoadingManager.Instance.FadeIn(() =>
         {
             LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
         });
 
         SoundManager.Instance.Stop();
+        IsGameOver = false;
+        fading = false;
+    }
+
+    public void ShowEndGame()
+    {
+        if (fading) return;
+        IsGameOver = true;
+        fading = true;
+        LoadingManager.Instance.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
+        SoundManager.Instance.Stop();
+        fading = false;
+        
     }
 
     int GetCamId()
@@ -49,7 +73,8 @@ public class GameManager : Singleton<GameManager>
         Vector3 magnitudeVector = Player.Pos;
         Vector3 normalizedVector = magnitudeVector.normalized;
 
-        float maxAbsValue = Mathf.Max(Mathf.Abs(normalizedVector.x), Mathf.Abs(normalizedVector.y), Mathf.Abs(normalizedVector.z));
+        float maxAbsValue = Mathf.Max(Mathf.Abs(normalizedVector.x), Mathf.Abs(normalizedVector.y),
+            Mathf.Abs(normalizedVector.z));
 
         Vector3 closestDirectionVector;
 
