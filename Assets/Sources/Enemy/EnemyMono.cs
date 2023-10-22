@@ -16,6 +16,8 @@ namespace Sources.Enemy
         public int Identifier { get; private set; }
 
         [SerializeField] private NavMeshAgent agent;
+        [SerializeField] AudioClip damageAudio;
+        [SerializeField] AudioClip attackAudio;
 
         public IPlayer target;
         public event Action OnDied;
@@ -55,6 +57,9 @@ namespace Sources.Enemy
 
         public void TakeDamage(int damage)
         {
+            if (damageAudio != null)
+                damageAudio.Play();
+
             Health -= damage;
 
             if (health <= 0)
@@ -71,6 +76,10 @@ namespace Sources.Enemy
 
             var player = other.gameObject.GetComponent<IPlayer>();
             player?.TakeDamage(damage);
+            
+            if (attackAudio != null)
+                attackAudio.Play();
+
             canAttack = false;
         }
     }
