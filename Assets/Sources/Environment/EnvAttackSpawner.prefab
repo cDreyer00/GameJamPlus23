@@ -49,8 +49,8 @@ MonoBehaviour:
   startSpawnTimer: 10
   minInstanceCount: 3
   maxInstanceCount: 10
-  minDamage: 1
-  maxDamage: 10
+  minDamage: 5
+  maxDamage: 20
   minSpawnInterval: 0.1
   maxSpawnInterval: 1
   spikeFrequency: 30

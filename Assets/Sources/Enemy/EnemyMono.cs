@@ -102,7 +102,7 @@ namespace Sources.Enemy
             }
         }
 
-        private void OnCollisionStay(Collision other)
+        private void Colide(Collision other)
         {
             if (!canAttack) return;
 
@@ -110,13 +110,21 @@ namespace Sources.Enemy
             if (player != null)
             {
                 anim.SetTrigger(AnimIsAttack);
-                player.TakeDamage(damage);
+                Helpers.ActionCallback(() => player.TakeDamage(damage), 0.34f);
             }
 
             if (attackAudio != null)
                 attackAudio.Play();
 
             canAttack = false;
+        }
+        private void OnCollisionStay(Collision other)
+        {
+            Colide(other);
+        }
+        private void OnCollisionEnter(Collision collision)
+        {
+            Colide(collision);
         }
 
         public void SetDestination(Vector3 position)
