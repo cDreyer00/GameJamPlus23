@@ -9,9 +9,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Canvas endGameCanvas;
 
     public IPlayer Player { get; private set; }
-    
-    public  static bool IsGameOver { get; private set; }
-    
+
+    public static bool IsGameOver { get; private set; }
+
     public void RegisterPlayer(IPlayer p) => Player = p;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
@@ -45,7 +45,7 @@ public class GameManager : Singleton<GameManager>
     public void ReloadScene()
     {
         if (fading) return;
-        
+
         fading = true;
         LoadingManager.Instance.FadeIn(() =>
         {
@@ -65,7 +65,7 @@ public class GameManager : Singleton<GameManager>
         LoadingManager.Instance.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
         SoundManager.Instance.Stop();
         fading = false;
-        
+
     }
 
     int GetCamId()

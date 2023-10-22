@@ -21,18 +21,9 @@ namespace Sources
         void Update()
         {
             time -= Time.deltaTime;
-            if (time % 01f < 1e-3f)
-            {
-                textMesh.text = time.ToString("0");
-            }
-
+            textMesh.text = time.ToString("0");
             if (!(time <= 0)) return;
-
-            // foreach (var o in toDisable)
-            // {
-            //     o.SetActive(false);
-            // }
-            
+            if (GameManager.IsGameOver) return;
             GameManager.Instance.ShowEndGame();
         }
     }
