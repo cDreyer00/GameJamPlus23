@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Lookat : MonoBehaviour
 {
-    -Transform cam;
+    Transform cam;
 
     private void Start()
     {
