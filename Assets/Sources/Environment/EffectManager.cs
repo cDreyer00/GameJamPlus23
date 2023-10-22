@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Sources.Enemy;
 using UnityEngine;
@@ -11,38 +12,50 @@ namespace Sources.Environment
         Confusion,
         Slow
     }
-    public sealed class EffectManager : MonoBehaviour
+    public static class EffectManager
     {
-        [SerializeField] private MeshRenderer mr;
 
-        private Vector3 GetRandomPoint()
+        public static void ApplyEffect(IEnemy enemy, Effect effect)
         {
-            var bounds = mr.bounds;
-            float x = UnityEngine.Random.Range(bounds.min.x, bounds.max.x);
-            float z = UnityEngine.Random.Range(bounds.min.z, bounds.max.z);
-            return new Vector3(x, 0, z);
+            Action<IEnemy> e = effect switch
+            {
+                Effect.Confusion => ApplyConfusion,
+                Effect.Slow => ApplySlow,
+            };
+
+            e?.Invoke(enemy);
         }
 
-        public IEnumerator Confusion(float time)
+        static void ApplyConfusion(IEnemy enemy)
         {
-            foreach (var enemy in EnemySpawner.Instance.Instances)
-            {
-                enemy.canMove = false;
-            }
-            while (time > 0)
-            {
-                foreach (var enemy in EnemySpawner.Instance.Instances)
-                {
-                    enemy.SetDestination(GetRandomPoint());
-                }
 
-                time -= Time.deltaTime;
-                yield return null;
-            }
-            foreach (var enemy in EnemySpawner.Instance.Instances)
-            {
-                enemy.canMove = true;
-            }
         }
+
+        static void ApplySlow(IEnemy enemy)
+        {
+
+        }
+
+        // public IEnumerator Confusion(float time)
+        // {
+        //     foreach (var enemy in EnemySpawner.Instance.Instances)
+        //     {
+        //         enemy.canMove = false;
+        //     }
+        //     while (time > 0)
+        //     {
+        //         foreach (var enemy in EnemySpawner.Instance.Instances)
+        //         {
+        //             enemy.SetDestination(GetRandomPoint());
+        //         }
+
+        //         time -= Time.deltaTime;
+        //         yield return null;
+        //     }
+        //     foreach (var enemy in EnemySpawner.Instance.Instances)
+        //     {
+        //         enemy.canMove = true;
+        //     }
+        // }
     }
 }

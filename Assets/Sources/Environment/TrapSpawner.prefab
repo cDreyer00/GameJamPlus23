@@ -44,15 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb26c483abf8e704d9dc7525ff30305b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 0
   difficultySpike: 0
-  minInstanceCount: 1
-  maxInstanceCount: 10
-  minDamage: 1
-  maxDamage: 10
-  minSpawnInterval: 0.1
+  minInstanceCount: 2
+  maxInstanceCount: 4
+  minDamage: 0
+  maxDamage: 0
+  minSpawnInterval: 8
   maxSpawnInterval: 1
-  spikeFrequency: 60
+  spikeFrequency: 20
   spawnInterval: 1
   elevation: 1
   instancePrefab: {fileID: -5656992903076782827, guid: cbb2982c12f901e42bc7a22ac706ca3e, type: 3}
-  mr: {fileID: 0}
+  effect: 0

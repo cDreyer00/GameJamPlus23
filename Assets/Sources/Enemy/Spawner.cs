@@ -27,14 +27,13 @@ namespace Sources.Enemy
         public T instancePrefab;
 
         protected List<T> instances;
-        public List<T> Instances => instances;
-
-        [SerializeField] protected MeshRenderer mr;
+        public List<T> Instances => instances;        
 
         float initTime;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             instances = new List<T>();
             initTime = Time.time;
         }
@@ -61,8 +60,9 @@ namespace Sources.Enemy
 
         protected virtual void SpawnInstance()
         {
-            float randX = UnityEngine.Random.Range(mr.bounds.max.x, mr.bounds.min.x);
-            float randZ = UnityEngine.Random.Range(mr.bounds.max.z, mr.bounds.min.z);
+            Bounds bounds = GameManager.Instance.GameBounds;
+            float randX = UnityEngine.Random.Range(bounds.max.x, bounds.min.x);
+            float randZ = UnityEngine.Random.Range(bounds.max.z, bounds.min.z);
             var randomPosition = new Vector3(randX, elevation, randZ);
             var newPoint = transform.position + randomPosition;
             T instance = Instantiate(instancePrefab, newPoint, Quaternion.identity);
