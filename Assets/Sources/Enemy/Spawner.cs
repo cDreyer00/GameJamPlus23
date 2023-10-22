@@ -14,6 +14,7 @@ namespace Sources.Enemy
     {
         public float difficultySpike;
 
+        public int currentInstanceCount = 0;
         public int minInstanceCount = 1;
         public int maxInstanceCount = 10;
         public int minDamage = 1;
@@ -48,7 +49,7 @@ namespace Sources.Enemy
         {
             while (true)
             {
-                if (instances.Count >= maxInstanceCount)
+                if (instances.Count >= currentInstanceCount)
                 {
                     yield return null;
                     continue;
@@ -74,7 +75,7 @@ namespace Sources.Enemy
         {
             float spike = GetDifficultySpike();
             spawnInterval = Mathf.Clamp(1 - spike / 10, minSpawnInterval, maxSpawnInterval);
-            maxInstanceCount = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
+            currentInstanceCount = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
         }
 
         public float GetDifficultySpike()

@@ -19,6 +19,7 @@ namespace Sources.Environment
             _effects = new Dictionary<Effect, IEnumerator>
             {
                 [Effect.Confusion] = effectManager.Confusion(3f),
+                [Effect.Slow] = effectManager.Slow(3f)
             };
         }
 

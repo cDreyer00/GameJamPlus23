@@ -19,12 +19,18 @@ namespace Sources.Enemy
         [SerializeField] AudioClip damageAudio;
         [SerializeField] AudioClip attackAudio;
 
+        Animator animator;
+
+
         public IPlayer target;
         public event Action OnDied;
 
         [SerializeField] private int health;
 
         public bool canMove = true;
+        private static readonly int AnimIsAttack = Animator.StringToHash("isAttack");
+        private static readonly int AnimIsDead = Animator.StringToHash("isDead");
+        private static readonly int AnimIsWalk = Animator.StringToHash("isWalk");
 
         public int Health
         {
@@ -38,6 +44,9 @@ namespace Sources.Enemy
         {
             Identifier = nextId++;
             agent = GetComponent<NavMeshAgent>();
+            animator = GetComponentInChildren<Animator>();
+
+            animator.SetBool(AnimIsWalk, true);
         }
 
         private void Update()
@@ -70,9 +79,14 @@ namespace Sources.Enemy
 
             if (health <= 0)
             {
-                Destroy(gameObject);
-                OnDied?.Invoke();
-                PowerBar.Instance.UpdatePower(powerScore);
+                agent.isStopped = true;
+                animator.SetTrigger(AnimIsDead);
+                Helpers.ActionCallback(() =>
+                {
+                    Destroy(gameObject);
+                    OnDied?.Invoke();
+                    PowerBar.Instance.UpdatePower(powerScore);
+                }, 1f);
             }
         }
 
@@ -81,8 +95,13 @@ namespace Sources.Enemy
             if (!canAttack) return;
 
             var player = other.gameObject.GetComponent<IPlayer>();
-            player?.TakeDamage(damage);
-            
+
+            if (player != null)
+            {
+                animator.SetTrigger(AnimIsAttack);
+                player.TakeDamage(damage);
+            }
+
             if (attackAudio != null)
                 attackAudio.Play();
 
@@ -92,6 +111,12 @@ namespace Sources.Enemy
         public void SetDestination(Vector3 position)
         {
             agent.SetDestination(position);
+        }
+
+        public float Speed
+        {
+            get => agent.speed;
+            set => agent.speed = value;
         }
     }
 }

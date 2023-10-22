@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Sources.Enemy;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,6 +12,7 @@ namespace Sources.Environment
         Confusion,
         Slow
     }
+
     public sealed class EffectManager : MonoBehaviour
     {
         [SerializeField] private MeshRenderer mr;
@@ -29,6 +31,7 @@ namespace Sources.Environment
             {
                 enemy.canMove = false;
             }
+
             while (time > 0)
             {
                 foreach (var enemy in EnemySpawner.Instance.Instances)
@@ -39,9 +42,28 @@ namespace Sources.Environment
                 time -= Time.deltaTime;
                 yield return null;
             }
+
             foreach (var enemy in EnemySpawner.Instance.Instances)
             {
                 enemy.canMove = true;
+            }
+        }
+
+        public IEnumerator Slow(float time)
+        {
+            var speeds = new List<float>();
+            foreach (var enemy in EnemySpawner.Instance.Instances)
+            {
+                speeds.Add(enemy.Speed);
+                enemy.Speed = 0;
+            }
+
+            yield return Helpers.GetWait(time);
+
+            for (int i = 0; i < EnemySpawner.Instance.Instances.Count; i++)
+            {
+                var enemy = EnemySpawner.Instance.Instances[i];
+                enemy.Speed = speeds[i];
             }
         }
     }

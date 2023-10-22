@@ -341,6 +341,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
+      propertyPath: elevation
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -350,11 +354,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
       propertyPath: minRadius
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
+      propertyPath: maxInstanceCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
+      propertyPath: maxSpawnInterval
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
+      propertyPath: minInstanceCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
+      propertyPath: minSpawnInterval
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
       propertyPath: maxDistFromPlayer
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1547531758892995953, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
       propertyPath: m_RootOrder
@@ -937,6 +957,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: power
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: decaySpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: decayAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 181431516786749757, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: extraDecayMod
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 301364948408241717, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1035,6 +1071,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
   m_PrefabInstance: {fileID: 1631272590}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1059463456 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5142445629680260967, guid: 251f1bc1c4357494ab8608a3501fd9c1, type: 3}
+  m_PrefabInstance: {fileID: 1598390610}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1059463459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059463456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e28a523306e388248a572f3b5692fe18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mr: {fileID: 406087252}
 --- !u!1 &1063234256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,6 +1180,10 @@ PrefabInstance:
       value: Decal Boeiro (1)
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 0e06025b51e77cf4a8e373f466357b65, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 0e06025b51e77cf4a8e373f466357b65, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.21
       objectReference: {fileID: 0}
@@ -1188,6 +1246,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 406087252}
     - target: {fileID: 2576705429280413079, guid: 251f1bc1c4357494ab8608a3501fd9c1, type: 3}
+      propertyPath: effect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2576705429280413079, guid: 251f1bc1c4357494ab8608a3501fd9c1, type: 3}
       propertyPath: maxDamage
       value: 0
       objectReference: {fileID: 0}
@@ -1195,6 +1257,10 @@ PrefabInstance:
       propertyPath: minDamage
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2576705429280413079, guid: 251f1bc1c4357494ab8608a3501fd9c1, type: 3}
+      propertyPath: effectManager
+      value: 
+      objectReference: {fileID: 1059463459}
     - target: {fileID: 2576705429280413079, guid: 251f1bc1c4357494ab8608a3501fd9c1, type: 3}
       propertyPath: spikeFrequency
       value: 20
@@ -1262,7 +1328,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5142445629680260967, guid: 251f1bc1c4357494ab8608a3501fd9c1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1059463459}
   m_SourcePrefab: {fileID: 100100000, guid: 251f1bc1c4357494ab8608a3501fd9c1, type: 3}
 --- !u!1001 &1631272590
 PrefabInstance:
@@ -1426,6 +1495,10 @@ PrefabInstance:
     - target: {fileID: 5411356822596041321, guid: d3a23b7ad210dc84b9805a1a85f7a2b7, type: 3}
       propertyPath: minSpeed
       value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5411356822596041321, guid: d3a23b7ad210dc84b9805a1a85f7a2b7, type: 3}
+      propertyPath: maxInstanceCount
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8748139427391142789, guid: d3a23b7ad210dc84b9805a1a85f7a2b7, type: 3}
       propertyPath: m_Name
