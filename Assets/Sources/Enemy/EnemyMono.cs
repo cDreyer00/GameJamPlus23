@@ -26,6 +26,8 @@ namespace Sources.Enemy
 
         public bool canMove = true;
 
+        [SerializeField] FeedbackDamage feedback;
+
         public int Health
         {
             get => health;
@@ -63,6 +65,7 @@ namespace Sources.Enemy
 
         public void TakeDamage(int damage)
         {
+            feedback.StartCoroutine("DamageColor");
             if (damageAudio != null)
                 damageAudio.Play();
 

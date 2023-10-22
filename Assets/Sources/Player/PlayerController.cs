@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     public Vector3 Pos => transform.position;
 
+    [SerializeField] FeedbackDamage feedback;
+
     private void Awake()
     {
         initShootDelay = shootDelay;
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     public void TakeDamage(int amount)
     {
+        feedback.StartCoroutine("DamageColor");
         if (damageAudio != null)
             damageAudio.Play();
 
