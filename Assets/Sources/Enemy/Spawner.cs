@@ -13,7 +13,7 @@ namespace Sources.Enemy
     public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
     {
         public float difficultySpike;
-        
+
         public int minInstanceCount = 1;
         public int maxInstanceCount = 10;
         public int minDamage = 1;
@@ -30,9 +30,12 @@ namespace Sources.Enemy
 
         [SerializeField] protected MeshRenderer mr;
 
+        float initTime;
+
         protected virtual void Awake()
         {
             instances = new List<T>();
+            initTime = Time.time;
         }
 
         protected virtual void Start()
@@ -75,7 +78,7 @@ namespace Sources.Enemy
 
         public float GetDifficultySpike()
         {
-            return difficultySpike = Time.time / spikeFrequency;
+            return difficultySpike = (Time.time - initTime) / spikeFrequency;
         }
 
         public abstract void OnAfterSpawn(T instance);
