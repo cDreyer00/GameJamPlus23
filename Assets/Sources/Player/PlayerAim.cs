@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CDreyer;
 using UnityEngine;
 
 public class PlayerAim : MonoBehaviour
@@ -14,13 +15,17 @@ public class PlayerAim : MonoBehaviour
 
     public void SetAim(Vector3 dir)
     {
-        var myPos = transform.localPosition;
-        Physics.Raycast(myPos, dir, out var hit, distance, LayerMask.GetMask("Enemy"));
+        float dist = distance;
+        var pos = transform.localPosition;
 
-        var hitPos = hit.point;
-        float dist = Vector3.Distance(myPos, hitPos);
+        if (Physics.Raycast(transform.position, dir, out RaycastHit hit))
+        {
+            GameLogger.Log($"hitted on {hit.collider.name}", "green");
+            dist = Vector3.Distance(pos, hit.point);
+        }
+        
         dir.Normalize();
-        lr.SetPosition(0, myPos);
-        lr.SetPosition(1, myPos + dir * dist);
+        lr.SetPosition(0, pos);
+        lr.SetPosition(1, pos + dir * dist);
     }
 }
