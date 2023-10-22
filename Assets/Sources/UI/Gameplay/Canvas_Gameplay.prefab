@@ -595,11 +595,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8ebd69a6d1c46498ea43fdab71155c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 60
-  toDisable:
-  - {fileID: 0}
-  - {fileID: 0}
-  textMesh: {fileID: 0}
+  time: 90
+  textMesh: {fileID: 1562352786052421876}
 --- !u!1 &2368562710208658311
 GameObject:
   m_ObjectHideFlags: 0

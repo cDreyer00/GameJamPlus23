@@ -50,11 +50,10 @@ public class GameManager : Singleton<GameManager>
         LoadingManager.Instance.FadeIn(() =>
         {
             LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
+            IsGameOver = false;
+            fading = false;
         });
-
         SoundManager.Instance.Stop();
-        IsGameOver = false;
-        fading = false;
     }
 
     public void ShowEndGame()

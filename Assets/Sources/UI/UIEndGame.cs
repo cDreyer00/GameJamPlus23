@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using CDreyer;
 using Microsoft.Unity.VisualStudio.Editor;
+using DG.Tweening;
 
 public class UIEndGame : MonoBehaviour
 {
-    [SerializeField] ButtonBehaviour btn1;
+    [SerializeField] ButtonBehaviour[] btns;
 
     void Start()
     {
-        GameManager.Instance.ReloadScene();
+        foreach (var b in btns)
+        {
+            b.transform.localScale = Vector3.zero;
+            b.transform.DOScale(Vector3.one, 0.5f);
+            b.AddListener(GameManager.Instance.ReloadScene, InteractionType.ClickUp);
+        };
     }
 }
