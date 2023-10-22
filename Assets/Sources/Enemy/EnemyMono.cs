@@ -90,7 +90,7 @@ namespace Sources.Enemy
                 anim.SetTrigger(AnimIsDead);
                 Helpers.ActionCallback(() =>
                 {
-                    if (gameObject.IsDestroyed()) return;
+                    if (this.IsDestroyed()) return;
                     Destroy(gameObject);
                     OnDied?.Invoke();
                     PowerBar.Instance.UpdatePower(powerScore);
