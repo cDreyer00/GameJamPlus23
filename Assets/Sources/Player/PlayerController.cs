@@ -24,6 +24,7 @@ namespace Sources.Player
 
         public Vector3 Pos => transform.position;
 
+        [SerializeField] FeedbackDamage feed;
         private void Awake()
         {
             initShootDelay = shootDelay;
@@ -99,6 +100,8 @@ namespace Sources.Player
 
         public void TakeDamage(int amount)
         {
+            feed.StartCoroutine("DamageColor");
+
             if (damageAudio != null)
                 damageAudio.Play();
             

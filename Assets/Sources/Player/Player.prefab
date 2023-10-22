@@ -452,6 +452,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9c9758f79734b4d4fa8ce4fb068b639f, type: 3}
   - {fileID: 8300000, guid: a729eac921de1c1468430a8598cef1ed, type: 3}
   damageAudio: {fileID: 0}
+  feed: {fileID: 6241744108431300218}
 --- !u!54 &2799235822207906874
 Rigidbody:
   m_ObjectHideFlags: 0
