@@ -12,6 +12,8 @@ public class Lookat : MonoBehaviour
     }
     void Update()
     {
-        transform.LookAt(cam);
+        Vector3 lookAt = cam.position;
+        lookAt.y = transform.position.y;
+        transform.LookAt(lookAt);
     }
 }
