@@ -14,7 +14,7 @@ namespace Sources.Enemy
     {
         public float difficultySpike;
 
-        public int currentInstanceCount = 0;
+        public int startSpawnTimer;
         public int minInstanceCount = 1;
         public int maxInstanceCount = 10;
         public int minDamage = 1;
@@ -27,17 +27,13 @@ namespace Sources.Enemy
 
         public T instancePrefab;
 
-        protected List<T> instances;
+        protected List<T> instances = new();
         public List<T> Instances => instances;
 
-        [SerializeField] protected MeshRenderer mr;
-
-        float initTime;
-
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             instances = new List<T>();
-            initTime = Time.time;
         }
 
         protected virtual void Start()
@@ -49,7 +45,13 @@ namespace Sources.Enemy
         {
             while (true)
             {
-                if (instances.Count >= currentInstanceCount)
+                if (GameManager.Instance.GameElapsedTime < startSpawnTimer)
+                {
+                    yield return null;
+                    continue;
+                }
+
+                if (instances.Count >= maxInstanceCount)
                 {
                     yield return null;
                     continue;
@@ -62,8 +64,9 @@ namespace Sources.Enemy
 
         protected virtual void SpawnInstance()
         {
-            float randX = UnityEngine.Random.Range(mr.bounds.max.x, mr.bounds.min.x);
-            float randZ = UnityEngine.Random.Range(mr.bounds.max.z, mr.bounds.min.z);
+            Bounds bounds = GameManager.Instance.GameBounds;
+            float randX = UnityEngine.Random.Range(bounds.max.x, bounds.min.x);
+            float randZ = UnityEngine.Random.Range(bounds.max.z, bounds.min.z);
             var randomPosition = new Vector3(randX, elevation, randZ);
             var newPoint = transform.position + randomPosition;
             T instance = Instantiate(instancePrefab, newPoint, Quaternion.identity);
@@ -75,12 +78,12 @@ namespace Sources.Enemy
         {
             float spike = GetDifficultySpike();
             spawnInterval = Mathf.Clamp(1 - spike / 10, minSpawnInterval, maxSpawnInterval);
-            currentInstanceCount = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
+            maxInstanceCount = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
         }
 
         public float GetDifficultySpike()
         {
-            return difficultySpike = (Time.time - initTime) / spikeFrequency;
+            return difficultySpike = GameManager.Instance.GameElapsedTime / spikeFrequency;
         }
 
         public abstract void OnAfterSpawn(T instance);

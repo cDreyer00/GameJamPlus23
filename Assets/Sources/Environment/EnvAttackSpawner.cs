@@ -15,7 +15,7 @@ public class EnvAttackSpawner : Spawner<EnvAreaAttack>
     protected override void SpawnInstance()
     {
         Vector3 pos = GetRandomPosition();
-        var bounds = mr.bounds;
+        var bounds = GameManager.Instance.GameBounds;
         var instance = Instantiate(instancePrefab, pos, Quaternion.identity);
         float rand = UnityEngine.Random.Range(0.6f, 1f);
         float radius = instance.radius = UnityEngine.Random.Range(minRadius, maxRadius) * rand;
@@ -41,8 +41,10 @@ public class EnvAttackSpawner : Spawner<EnvAreaAttack>
         float randX = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
         float randZ = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
         var randomPosition = GameManager.Instance.Player.Pos + new Vector3(randX, elevation, randZ);
-        randomPosition.x = Mathf.Clamp(randomPosition.x, mr.bounds.min.x, mr.bounds.max.x);
-        randomPosition.z = Mathf.Clamp(randomPosition.z, mr.bounds.min.z, mr.bounds.max.z);
+
+        var bounds = GameManager.Instance.GameBounds;
+        randomPosition.x = Mathf.Clamp(randomPosition.x, bounds.min.x, bounds.max.x);
+        randomPosition.z = Mathf.Clamp(randomPosition.z, bounds.min.z, bounds.max.z);
 
         return randomPosition;
     }

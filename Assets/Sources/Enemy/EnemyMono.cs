@@ -1,6 +1,8 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using CDreyer;
 
 namespace Sources.Enemy
 {
@@ -19,18 +21,14 @@ namespace Sources.Enemy
         [SerializeField] AudioClip damageAudio;
         [SerializeField] AudioClip attackAudio;
 
-        Animator animator;
-
-
         public IPlayer target;
         public event Action OnDied;
+
+        public Vector3 Pos => transform.position;
 
         [SerializeField] private int health;
 
         public bool canMove = true;
-        private static readonly int AnimIsAttack = Animator.StringToHash("isAttack");
-        private static readonly int AnimIsDead = Animator.StringToHash("isDead");
-        private static readonly int AnimIsWalk = Animator.StringToHash("isWalk");
 
         [SerializeField] FeedbackDamage feedback;
 
@@ -46,9 +44,6 @@ namespace Sources.Enemy
         {
             Identifier = nextId++;
             agent = GetComponent<NavMeshAgent>();
-            animator = GetComponentInChildren<Animator>();
-
-            animator.SetBool(AnimIsWalk, true);
         }
 
         private void Update()
@@ -82,14 +77,9 @@ namespace Sources.Enemy
 
             if (health <= 0)
             {
-                agent.isStopped = true;
-                animator.SetTrigger(AnimIsDead);
-                Helpers.ActionCallback(() =>
-                {
-                    Destroy(gameObject);
-                    OnDied?.Invoke();
-                    PowerBar.Instance.UpdatePower(powerScore);
-                }, 1f);
+                Destroy(gameObject);
+                OnDied?.Invoke();
+                PowerBar.Instance.UpdatePower(powerScore);
             }
         }
 
@@ -98,12 +88,7 @@ namespace Sources.Enemy
             if (!canAttack) return;
 
             var player = other.gameObject.GetComponent<IPlayer>();
-
-            if (player != null)
-            {
-                animator.SetTrigger(AnimIsAttack);
-                player.TakeDamage(damage);
-            }
+            player?.TakeDamage(damage);
 
             if (attackAudio != null)
                 attackAudio.Play();
@@ -116,10 +101,21 @@ namespace Sources.Enemy
             agent.SetDestination(position);
         }
 
-        public float Speed
+        public void SetDestForTimer(Vector3 dest, float timer)
         {
-            get => agent.speed;
-            set => agent.speed = value;
+            idleTime = timer;
+            SetDestination(dest);
+        }
+
+        public void SetSpeed(float speed, float timer)
+        {
+            float normalSpeed = agent.speed;
+            agent.speed = speed;
+            Helpers.ActionCallback(() =>
+            {
+                if (this.IsDestroyed()) return;
+                agent.speed = normalSpeed;
+            }, timer);
         }
     }
 }

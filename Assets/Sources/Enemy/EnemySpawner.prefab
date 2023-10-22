@@ -44,15 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6222209b55c50074db25563dd4541b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 0
+  difficultySpike: 0
+  startSpawnTimer: 0
+  minInstanceCount: 1
   maxInstanceCount: 10
+  minDamage: 1
+  maxDamage: 10
+  minSpawnInterval: 0.1
+  maxSpawnInterval: 1
+  spikeFrequency: 60
   spawnInterval: 2
   elevation: 1
   instancePrefab: {fileID: 8135059297603922165, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
-  mr: {fileID: 0}
-  difficultySpike: 0
-  minEnemyCount: 1
-  maxEnemyCount: 10
-  minSpawnInterval: 0.1
-  maxSpawnInterval: 1
-  minDamage: 1
-  maxDamage: 10
+  minSpeed: 1
+  maxSpeed: 10

@@ -24,19 +24,19 @@ public class CameraController : Singleton<CameraController>
     Vector3 curEuler = Vector3.zero;
     HashSet<Transform> walls = new();
     HashSet<Transform> hitWalls = new();
-    
-    
-    public Direction Direction => (Direction) Math.Abs(camAnchor.eulerAngles.y / 90);
 
-    
-    public Direction Dir; 
+    public Direction Direction => (Direction)(Math.Abs(curEuler.y / 90) % 4);
     public Camera Cam => cam;
+
+    public event Action<Direction> camDirectionChanged;
 
     public void RotateLeft()
     {
         curEuler += Vector3.up * 90;
         Vector3 endValue = new(0, curEuler.y, 0);
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
+
+        camDirectionChanged?.Invoke(Direction);
     }
 
     public void RotateRight()
@@ -44,13 +44,14 @@ public class CameraController : Singleton<CameraController>
         curEuler += Vector3.down * 90;
         Vector3 endValue = new(0, curEuler.y, 0);
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
+
+        camDirectionChanged?.Invoke(Direction);
     }
 
     readonly RaycastHit[] _hits = new RaycastHit[4];
 
     private void Update()
     {
-        Dir = Direction;
         var pos = wallRaycastAnchor.position;
         var dir = wallRaycastAnchor.forward;
         int size = Physics.RaycastNonAlloc(pos, dir, _hits, Mathf.Infinity);
