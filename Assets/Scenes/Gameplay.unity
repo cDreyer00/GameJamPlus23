@@ -7838,6 +7838,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6891723404258954367, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
+      propertyPath: spikeFrequency
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6891723404258954367, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
+      propertyPath: maxInstanceCount
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
