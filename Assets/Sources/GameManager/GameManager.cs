@@ -28,6 +28,8 @@ public class GameManager : Singleton<GameManager>
         {
             LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
         });
+
+        SoundManager.Instance.Stop();
     }
 
     int GetCamId()

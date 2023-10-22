@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,6 +12,9 @@ public class PlayerController : MonoBehaviour, IPlayer
     [SerializeField] float shootDelay = 1.3f;
     [SerializeField] float shootDelayDelta = 0.15f;
     [SerializeField] float breakDrag = 5f;
+    [Space]
+    [SerializeField] AudioClip[] shootAudios;
+    [SerializeField] AudioClip damageAudio;
 
     Camera cam;
     float initShootDelay;
@@ -47,7 +49,6 @@ public class PlayerController : MonoBehaviour, IPlayer
             }
         }
 
-        // if (Input.GetMouseButton(0))
         Rotate();
 
         if (transform.position.y <= -1)
@@ -79,6 +80,9 @@ public class PlayerController : MonoBehaviour, IPlayer
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
         Dash(-proj.transform.forward);
+
+        if (shootAudios.Length > 0)
+            shootAudios[Random.Range(0, shootAudios.Length)].Play();
     }
 
     void Dash(Vector3 dir)
@@ -94,6 +98,9 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     public void TakeDamage(int amount)
     {
+        if (damageAudio != null)
+            damageAudio.Play();
+
         float power = PowerBar.Instance.Power;
         if (power <= 0)
         {
