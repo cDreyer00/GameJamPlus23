@@ -52,7 +52,7 @@ namespace Sources.Enemy
                     continue;
                 }
 
-                if (instances.Count >= currentMaxInstances)
+                if (instances.Count > currentMaxInstances)
                 {
                     yield return null;
                     continue;
