@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2997253539825401098}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6891723404258954367
 MonoBehaviour:
@@ -47,16 +47,16 @@ MonoBehaviour:
   dontDestroyOnLoad: 0
   difficultySpike: 0
   startSpawnTimer: 10
-  minInstanceCount: 1
+  minInstanceCount: 3
   maxInstanceCount: 10
   minDamage: 1
   maxDamage: 10
   minSpawnInterval: 0.1
   maxSpawnInterval: 1
-  spikeFrequency: 60
+  spikeFrequency: 30
   spawnInterval: 1
   elevation: 0.1
   instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
   maxDistFromPlayer: 8
-  minRadius: 1
+  minRadius: 2
   maxRadius: 10

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2030193239284623269}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: player_rot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 431440245209478586}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 167829896736789762}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3271223861701965309
 GameObject:
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 571816893483890691}
   - component: {fileID: 6669691151031775154}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Braco_Verde
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,13 +55,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3271223861701965309}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.357, y: 0.592, z: 0}
   m_LocalScale: {x: 1.340976, y: 1.340976, z: 1.340976}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5981942358528734517}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6669691151031775154
 SpriteRenderer:
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 988394458813437955}
   - component: {fileID: 1900093878006884167}
   - component: {fileID: 6241744108431300218}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Protagonista_Frente_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,13 +141,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4538759771164796262}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.625, z: 0}
   m_LocalScale: {x: 1.55, y: 1.55, z: 1.55}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5981942358528734517}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &988394458813437955
 SpriteRenderer:
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 6924845005692411197}
   - component: {fileID: 98108918132448726}
   - component: {fileID: 192714377665351109}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Aim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,13 +261,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5631187236003761713}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 167829896736789762}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &98108918132448726
 LineRenderer:
@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 2799235822207906874}
   - component: {fileID: 7350480416624437675}
   - component: {fileID: 7580601439425547171}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -414,7 +414,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087302238658029148}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -424,6 +423,7 @@ Transform:
   - {fileID: 2030193239284623269}
   - {fileID: 6924845005692411197}
   m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7411618165646411253
 MonoBehaviour:
@@ -442,7 +442,7 @@ MonoBehaviour:
   anchor: {fileID: 2030193239284623269}
   rb: {fileID: 2799235822207906874}
   aim: {fileID: 192714377665351109}
-  dashForce: 25
+  dashForce: 10.4
   shootDelay: 0.8
   shootDelayDelta: 0.15
   breakDrag: 5
@@ -529,7 +529,7 @@ GameObject:
   - component: {fileID: 5981942358528734517}
   - component: {fileID: 1679111150222525187}
   - component: {fileID: 4648811874107556195}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PlayerSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -543,7 +543,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7731511310826101504}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.9016, y: 1.9016, z: 1.9016}
@@ -552,6 +551,7 @@ Transform:
   - {fileID: 4283160997115300786}
   - {fileID: 571816893483890691}
   m_Father: {fileID: 167829896736789762}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1679111150222525187
 MeshFilter:
