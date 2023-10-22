@@ -7,18 +7,30 @@ public class SoundManager : Singleton<SoundManager>
 {
     AudioSource source;
 
-    void Awake()
+    protected override void Awake()
     {
         base.Awake();
         source = GetComponent<AudioSource>();
         source = source == null ? gameObject.AddComponent<AudioSource>() : source;
 
-        source.Play();
+        if (Instance == this)
+            source.Play();
     }
 
     public void PlayClip(AudioClip clip)
     {
         source.PlayOneShot(clip);
+
+    }
+    public void Stop()
+    {
+        source.Stop();
+    }
+
+    void OnDisable()
+    {
+        if (source != null)
+            source.Stop();
     }
 }
 
