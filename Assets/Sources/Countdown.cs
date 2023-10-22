@@ -21,10 +21,8 @@ namespace Sources
         void Update()
         {
             time -= Time.deltaTime;
-            if (time % 01f < 1e-3f)
-            {
-                textMesh.text = time.ToString("0");
-            }
+            textMesh.text = time.ToString("0");
+
 
             if (!(time <= 0)) return;
 
@@ -32,7 +30,7 @@ namespace Sources
             // {
             //     o.SetActive(false);
             // }
-            
+
             GameManager.Instance.ShowEndGame();
         }
     }
