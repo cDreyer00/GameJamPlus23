@@ -215,6 +215,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_FadeFactor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4683100282082049296, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_Name
       value: Decal ingrenagem (9)
@@ -237,19 +241,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.5841929
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0.5841929
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.3983952
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.3983952
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -261,7 +265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 68.585
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -283,6 +287,10 @@ PrefabInstance:
     - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_Size.y
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_FadeFactor
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4683100282082049296, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_Name
@@ -337,6 +345,84 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+--- !u!1001 &335119670
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 615169455}
+    m_Modifications:
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_FadeFactor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4683100282082049296, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_Name
+      value: Decal ingrenagem (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5469721
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5469721
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.44813117
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.44813117
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 78.655
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+--- !u!4 &335119671 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+  m_PrefabInstance: {fileID: 335119670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &406087251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -509,6 +595,84 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2831cbb9b4406bc47be0a95fba3bce0e, type: 3}
+--- !u!1001 &553574635
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 615169455}
+    m_Modifications:
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_FadeFactor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4683100282082049296, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_Name
+      value: Decal ingrenagem (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5469721
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5469721
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.44813117
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.44813117
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 78.655
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+--- !u!4 &553574636 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+  m_PrefabInstance: {fileID: 553574635}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &561174577
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -591,6 +755,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_FadeFactor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4683100282082049296, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_Name
       value: Decal ingrenagem (7)
@@ -601,7 +769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.24
+      value: 3.08
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -609,7 +777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.79
+      value: -4.01
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -680,6 +848,8 @@ Transform:
   - {fileID: 561174578}
   - {fileID: 1223127543}
   - {fileID: 197215876}
+  - {fileID: 335119671}
+  - {fileID: 553574636}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1314,6 +1484,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_FadeFactor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4683100282082049296, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_Name
       value: Decal ingrenagem (5)
@@ -1336,19 +1510,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.66959983
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0.66959983
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.22723581
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.22723581
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1360,7 +1534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -37.49
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1422,6 +1596,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1353587848201716559, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
+      propertyPath: m_FadeFactor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4683100282082049296, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_Name
       value: Decal ingrenagem (11)
@@ -1444,19 +1622,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.5469721
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0.5469721
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.44813117
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.44813117
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1468,7 +1646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6868050747035267618, guid: 65e7076e9832e0d4bbc607a94989dfcd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 78.655
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

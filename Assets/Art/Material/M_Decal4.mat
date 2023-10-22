@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Decal
+  m_Name: M_Decal4
   m_Shader: {fileID: -6465566751694194690, guid: 9b4e681081e2b4c469111bb649e2f7ee, type: 3}
   m_Parent: {fileID: 2100000, guid: adef66522f9ebcf46ac1e49204e050e3, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -45,7 +45,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Base_Map:
-        m_Texture: {fileID: 2800000, guid: dce6053745cbfcc4ea87b6e9d55affd0, type: 3}
+        m_Texture: {fileID: 2800000, guid: faeee4fb8bd644c4dacec13a7bcb4c49, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
