@@ -27,6 +27,7 @@ namespace Sources.Player
         public float ShootDelay => shootDelay;
 
         [SerializeField] FeedbackDamage feed;
+        [SerializeField] CameraShake came;
         private void Awake()
         {
             initShootDelay = shootDelay;
@@ -108,6 +109,7 @@ namespace Sources.Player
             if (GameManager.IsGameOver)
                 return;
             feed.StartCoroutine("DamageColor");
+            came.ShakeCamera();
 
             if (damageAudio != null)
                 damageAudio.Play();
