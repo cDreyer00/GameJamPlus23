@@ -31,6 +31,9 @@ namespace Sources.Enemy
         public bool canMove = true;
 
         [SerializeField] FeedbackDamage feedback;
+        private Animator anim;
+        private static readonly int AnimIsDead = Animator.StringToHash("isDead");
+        private static readonly int AnimIsDamage = Animator.StringToHash("isDamage");
 
         public int Health
         {
@@ -44,6 +47,7 @@ namespace Sources.Enemy
         {
             Identifier = nextId++;
             agent = GetComponent<NavMeshAgent>();
+            anim = GetComponentInChildren<Animator>();
         }
 
         private void Update()
@@ -77,9 +81,17 @@ namespace Sources.Enemy
 
             if (health <= 0)
             {
-                Destroy(gameObject);
-                OnDied?.Invoke();
-                PowerBar.Instance.UpdatePower(powerScore);
+                anim.SetTrigger(AnimIsDead);
+                Helpers.ActionCallback(() =>
+                {
+                    Destroy(gameObject);
+                    OnDied?.Invoke();
+                    PowerBar.Instance.UpdatePower(powerScore);
+                }, 1f);
+            }
+            else
+            {
+                anim.SetTrigger(AnimIsDamage);
             }
         }
 
