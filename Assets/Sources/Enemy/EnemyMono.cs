@@ -32,6 +32,8 @@ namespace Sources.Enemy
         private static readonly int AnimIsDead = Animator.StringToHash("isDead");
         private static readonly int AnimIsWalk = Animator.StringToHash("isWalk");
 
+        [SerializeField] FeedbackDamage feedback;
+
         public int Health
         {
             get => health;
@@ -72,6 +74,7 @@ namespace Sources.Enemy
 
         public void TakeDamage(int damage)
         {
+            feedback.StartCoroutine("DamageColor");
             if (damageAudio != null)
                 damageAudio.Play();
 
