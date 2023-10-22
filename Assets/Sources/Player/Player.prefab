@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lr: {fileID: 98108918132448726}
-  distance: 10
+  distance: 20
 --- !u!1 &6087302238658029148
 GameObject:
   m_ObjectHideFlags: 0
