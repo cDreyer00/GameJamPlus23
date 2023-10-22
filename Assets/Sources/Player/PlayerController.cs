@@ -23,6 +23,10 @@ namespace Sources.Player
 
         public Vector3 Pos => transform.position;
 
+        public float CurDelay => curDelay;
+        public float ShootDelay => shootDelay;
+
+        [SerializeField] FeedbackDamage feed;
         private void Awake()
         {
             initShootDelay = shootDelay;
@@ -100,6 +104,7 @@ namespace Sources.Player
         {
             if (GameManager.IsGameOver)
                 return;
+            feed.StartCoroutine("DamageColor");
 
             if (damageAudio != null)
                 damageAudio.Play();
