@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour, IPlayer
     void Update()
     {
         curDelay += Time.deltaTime;
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButton(0))
         {
             if (curDelay >= shootDelay)
             {
