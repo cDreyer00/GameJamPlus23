@@ -17,13 +17,14 @@ public class PowerBar : Singleton<PowerBar>
     [SerializeField] int powerLevel;
     [SerializeField] private float[] powerTrashHolds;
     public float Power => power;
+    public float MaxPower => maxPower;
     public event Action<PowerBarEventArgs> onPowerChanged;
 
     public int DiscretePowerLevel()
     {
         for (int i = 0; i < powerTrashHolds.Length; i++)
         {
-            if (power < powerTrashHolds[i])
+            if (power >= powerTrashHolds[i])
                 return i;
         }
 
@@ -48,7 +49,7 @@ public class PowerBar : Singleton<PowerBar>
 
     public void UpdatePower(float amount)
     {
-        power += amount;
+        power -= amount;
         power = Math.Clamp(power, 0, maxPower);
         slider.value = power;
         powerLevel = DiscretePowerLevel();

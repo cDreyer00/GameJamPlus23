@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4ca1328f3b9dc9341a39115886b57e58
+guid: 5f660ebd0c9217248ab677bfdb9539a9
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -147,90 +147,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: O_Burgues_Abrindo_Mao_1
-      rect:
-        serializedVersion: 2
-        x: 56
-        y: 58
-        width: 143
-        height: 159
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9a23782351d19364494c0f29d974335b
-      internalID: 344500505
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: O_Burgues_Abrindo_Mao_4
-      rect:
-        serializedVersion: 2
-        x: 311
-        y: 57
-        width: 146
-        height: 160
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6483f43cbfa3617448d6e0f088a8f8b6
-      internalID: -142478471
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: O_Burgues_Abrindo_Mao_7
-      rect:
-        serializedVersion: 2
-        x: 554
-        y: 51
-        width: 172
-        height: 166
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: db42596c8f3fb1d48974d04cae95d2a8
-      internalID: 1192600475
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 67e073f53ae4ad64d8304f2c2fe2067d
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      O_Burgues_Abrindo_Mao_0: 1696254711
-      O_Burgues_Abrindo_Mao_1: 344500505
-      O_Burgues_Abrindo_Mao_2: 637702788
-      O_Burgues_Abrindo_Mao_3: -433741385
-      O_Burgues_Abrindo_Mao_4: -142478471
-      O_Burgues_Abrindo_Mao_5: 2140416227
-      O_Burgues_Abrindo_Mao_6: -395191298
-      O_Burgues_Abrindo_Mao_7: 1192600475
-      O_Burgues_Abrindo_Mao_8: 475351422
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

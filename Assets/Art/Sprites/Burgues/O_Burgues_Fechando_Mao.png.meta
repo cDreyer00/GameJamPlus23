@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -34,27 +34,27 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -147,18 +147,250 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 54
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b81575e915d6b7346a83eb4ceb44d03b
+      internalID: -604243746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_4
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 59
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4c21f58479cb72408a0e55d47b956ce
+      internalID: 1964204754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_7
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 55
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a98063fe21a391d46b4fd3b64e4143b8
+      internalID: -1986705638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_9
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 59
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93361bf163902c741914435e7939eecd
+      internalID: -1091903879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_10
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 55
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a440d68af7045348a222bb03311bb4e
+      internalID: 766573583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_11
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 57
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d93ad1b99a2aa44ca36451c6155bcb4
+      internalID: -368278110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_12
+      rect:
+        serializedVersion: 2
+        x: 1585
+        y: 54
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95987274c6d56014bbea56e719f8a98e
+      internalID: 1360591623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_13
+      rect:
+        serializedVersion: 2
+        x: 1840
+        y: 56
+        width: 162
+        height: 161
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43c7ffcf89d354b45811f6d7001d8432
+      internalID: -2112003467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_14
+      rect:
+        serializedVersion: 2
+        x: 2097
+        y: 54
+        width: 162
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dca7b61ddf82f1c45bea09521148e590
+      internalID: -1141894548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: O_Burgues_Fechando_Mao_15
+      rect:
+        serializedVersion: 2
+        x: 2354
+        y: 59
+        width: 162
+        height: 160
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35981ce6d0ff34143a47330a9e658e78
+      internalID: -346393356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5b7225bf927dbca419884278ad0d5f01
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      O_Burgues_Fechando_Mao_0: -1011679932
+      O_Burgues_Fechando_Mao_1: -604243746
+      O_Burgues_Fechando_Mao_10: 766573583
+      O_Burgues_Fechando_Mao_11: -368278110
+      O_Burgues_Fechando_Mao_12: 1360591623
+      O_Burgues_Fechando_Mao_13: -2112003467
+      O_Burgues_Fechando_Mao_14: -1141894548
+      O_Burgues_Fechando_Mao_15: -346393356
+      O_Burgues_Fechando_Mao_16: -2112296853
+      O_Burgues_Fechando_Mao_17: -947469315
+      O_Burgues_Fechando_Mao_18: -135056166
+      O_Burgues_Fechando_Mao_19: 1882790364
+      O_Burgues_Fechando_Mao_2: 2056149652
+      O_Burgues_Fechando_Mao_20: -452514769
+      O_Burgues_Fechando_Mao_21: -1741708448
+      O_Burgues_Fechando_Mao_3: -660580935
+      O_Burgues_Fechando_Mao_4: 1964204754
+      O_Burgues_Fechando_Mao_5: -386519322
+      O_Burgues_Fechando_Mao_6: -2062031531
+      O_Burgues_Fechando_Mao_7: -1986705638
+      O_Burgues_Fechando_Mao_8: -910924321
+      O_Burgues_Fechando_Mao_9: -1091903879
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
