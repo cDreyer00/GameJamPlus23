@@ -58,5 +58,4 @@ MonoBehaviour:
   elevation: 0.1
   instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
   maxDistFromPlayer: 8
-  minRadius: 2
-  maxRadius: 10
+  minRadius: 10
