@@ -65,6 +65,9 @@ namespace Sources.Enemy
 
         private void Update()
         {
+            if (GameManager.IsGameOver)
+                return;
+            
             idleTime -= Time.deltaTime;
             if (idleTime > 0) return;
             else if (!canMove)

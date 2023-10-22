@@ -13,8 +13,7 @@ namespace Sources.Player
         [SerializeField] float shootDelay = 1.3f;
         [SerializeField] float shootDelayDelta = 0.15f;
         [SerializeField] float breakDrag = 5f;
-        [Space]
-        [SerializeField] AudioClip[] shootAudios;
+        [Space] [SerializeField] AudioClip[] shootAudios;
         [SerializeField] AudioClip damageAudio;
 
         Camera cam;
@@ -103,6 +102,8 @@ namespace Sources.Player
 
         public void TakeDamage(int amount)
         {
+            if (GameManager.IsGameOver)
+                return;
             feed.StartCoroutine("DamageColor");
 
             if (damageAudio != null)

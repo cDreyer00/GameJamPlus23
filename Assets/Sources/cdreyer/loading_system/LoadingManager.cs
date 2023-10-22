@@ -81,7 +81,10 @@ namespace CDreyer
             fade.color = new Color(0, 0, 0, 0);
 
             Sequence s = DOTween.Sequence();
-            s.Append(fade.DOColor(new Color(0, 0, 0, 1), 0.25f));
+            s.Append(
+                fade.DOColor(new Color(0, 0, 0, 1), 0.25f)
+                    .SetUpdate(true)
+            ).SetUpdate(true);
             s.OnComplete(() =>
             {
                 onComplete?.Invoke();
