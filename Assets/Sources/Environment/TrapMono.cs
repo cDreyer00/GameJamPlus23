@@ -40,19 +40,19 @@ public class TrapMono : MonoBehaviour
     void OnCamDirectionChanged(Direction dir)
     {
         curCameraDir = dir;
-        if (dir == direction)
-        {
-            sprite.color = Color.green;
-        }
-        else
-        {
-            sprite.color = Color.gray;
-        }
+        // if (dir == direction)
+        // {
+        //     sprite.color = Color.green;
+        // }
+        // else
+        // {
+        //     sprite.color = Color.gray;
+        // }
     }
 
     void Update()
     {
-        if (curCameraDir != direction) return;
+        // if (curCameraDir != direction) return;
 
         if (Vector3.Distance(GameManager.Instance.Player.Pos, transform.position) < radius)
             Trigger();
