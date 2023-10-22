@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Lookat : MonoBehaviour
 {
-    [SerializeField] Transform cam;
+    Transform cam;
+
+    private void Start()
+    {
+        cam = GameObject.Find("Main Camera").transform;
+    }
     void Update()
     {
         transform.LookAt(cam);
