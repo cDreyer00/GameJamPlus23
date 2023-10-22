@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
   difficultySpike: 0
+  startSpawnTimer: 5
   minInstanceCount: 2
   maxInstanceCount: 4
   minDamage: 0
@@ -56,4 +57,3 @@ MonoBehaviour:
   spawnInterval: 1
   elevation: 1
   instancePrefab: {fileID: -5656992903076782827, guid: cbb2982c12f901e42bc7a22ac706ca3e, type: 3}
-  effect: 0

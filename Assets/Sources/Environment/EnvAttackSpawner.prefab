@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8748139427391142789
+--- !u!1 &2997253539825401098
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8848100431418191830}
-  - component: {fileID: 3437253396121358214}
+  - component: {fileID: 6254343403237477536}
+  - component: {fileID: 6891723404258954367}
   m_Layer: 0
-  m_Name: EnemySpawner 1
+  m_Name: EnvAttackSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8848100431418191830
+--- !u!4 &6254343403237477536
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8748139427391142789}
+  m_GameObject: {fileID: 2997253539825401098}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -32,30 +32,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3437253396121358214
+--- !u!114 &6891723404258954367
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8748139427391142789}
+  m_GameObject: {fileID: 2997253539825401098}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd54f4c692d3dcc468c54d8121187213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
   difficultySpike: 0
-  minInstanceCount: 2
+  startSpawnTimer: 10
+  minInstanceCount: 1
   maxInstanceCount: 10
-  minDamage: 5
-  maxDamage: 50
+  minDamage: 1
+  maxDamage: 10
   minSpawnInterval: 0.1
-  maxSpawnInterval: 0.7
-  spikeFrequency: 20
-  spawnInterval: 3
+  maxSpawnInterval: 1
+  spikeFrequency: 60
+  spawnInterval: 1
   elevation: 0.1
   instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
-  maxDistFromPlayer: 4
-  minRadius: 2
-  maxRadius: 4
+  maxDistFromPlayer: 8
+  minRadius: 1
+  maxRadius: 10

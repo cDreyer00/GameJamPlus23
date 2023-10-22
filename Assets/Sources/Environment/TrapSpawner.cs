@@ -7,10 +7,6 @@ namespace Sources.Environment
 {
     public class TrapSpawner : Spawner<TrapMono>
     {
-        [SerializeField] private Effect effect;
-
-        private Dictionary<Effect, IEnumerator> _effects;
-
         protected override void Awake()
         {
             base.Awake();
@@ -19,6 +15,7 @@ namespace Sources.Environment
         public override void OnAfterSpawn(TrapMono instance)
         {
             instance.Init();
+            instance.Effect = (Effect)Random.Range(0, 2);
             instance.onTrapDisabled += trap =>
             {
                 instances.Remove(trap);

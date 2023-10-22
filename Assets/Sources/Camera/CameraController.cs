@@ -25,7 +25,7 @@ public class CameraController : Singleton<CameraController>
     HashSet<Transform> walls = new();
     HashSet<Transform> hitWalls = new();
 
-    public Direction Direction => (Direction)Math.Abs(curEuler.y / 90);
+    public Direction Direction => (Direction)(Math.Abs(curEuler.y / 90) % 4);
     public Camera Cam => cam;
 
     public event Action<Direction> camDirectionChanged;

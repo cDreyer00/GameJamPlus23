@@ -1,6 +1,8 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using CDreyer;
 
 namespace Sources.Enemy
 {
@@ -21,6 +23,8 @@ namespace Sources.Enemy
 
         public IPlayer target;
         public event Action OnDied;
+
+        public Vector3 Pos => transform.position;
 
         [SerializeField] private int health;
 
@@ -82,7 +86,7 @@ namespace Sources.Enemy
 
             var player = other.gameObject.GetComponent<IPlayer>();
             player?.TakeDamage(damage);
-            
+
             if (attackAudio != null)
                 attackAudio.Play();
 
@@ -92,6 +96,23 @@ namespace Sources.Enemy
         public void SetDestination(Vector3 position)
         {
             agent.SetDestination(position);
+        }
+
+        public void SetDestForTimer(Vector3 dest, float timer)
+        {
+            idleTime = timer;
+            SetDestination(dest);
+        }
+
+        public void SetSpeed(float speed, float timer)
+        {
+            float normalSpeed = agent.speed;
+            agent.speed = speed;
+            Helpers.ActionCallback(() =>
+            {
+                if (this.IsDestroyed()) return;
+                agent.speed = normalSpeed;
+            }, timer);
         }
     }
 }

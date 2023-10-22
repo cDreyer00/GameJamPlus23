@@ -6,6 +6,8 @@ using Sources.Environment;
 using UnityEngine;
 using CDreyer;
 using Sources.Enemy;
+using Unity.VisualScripting;
+using UnityEditor;
 
 public class TrapMono : MonoBehaviour
 {
@@ -16,9 +18,11 @@ public class TrapMono : MonoBehaviour
     [SerializeField] float lifeTime;
 
     public float Radius => radius;
+    public Effect Effect { get => effect; set => effect = value; }
 
     public event Action<TrapMono> onTrapDisabled;
     SpriteRenderer sprite;
+    Direction curCameraDir;
 
     public void Init()
     {
@@ -27,17 +31,18 @@ public class TrapMono : MonoBehaviour
         transform.localScale = Vector3.one * radius;
 
         CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
+
+        OnCamDirectionChanged(CameraController.Instance.Direction);
+
+        Helpers.ActionCallback(Disable, lifeTime);
     }
 
     void OnCamDirectionChanged(Direction dir)
     {
+        curCameraDir = dir;
         if (dir == direction)
         {
             sprite.color = Color.green;
-            if (Vector3.Distance(GameManager.Instance.Player.Pos, transform.position) < radius)
-            {
-                Trigger();
-            }
         }
         else
         {
@@ -45,17 +50,29 @@ public class TrapMono : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (curCameraDir != direction) return;
+
+        if (Vector3.Distance(GameManager.Instance.Player.Pos, transform.position) < radius)
+            Trigger();
+    }
+
     void Trigger()
     {
         foreach (var e in EnemySpawner.Instance.Instances)
-            EffectManager.ApplyEffect(e, effect);
+            EffectManager.ApplyEffect(e, effect, effectDuration);
 
         Disable();
     }
 
     void Disable()
     {
+        if (this.IsDestroyed()) return;
+
         onTrapDisabled?.Invoke(this);
         Destroy(gameObject);
+
+        CameraController.Instance.camDirectionChanged -= OnCamDirectionChanged;
     }
 }

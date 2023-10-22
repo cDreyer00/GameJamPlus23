@@ -14,6 +14,7 @@ namespace Sources.Enemy
     {
         public float difficultySpike;
 
+        public int startSpawnTimer;
         public int minInstanceCount = 1;
         public int maxInstanceCount = 10;
         public int minDamage = 1;
@@ -26,16 +27,13 @@ namespace Sources.Enemy
 
         public T instancePrefab;
 
-        protected List<T> instances;
-        public List<T> Instances => instances;        
-
-        float initTime;
+        protected List<T> instances = new();
+        public List<T> Instances => instances;
 
         protected override void Awake()
         {
             base.Awake();
             instances = new List<T>();
-            initTime = Time.time;
         }
 
         protected virtual void Start()
@@ -47,6 +45,12 @@ namespace Sources.Enemy
         {
             while (true)
             {
+                if (GameManager.Instance.GameElapsedTime < startSpawnTimer)
+                {
+                    yield return null;
+                    continue;
+                }
+
                 if (instances.Count >= maxInstanceCount)
                 {
                     yield return null;
@@ -79,7 +83,7 @@ namespace Sources.Enemy
 
         public float GetDifficultySpike()
         {
-            return difficultySpike = (Time.time - initTime) / spikeFrequency;
+            return difficultySpike = GameManager.Instance.GameElapsedTime / spikeFrequency;
         }
 
         public abstract void OnAfterSpawn(T instance);

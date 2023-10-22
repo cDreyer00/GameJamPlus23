@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
-    
+
     public IPlayer Player { get; private set; }
     public void RegisterPlayer(IPlayer p) => Player = p;
 
@@ -14,6 +14,14 @@ public class GameManager : Singleton<GameManager>
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
     public Bounds GameBounds { get => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds; }
+
+    float _initTime;
+    public float GameElapsedTime => Time.time - _initTime;
+
+    void Start()
+    {
+        _initTime = Time.time;
+    }
 
     void Update()
     {

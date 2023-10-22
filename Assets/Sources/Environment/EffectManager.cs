@@ -15,25 +15,26 @@ namespace Sources.Environment
     public static class EffectManager
     {
 
-        public static void ApplyEffect(IEnemy enemy, Effect effect)
+        public static void ApplyEffect(IEnemy enemy, Effect effect, float timer)
         {
-            Action<IEnemy> e = effect switch
+            Action<IEnemy, float> e = effect switch
             {
                 Effect.Confusion => ApplyConfusion,
                 Effect.Slow => ApplySlow,
+                _ => throw new NotImplementedException(),
             };
 
-            e?.Invoke(enemy);
+            e?.Invoke(enemy, timer);
         }
 
-        static void ApplyConfusion(IEnemy enemy)
+        static void ApplyConfusion(IEnemy enemy, float timer)
         {
-
+            enemy.SetDestForTimer(enemy.Pos, timer);
         }
 
-        static void ApplySlow(IEnemy enemy)
+        static void ApplySlow(IEnemy enemy, float timer)
         {
-
+            enemy.SetSpeed(1, timer);            
         }
 
         // public IEnumerator Confusion(float time)
