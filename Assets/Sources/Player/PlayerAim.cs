@@ -20,10 +20,9 @@ public class PlayerAim : MonoBehaviour
 
         if (Physics.Raycast(transform.position, dir, out RaycastHit hit))
         {
-            GameLogger.Log($"hitted on {hit.collider.name}", "green");
-            dist = Vector3.Distance(pos, hit.point);
+            dist = Vector3.Distance(transform.position, hit.point);
         }
-        
+
         dir.Normalize();
         lr.SetPosition(0, pos);
         lr.SetPosition(1, pos + dir * dist);
