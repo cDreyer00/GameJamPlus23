@@ -12,7 +12,7 @@ namespace Sources.Enemy
         public int powerScore = 1;
         public int damage = 1;
         public float attackDelay = 1f;
-        public float idleTime = 0.75f;
+        public float idleTime = 1;
         float curDelay;
         bool canAttack = true;
         public int Identifier { get; private set; }
@@ -28,7 +28,15 @@ namespace Sources.Enemy
 
         [SerializeField] private int health;
 
-        public bool canMove = true;
+        public bool _canMove = false;
+        public bool canMove
+        {
+            get
+            {
+                anim.SetBool(AnimIsWalk, _canMove);
+                return _canMove;
+            }
+        }
 
         [SerializeField] FeedbackDamage feedback;
         private Animator anim;
@@ -55,8 +63,9 @@ namespace Sources.Enemy
         {
             idleTime -= Time.deltaTime;
             if (idleTime > 0) return;
+            else if (!canMove)
+                _canMove = true;
 
-            anim.SetBool(AnimIsWalk, canMove);
             if (!canAttack)
             {
                 curDelay += Time.deltaTime;
@@ -102,12 +111,11 @@ namespace Sources.Enemy
             }
         }
 
-        private void Colide(Collision other)
+        private void Attack(Collision other)
         {
             if (!canAttack) return;
 
-            var player = other.gameObject.GetComponent<IPlayer>();
-            if (player != null)
+            if (other.gameObject.TryGetComponent<IPlayer>(out var player))
             {
                 anim.SetTrigger(AnimIsAttack);
                 Helpers.ActionCallback(() => player.TakeDamage(damage), 0.34f);
@@ -118,14 +126,9 @@ namespace Sources.Enemy
 
             canAttack = false;
         }
-        private void OnCollisionStay(Collision other)
-        {
-            Colide(other);
-        }
-        private void OnCollisionEnter(Collision collision)
-        {
-            Colide(collision);
-        }
+
+        private void OnCollisionStay(Collision other) => Attack(other);
+        private void OnCollisionEnter(Collision collision) => Attack(collision);
 
         public void SetDestination(Vector3 position)
         {

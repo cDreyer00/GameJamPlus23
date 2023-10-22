@@ -27,6 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6089110235842682470}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,7 +35,6 @@ Transform:
   m_Children:
   - {fileID: 8207677253409384896}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8135059297603922165
 MonoBehaviour:
@@ -51,12 +51,12 @@ MonoBehaviour:
   powerScore: 3
   damage: 10
   attackDelay: 0.5
-  idleTime: 1
+  idleTime: 2
   agent: {fileID: 0}
   damageAudio: {fileID: 0}
   attackAudio: {fileID: 0}
   health: 10
-  canMove: 1
+  _canMove: 1
   feedback: {fileID: 798822857582975139}
 --- !u!54 &1516845875696123519
 Rigidbody:
@@ -157,13 +157,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6462346100620335737}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 3.4047413, y: 3.4047413, z: 3.4047413}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4864197767820366391}
-  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9180865843836742033
 SpriteRenderer:
