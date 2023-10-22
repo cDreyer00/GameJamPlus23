@@ -31,9 +31,13 @@ namespace Sources.Enemy
         public bool _canMove = false;
         public bool canMove
         {
+            set
+            {
+                _canMove = value;
+                anim.SetBool(AnimIsWalk, value);
+            }
             get
             {
-                anim.SetBool(AnimIsWalk, _canMove);
                 return _canMove;
             }
         }
@@ -64,7 +68,7 @@ namespace Sources.Enemy
             idleTime -= Time.deltaTime;
             if (idleTime > 0) return;
             else if (!canMove)
-                _canMove = true;
+                canMove = true;
 
             if (!canAttack)
             {
@@ -114,22 +118,23 @@ namespace Sources.Enemy
         private void Attack(Collision other)
         {
             if (!canAttack) return;
-            _canMove = false;
+            canMove = false;
 
             if (other.gameObject.TryGetComponent<IPlayer>(out var player))
             {
+                canAttack = false;
                 anim.SetTrigger(AnimIsAttack);
                 Helpers.ActionCallback(() =>
                 {
                     player.TakeDamage(damage);
-                    _canMove = true;
+                    canMove = true;        
                 }, 0.34f);
             }
 
             if (attackAudio != null)
                 attackAudio.Play();
 
-            canAttack = false;
+
         }
 
         private void OnCollisionStay(Collision other) => Attack(other);
