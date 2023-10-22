@@ -114,11 +114,16 @@ namespace Sources.Enemy
         private void Attack(Collision other)
         {
             if (!canAttack) return;
+            _canMove = false;
 
             if (other.gameObject.TryGetComponent<IPlayer>(out var player))
             {
                 anim.SetTrigger(AnimIsAttack);
-                Helpers.ActionCallback(() => player.TakeDamage(damage), 0.34f);
+                Helpers.ActionCallback(() =>
+                {
+                    player.TakeDamage(damage);
+                    _canMove = true;
+                }, 0.34f);
             }
 
             if (attackAudio != null)
