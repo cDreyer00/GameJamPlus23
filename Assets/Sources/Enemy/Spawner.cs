@@ -28,6 +28,7 @@ namespace Sources.Enemy
         public T instancePrefab;
 
         protected List<T> instances = new();
+        protected int currentMaxInstances = new();
         public List<T> Instances => instances;
 
         protected override void Awake()
@@ -51,7 +52,7 @@ namespace Sources.Enemy
                     continue;
                 }
 
-                if (instances.Count >= maxInstanceCount)
+                if (instances.Count >= currentMaxInstances)
                 {
                     yield return null;
                     continue;
@@ -78,7 +79,7 @@ namespace Sources.Enemy
         {
             float spike = GetDifficultySpike();
             spawnInterval = Mathf.Clamp(1 - spike / 10, minSpawnInterval, maxSpawnInterval);
-            maxInstanceCount = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
+            currentMaxInstances = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
         }
 
         public virtual float GetDifficultySpike()
