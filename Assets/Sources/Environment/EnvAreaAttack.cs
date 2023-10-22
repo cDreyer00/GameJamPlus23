@@ -16,6 +16,11 @@ public class EnvAreaAttack : MonoBehaviour
     public void Init()
     {
         Helpers.ActionCallback(DealDamage, timer);
+        //transform.localScale = Vector3.one * radius;
+    }
+
+    private void Update()
+    {
         transform.localScale = Vector3.one * radius;
     }
 

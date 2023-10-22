@@ -8,7 +8,7 @@ using UnityEngine;
 public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 {
     [SerializeField] float maxDistFromPlayer;
-    
+
     public float minRadius = 1f;
     public float maxRadius = 10f;
 
@@ -17,9 +17,11 @@ public class EnvAttackSpawner : Spawner<EnvAreaAttack>
         Vector3 pos = GetRandomPosition();
         var bounds = mr.bounds;
         var instance = Instantiate(instancePrefab, pos, Quaternion.identity);
-        var radius = instance.radius;
-        pos.x = Mathf.Clamp(pos.x, bounds.min.x + radius/2, bounds.max.x - radius/2);
-        pos.z = Mathf.Clamp(pos.z, bounds.min.z + radius/2, bounds.max.z - radius/2);
+        float rand = UnityEngine.Random.Range(0.6f, 1f);
+        float radius = instance.radius = UnityEngine.Random.Range(minRadius, maxRadius) * rand;
+        pos.x = Mathf.Clamp(pos.x, bounds.min.x + radius / 2, bounds.max.x - radius / 2);
+        pos.z = Mathf.Clamp(pos.z, bounds.min.z + radius / 2, bounds.max.z - radius / 2);
+
         instance.transform.position = pos;
         instances.Add(instance);
         OnAfterSpawn(instance);
