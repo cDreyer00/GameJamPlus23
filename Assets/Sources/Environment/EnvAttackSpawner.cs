@@ -7,12 +7,16 @@ using UnityEngine;
 
 public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 {
-    private Vector3[] randomPositions;
+    [SerializeField] float maxDistFromPlayer;
+    [SerializeField] Vector3 minBounds;
+    [SerializeField] Vector3 maxBounds;
 
-    protected override void Awake()
+    protected override void SpawnInstance()
     {
-        base.Awake();
-        randomPositions = new Vector3[10];
+        Vector3 pos = GetRandomPosition();
+        var instance = Instantiate(instancePrefab, pos, Quaternion.identity);
+        instances.Add(instance);
+        OnAfterSpawn(instance);
     }
 
     public override void OnAfterSpawn(EnvAreaAttack instance)
@@ -23,41 +27,15 @@ public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 
     Vector3 GetRandomPosition()
     {
-        float randX = UnityEngine.Random.Range(mr.bounds.max.x, mr.bounds.min.x);
-        float randZ = UnityEngine.Random.Range(mr.bounds.max.z, mr.bounds.min.z);
-        var randomPosition = new Vector3(randX, elevation, randZ);
+        minBounds = mr.bounds.min;
+        maxBounds = mr.bounds.max;
+
+        float randX = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
+        float randZ = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
+        var randomPosition = GameManager.Instance.Player.Pos + new Vector3(randX, elevation, randZ);
+        randomPosition.x = Mathf.Clamp(randomPosition.x, mr.bounds.min.x, mr.bounds.max.x);
+        randomPosition.z = Mathf.Clamp(randomPosition.z, mr.bounds.min.z, mr.bounds.max.z);
+
         return randomPosition;
-    }
-
-    void GetRandomPositions(Vector3[] positions)
-    {
-        for (int i = 0; i < positions.Length; i++)
-        {
-            positions[i] = GetRandomPosition();
-        }
-    }
-
-    protected override void SpawnInstance()
-    {
-        float closeToPLayerBias = 0.7f;
-        float rand = Random.Range(0f, 1f);
-        GetRandomPositions(randomPositions);
-        Vector3 vec;
-        if (rand < closeToPLayerBias)
-        {
-            var closest = randomPositions
-                .OrderBy(p => Vector3.Distance(p, GameManager.Instance.Player.Pos))
-                .First();
-            vec = closest;
-        }
-        else
-        {
-            var first = randomPositions.First();
-            vec = first;
-        }
-        
-        var instance = Instantiate(instancePrefab, vec, Quaternion.identity);
-        instances.Add(instance);
-        OnAfterSpawn(instance);
     }
 }
