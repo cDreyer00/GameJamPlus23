@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using CDreyer;
 using DG.Tweening;
@@ -14,7 +15,8 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] Transform wallRaycastAnchor;
 
     Vector3 curEuler = Vector3.zero;
-    HashSet<MeshRenderer> walls = new();
+    HashSet<Transform> walls = new();
+    HashSet<Transform> hitWalls = new();
 
     public Camera Cam => cam;
 
@@ -32,23 +34,33 @@ public class CameraController : Singleton<CameraController>
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
     }
 
+    readonly RaycastHit[] _hits = new RaycastHit[4];
+
     private void Update()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(wallRaycastAnchor.position, wallRaycastAnchor.forward, out hit, Mathf.Infinity))
+        var pos = wallRaycastAnchor.position;
+        var dir = wallRaycastAnchor.forward;
+        int size = Physics.RaycastNonAlloc(pos, dir, _hits, Mathf.Infinity);
+
+        for (int i = 0; i < size; i++)
         {
-            var mesh = hit.collider.GetComponent<MeshRenderer>();
-            if (hit.collider.CompareTag("Wall"))
-            {
-                walls.Add(mesh);
-                mesh.enabled = false;
-            }
-            foreach (var meshRenderer in walls)
-            {
-                if (meshRenderer != mesh)
-                    meshRenderer.enabled = true;
-            }
+            var hit = _hits[i];
+            var t = hit.collider.transform.GetChild(0);
+            if (!hit.collider.CompareTag("Wall")) continue;
+
+            walls.Add(t);
+            hitWalls.Add(t);
         }
+    }
+
+    private void LateUpdate()
+    {
+        foreach (var wall in walls)
+        {
+            wall.gameObject.SetActive(!hitWalls.Contains(wall));
+        }
+
+        hitWalls.Clear();
     }
 
     public void SetRotation(int rotId)

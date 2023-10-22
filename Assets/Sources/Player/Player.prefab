@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 7411618165646411253}
   - component: {fileID: 2799235822207906874}
   - component: {fileID: 7350480416624437675}
+  - component: {fileID: 7580601439425547171}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -319,7 +320,7 @@ MonoBehaviour:
   anchor: {fileID: 2030193239284623269}
   rb: {fileID: 2799235822207906874}
   aim: {fileID: 192714377665351109}
-  dashForce: 6
+  dashForce: 7
   shootDelay: 0.8
   shootDelayDelta: 0.15
   breakDrag: 5
@@ -349,7 +350,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &7350480416624437675
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -373,6 +374,22 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &7580601439425547171
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6087302238658029148}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7731511310826101504
 GameObject:
   m_ObjectHideFlags: 0

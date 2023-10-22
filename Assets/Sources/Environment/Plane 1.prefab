@@ -2464,18 +2464,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   difficultySpike: 0
-  minInstanceCount: 3
+  minInstanceCount: 2
   maxInstanceCount: 10
-  minDamage: 1
+  minDamage: 2
   maxDamage: 10
   minSpawnInterval: 0.1
-  maxSpawnInterval: 1
-  spikeFrequency: 30
+  maxSpawnInterval: 0.8
+  spikeFrequency: 20
   spawnInterval: 3
   elevation: 0.1
   instancePrefab: {fileID: 8768465229550651439, guid: fa8166671c0b57f46be140f7e17c101a, type: 3}
   mr: {fileID: 6093873769978811990}
-  maxDistFromPlayer: 8
+  maxDistFromPlayer: 5
 --- !u!1 &7665218960074841402
 GameObject:
   m_ObjectHideFlags: 0
