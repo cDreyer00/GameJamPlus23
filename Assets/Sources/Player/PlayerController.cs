@@ -17,19 +17,16 @@ namespace Sources.Player
         [SerializeField] AudioClip[] shootAudios;
         [SerializeField] AudioClip damageAudio;
 
-        Animator animator;
         Camera cam;
         float initShootDelay;
         float curDelay;
         float baseDrag;
-        private static readonly int AnimIsDead = Animator.StringToHash("isDead");
 
         public Vector3 Pos => transform.position;
 
         private void Awake()
         {
             initShootDelay = shootDelay;
-            animator = model.GetComponentInChildren<Animator>();
         }
 
         void Start()
@@ -104,11 +101,10 @@ namespace Sources.Player
         {
             if (damageAudio != null)
                 damageAudio.Play();
-
-        
-        
+            
             float power = PowerBar.Instance.Power;
-            if (power <= 0)
+            float maxPower = PowerBar.Instance.MaxPower;
+            if (power >= maxPower)
             {
                 GameManager.Instance.ReloadScene();
                 return;
