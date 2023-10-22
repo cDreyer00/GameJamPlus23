@@ -74,7 +74,6 @@ namespace Sources.Enemy
             if (idleTime > 0) return;
             else if (!canMove)
             {
-                anim.SetBool(AnimIsWalk, true);
                 canMove = true;
             }
 

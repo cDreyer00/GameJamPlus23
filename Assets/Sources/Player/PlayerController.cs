@@ -46,7 +46,7 @@ namespace Sources.Player
         {
             if (GameManager.IsGameOver)
                 return;
-                
+
             curDelay += Time.deltaTime;
             if (Input.GetMouseButton(0))
             {
@@ -109,7 +109,7 @@ namespace Sources.Player
             if (GameManager.IsGameOver)
                 return;
             feed.StartCoroutine("DamageColor");
-            came.ShakeCamera();
+            if (came != null) came.ShakeCamera();
 
             if (damageAudio != null)
                 damageAudio.Play();

@@ -26,9 +26,9 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        if (!col.TryGetComponent<IEnemy>(out var enemy)) return;
-
-        enemy.TakeDamage(damage);
+        if (col.GetComponent<IPlayer>() != null) return;
         Destroy(gameObject);
+        if (!col.TryGetComponent<IEnemy>(out var enemy)) return;
+        enemy.TakeDamage(damage);
     }
 }
