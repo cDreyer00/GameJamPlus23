@@ -4132,6 +4132,10 @@ PrefabInstance:
       propertyPath: maxSpeed
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5357240769526217631, guid: 718f7369c27103743a9466f85a988b4a, type: 3}
+      propertyPath: maxInstanceCount
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5368131256275469320, guid: 718f7369c27103743a9466f85a988b4a, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
@@ -7837,14 +7841,6 @@ PrefabInstance:
     - target: {fileID: 6254343403237477536, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6891723404258954367, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
-      propertyPath: spikeFrequency
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6891723404258954367, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
-      propertyPath: maxInstanceCount
-      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
