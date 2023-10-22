@@ -12,9 +12,9 @@ namespace Sources.Enemy
         public int powerScore = 1;
         public int damage = 1;
         public float attackDelay = 1f;
+        public float idleTime = 0.75f;
         float curDelay;
         bool canAttack = true;
-        float idleTime = 0.75f;
         public int Identifier { get; private set; }
 
         [SerializeField] private NavMeshAgent agent;
@@ -33,7 +33,8 @@ namespace Sources.Enemy
         [SerializeField] FeedbackDamage feedback;
         private Animator anim;
         private static readonly int AnimIsDead = Animator.StringToHash("isDead");
-        private static readonly int AnimIsDamage = Animator.StringToHash("isDamage");
+        private static readonly int AnimIsWalk = Animator.StringToHash("isWalk");
+        private static readonly int AnimIsAttack = Animator.StringToHash("isAttack");
 
         public int Health
         {
@@ -55,6 +56,7 @@ namespace Sources.Enemy
             idleTime -= Time.deltaTime;
             if (idleTime > 0) return;
 
+            anim.SetBool(AnimIsWalk, canMove);
             if (!canAttack)
             {
                 curDelay += Time.deltaTime;
@@ -73,6 +75,8 @@ namespace Sources.Enemy
 
         public void TakeDamage(int damage)
         {
+            if (idleTime > 0) return;
+
             feedback.StartCoroutine("DamageColor");
             if (damageAudio != null)
                 damageAudio.Play();
@@ -81,9 +85,12 @@ namespace Sources.Enemy
 
             if (health <= 0)
             {
+                canAttack = false;
+                SetSpeed(0f, 1f);
                 anim.SetTrigger(AnimIsDead);
                 Helpers.ActionCallback(() =>
                 {
+                    if (gameObject.IsDestroyed()) return;
                     Destroy(gameObject);
                     OnDied?.Invoke();
                     PowerBar.Instance.UpdatePower(powerScore);
@@ -91,7 +98,7 @@ namespace Sources.Enemy
             }
             else
             {
-                anim.SetTrigger(AnimIsDamage);
+                anim.SetTrigger(AnimIsWalk);
             }
         }
 
@@ -100,7 +107,11 @@ namespace Sources.Enemy
             if (!canAttack) return;
 
             var player = other.gameObject.GetComponent<IPlayer>();
-            player?.TakeDamage(damage);
+            if (player != null)
+            {
+                anim.SetTrigger(AnimIsAttack);
+                player.TakeDamage(damage);
+            }
 
             if (attackAudio != null)
                 attackAudio.Play();
