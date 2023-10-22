@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using CDreyer;
+using UnityEditor;
 
 namespace Sources.Enemy
 {
@@ -34,7 +35,7 @@ namespace Sources.Enemy
             set
             {
                 _canMove = value;
-                anim.SetBool(AnimIsWalk, value);
+
             }
             get
             {
@@ -61,17 +62,21 @@ namespace Sources.Enemy
             Identifier = nextId++;
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponentInChildren<Animator>();
+
         }
 
         private void Update()
         {
             if (GameManager.IsGameOver)
                 return;
-            
+
             idleTime -= Time.deltaTime;
             if (idleTime > 0) return;
             else if (!canMove)
+            {
+                anim.SetBool(AnimIsWalk, true);
                 canMove = true;
+            }
 
             if (!canAttack)
             {
@@ -122,6 +127,7 @@ namespace Sources.Enemy
         {
             if (!canAttack) return;
             canMove = false;
+            anim.SetBool(AnimIsWalk, false);
 
             if (other.gameObject.TryGetComponent<IPlayer>(out var player))
             {
@@ -130,7 +136,8 @@ namespace Sources.Enemy
                 Helpers.ActionCallback(() =>
                 {
                     player.TakeDamage(damage);
-                    canMove = true;        
+                    canMove = true;
+                    anim.SetBool(AnimIsWalk, true);
                 }, 0.34f);
             }
 
