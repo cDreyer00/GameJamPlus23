@@ -133,7 +133,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4945139819626491169, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
       propertyPath: maxDistFromPlayer
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1547531758892995953, guid: 8b8bb8c6827607c43a386f28ee330288, type: 3}
       propertyPath: m_LocalPosition.x

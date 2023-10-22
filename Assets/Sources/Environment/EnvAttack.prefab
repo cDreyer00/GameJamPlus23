@@ -129,6 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b75e8dfddd4cb040a24c9d62de44637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 3
   damage: 3
-  range: 3
-  timer: 3
+  timer: 2
