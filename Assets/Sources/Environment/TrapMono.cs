@@ -22,19 +22,17 @@ public class TrapMono : MonoBehaviour
     {
         if (CameraController.Instance.Direction == TrapDirection)
         {
-            print("Trap is active");
             sprite.color = Color.green;
+            if (Vector3.Distance(GameManager.Instance.Player.Pos, transform.position) < radius)
+            {
+                onTrapTriggered?.Invoke(this);
+            }
         }
         else
         {
             sprite.color = Color.gray;
         }
-
-        if (Vector3.Distance(GameManager.Instance.Player.Pos, transform.position) < radius)
-        {
-            OnTrapTriggered?.Invoke(this);
-        }
     }
 
-    public Action<TrapMono> OnTrapTriggered;
+    public Action<TrapMono> onTrapTriggered;
 }

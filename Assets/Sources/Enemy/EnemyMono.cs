@@ -22,6 +22,8 @@ namespace Sources.Enemy
 
         [SerializeField] private int health;
 
+        public bool canMove = true;
+
         public int Health
         {
             get => health;
@@ -50,7 +52,11 @@ namespace Sources.Enemy
                     curDelay = 0;
                 }
             }
-            agent.SetDestination(target.Pos);
+
+            if (canMove)
+            {
+                SetDestination(target.Pos);
+            }
         }
 
         public void TakeDamage(int damage)
@@ -72,6 +78,11 @@ namespace Sources.Enemy
             var player = other.gameObject.GetComponent<IPlayer>();
             player?.TakeDamage(damage);
             canAttack = false;
+        }
+
+        public void SetDestination(Vector3 position)
+        {
+            agent.SetDestination(position);
         }
     }
 }

@@ -10,7 +10,7 @@ using Random = System.Random;
 
 namespace Sources.Enemy
 {
-    public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour
+    public abstract class Spawner<T> : CDreyer.Singleton<Spawner<T>> where T : MonoBehaviour
     {
         public float difficultySpike;
 
@@ -27,6 +27,7 @@ namespace Sources.Enemy
         public T instancePrefab;
 
         protected List<T> instances;
+        public List<T> Instances => instances;
 
         [SerializeField] protected MeshRenderer mr;
 
