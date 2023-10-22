@@ -8,8 +8,6 @@ using UnityEngine;
 public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 {
     [SerializeField] float maxDistFromPlayer;
-    [SerializeField] Vector3 minBounds;
-    [SerializeField] Vector3 maxBounds;
 
     protected override void SpawnInstance()
     {
@@ -27,9 +25,6 @@ public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 
     Vector3 GetRandomPosition()
     {
-        minBounds = mr.bounds.min;
-        maxBounds = mr.bounds.max;
-
         float randX = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
         float randZ = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
         var randomPosition = GameManager.Instance.Player.Pos + new Vector3(randX, elevation, randZ);
