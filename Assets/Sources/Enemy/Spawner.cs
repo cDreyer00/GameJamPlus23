@@ -81,7 +81,7 @@ namespace Sources.Enemy
             maxInstanceCount = Mathf.Clamp((int)(spike * maxInstanceCount), minInstanceCount, maxInstanceCount);
         }
 
-        public float GetDifficultySpike()
+        public virtual float GetDifficultySpike()
         {
             return difficultySpike = GameManager.Instance.GameElapsedTime / spikeFrequency;
         }
