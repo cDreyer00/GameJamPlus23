@@ -375,6 +375,7 @@ GameObject:
   - component: {fileID: 7140866304269886406}
   - component: {fileID: 8582886053487039950}
   - component: {fileID: 1562352786052421876}
+  - component: {fileID: 1398542645540301883}
   m_Layer: 5
   m_Name: SurvivalTimer
   m_TagString: Untagged
@@ -395,6 +396,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 301364948408241717}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.109833345, y: 0.91170174}
   m_AnchorMax: {x: 0.109833345, y: 0.91170174}
@@ -429,7 +431,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 00:00:00
+  m_text: 000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -498,6 +500,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1398542645540301883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731128712410315618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f8ebd69a6d1c46498ea43fdab71155c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 60
+  toDisable:
+  - {fileID: 0}
+  - {fileID: 0}
+  textMesh: {fileID: 0}
 --- !u!1 &2368562710208658311
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,7 +761,7 @@ MonoBehaviour:
   decaySpeed: 0.5
   decayAmount: 1
   maxPower: 100
-  power: 50
+  power: 100
   extraDecayMod: 1
   powerLevel: 0
   powerTrashHolds:
@@ -1535,7 +1554,7 @@ RectTransform:
   - {fileID: 4013015552397938746}
   - {fileID: 7140866304269886406}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
