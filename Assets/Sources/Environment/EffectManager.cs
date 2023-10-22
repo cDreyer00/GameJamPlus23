@@ -29,12 +29,14 @@ namespace Sources.Environment
 
         static void ApplyConfusion(IEnemy enemy, float timer)
         {
-            enemy.SetDestForTimer(enemy.Pos, timer);
+            float randX = UnityEngine.Random.Range(-100, 100);
+            float randZ = UnityEngine.Random.Range(-100, 100);
+            enemy.SetDestForTimer(new(randX, enemy.Pos.y, randZ), timer);
         }
 
         static void ApplySlow(IEnemy enemy, float timer)
         {
-            enemy.SetSpeed(1, timer);            
+            enemy.SetSpeed(1, timer);
         }
 
         // public IEnumerator Confusion(float time)
