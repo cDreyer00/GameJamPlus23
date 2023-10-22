@@ -24,6 +24,9 @@ namespace Sources.Player
 
         public Vector3 Pos => transform.position;
 
+        public float CurDelay => curDelay;
+        public float ShootDelay => shootDelay;
+
         [SerializeField] FeedbackDamage feed;
         private void Awake()
         {
@@ -104,7 +107,7 @@ namespace Sources.Player
 
             if (damageAudio != null)
                 damageAudio.Play();
-            
+
             float power = PowerBar.Instance.Power;
             float maxPower = PowerBar.Instance.MaxPower;
             if (power >= maxPower)
