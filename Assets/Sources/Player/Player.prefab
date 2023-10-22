@@ -442,7 +442,7 @@ MonoBehaviour:
   anchor: {fileID: 2030193239284623269}
   rb: {fileID: 2799235822207906874}
   aim: {fileID: 192714377665351109}
-  dashForce: 7
+  dashForce: 25
   shootDelay: 0.8
   shootDelayDelta: 0.15
   breakDrag: 5
