@@ -12,6 +12,7 @@ namespace Sources.Enemy
         public float attackDelay = 1f;
         float curDelay;
         bool canAttack = true;
+        float idleTime = 0.75f;
         public int Identifier { get; private set; }
 
         [SerializeField] private NavMeshAgent agent;
@@ -37,6 +38,9 @@ namespace Sources.Enemy
 
         private void Update()
         {
+            idleTime -= Time.deltaTime;
+            if (idleTime > 0) return;
+
             if (!canAttack)
             {
                 curDelay += Time.deltaTime;
@@ -46,7 +50,6 @@ namespace Sources.Enemy
                     curDelay = 0;
                 }
             }
-
             agent.SetDestination(target.Pos);
         }
 
@@ -65,7 +68,7 @@ namespace Sources.Enemy
         private void OnCollisionStay(Collision other)
         {
             if (!canAttack) return;
-            
+
             var player = other.gameObject.GetComponent<IPlayer>();
             player?.TakeDamage(damage);
             canAttack = false;

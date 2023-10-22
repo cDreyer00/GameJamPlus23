@@ -6,6 +6,13 @@ using UnityEngine;
 using CDreyer;
 using DG.Tweening;
 
+public enum Direction
+{
+    Down,
+    Left,
+    Up,
+    Right,
+}
 public class CameraController : Singleton<CameraController>
 {
     [SerializeField] Camera cam;
@@ -17,7 +24,12 @@ public class CameraController : Singleton<CameraController>
     Vector3 curEuler = Vector3.zero;
     HashSet<Transform> walls = new();
     HashSet<Transform> hitWalls = new();
+    
+    
+    public Direction Direction => (Direction) Math.Abs((camAnchor.eulerAngles.y / 90));
 
+    
+    public Direction Dir; 
     public Camera Cam => cam;
 
     public void RotateLeft()
@@ -38,6 +50,7 @@ public class CameraController : Singleton<CameraController>
 
     private void Update()
     {
+        Dir = Direction;
         var pos = wallRaycastAnchor.position;
         var dir = wallRaycastAnchor.forward;
         int size = Physics.RaycastNonAlloc(pos, dir, _hits, Mathf.Infinity);
