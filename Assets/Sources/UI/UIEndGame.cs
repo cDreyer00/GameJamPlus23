@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CDreyer;
-using Microsoft.Unity.VisualStudio.Editor;
 using DG.Tweening;
 
 public class UIEndGame : MonoBehaviour
