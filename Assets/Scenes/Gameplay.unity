@@ -3146,6 +3146,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1398542645540301883, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: time
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7300560191355610728, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -8630,10 +8634,6 @@ PrefabInstance:
       value: EnvAttackSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 6254343403237477536, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
-      propertyPath: m_RootOrder
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6254343403237477536, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -8672,6 +8672,14 @@ PrefabInstance:
     - target: {fileID: 6254343403237477536, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6891723404258954367, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
+      propertyPath: minSpawnInterval
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6891723404258954367, guid: c82c4d01a1bed8943afe8441c9114eb1, type: 3}
+      propertyPath: closePlayerChance
+      value: 0.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
