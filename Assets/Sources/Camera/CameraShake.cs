@@ -24,10 +24,10 @@ public class CameraShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       /* if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ShakeCamera();
-        }*/
+        /* if (Input.GetKeyDown(KeyCode.Space))
+         {
+             ShakeCamera();
+         }*/
 
         if (canShake)
         {
@@ -35,9 +35,11 @@ public class CameraShake : MonoBehaviour
         }
     }
 
-    public void ShakeCamera()
+    public void ShakeCamera(float shakeDuration = 0)
     {
         canShake = true;
+
+        shakeDuration = shakeDuration == 0 ? this.shakeDuration : shakeDuration;
         _shakeTimer = shakeDuration;
     }
 
@@ -51,7 +53,7 @@ public class CameraShake : MonoBehaviour
         else
         {
             _shakeTimer = 0f;
-            cameraTransform.position = orignalCameraPos;
+            cameraTransform.localPosition = orignalCameraPos;
             canShake = false;
         }
     }

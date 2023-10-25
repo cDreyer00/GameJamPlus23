@@ -51,7 +51,7 @@ MonoBehaviour:
   powerScore: 3
   damage: 10
   attackDelay: 0.5
-  idleTime: 2
+  idleTime: 1.1
   agent: {fileID: 0}
   damageAudio: {fileID: 0}
   attackAudio: {fileID: 0}

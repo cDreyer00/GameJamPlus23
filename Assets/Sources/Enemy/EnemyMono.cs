@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -32,15 +33,8 @@ namespace Sources.Enemy
         public bool _canMove = false;
         public bool canMove
         {
-            set
-            {
-                _canMove = value;
-
-            }
-            get
-            {
-                return _canMove;
-            }
+            set { _canMove = value; }
+            get { return _canMove; }
         }
 
         [SerializeField] FeedbackDamage feedback;
@@ -62,7 +56,6 @@ namespace Sources.Enemy
             Identifier = nextId++;
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponentInChildren<Animator>();
-
         }
 
         private void Update()
@@ -108,6 +101,7 @@ namespace Sources.Enemy
                 canAttack = false;
                 SetSpeed(0f, 1f);
                 anim.SetTrigger(AnimIsDead);
+                target.Came.ShakeCamera(0.2f);
                 Helpers.ActionCallback(() =>
                 {
                     if (this.IsDestroyed()) return;
@@ -115,6 +109,7 @@ namespace Sources.Enemy
                     OnDied?.Invoke();
                     PowerBar.Instance.UpdatePower(powerScore);
                 }, 1f);
+
             }
             else
             {
@@ -122,32 +117,33 @@ namespace Sources.Enemy
             }
         }
 
-        private void Attack(Collision other)
+        private IEnumerator Attack(Collision other)
         {
-            if (!canAttack) return;
+            if (!canAttack) yield break;
+
             canMove = false;
             anim.SetBool(AnimIsWalk, false);
 
+            var animClips = anim.GetCurrentAnimatorClipInfo(0);
+            var animClip = animClips[0];
             if (other.gameObject.TryGetComponent<IPlayer>(out var player))
             {
                 canAttack = false;
                 anim.SetTrigger(AnimIsAttack);
-                Helpers.ActionCallback(() =>
+                if (animClip.clip.name == "Attack")
                 {
                     player.TakeDamage(damage);
                     canMove = true;
                     anim.SetBool(AnimIsWalk, true);
-                }, 0.34f);
+                }
             }
 
             if (attackAudio != null)
                 attackAudio.Play();
-
-
         }
 
-        private void OnCollisionStay(Collision other) => Attack(other);
-        private void OnCollisionEnter(Collision collision) => Attack(collision);
+        private void OnCollisionStay(Collision other) => StartCoroutine(Attack(other));
+        private void OnCollisionEnter(Collision collision) => StartCoroutine(Attack(collision));
 
         public void SetDestination(Vector3 position)
         {
