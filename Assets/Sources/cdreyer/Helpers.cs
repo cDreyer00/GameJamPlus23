@@ -85,10 +85,16 @@ public static class Helpers
 
         action?.Invoke();
     }
-    public static IEnumerator ActionCallbackCoroutine(Action action, float timer)
+    // Task.Delay has some problems in WebGL builds so we use a coroutine instead for it
+    public static void ActionCallbackCr(this MonoBehaviour mb, Action action, float timer)
     {
-        yield return GetWait(timer);
-        action?.Invoke();
+        mb.StartCoroutine(ActionCallbackCoroutine(action, timer));
+
+        static IEnumerator ActionCallbackCoroutine(Action action, float timer)
+        {
+            yield return GetWait(timer);
+            action?.Invoke();
+        }
     }
 
     public static void ChangeObjectLayer(Transform tr, int layer)
