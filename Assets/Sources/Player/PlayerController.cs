@@ -28,6 +28,7 @@ namespace Sources.Player
 
         [SerializeField] FeedbackDamage feed;
         [SerializeField] CameraShake came;
+        public CameraShake Came => came;
         private void Awake()
         {
             initShootDelay = shootDelay;
