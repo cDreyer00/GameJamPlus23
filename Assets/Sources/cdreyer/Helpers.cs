@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using System.Collections;
 
 public static class Helpers
 {
@@ -11,8 +12,7 @@ public static class Helpers
     {
         get
         {
-            if (cam == null)
-            {
+            if (cam == null) {
                 cam = Camera.main;
             }
             return cam;
@@ -27,8 +27,8 @@ public static class Helpers
         return waitDictionary[time];
     }
 
-    private static PointerEventData eventDataCurrentPosition;
-    static List<RaycastResult> results;
+    private static PointerEventData    eventDataCurrentPosition;
+    static         List<RaycastResult> results;
     public static bool IsOverUI
     {
         get
@@ -50,8 +50,7 @@ public static class Helpers
         if (children == null) children = new();
         if (transform.childCount < 1) return children;
 
-        foreach (Transform child in transform)
-        {
+        foreach (Transform child in transform) {
             children.Add(child);
 
             GetAllChildren(child, children);
@@ -64,11 +63,10 @@ public static class Helpers
     public static void Shuffle<T>(this IList<T> list)
     {
         int n = list.Count;
-        while (n > 1)
-        {
+        while (n > 1) {
             n--;
-            int k = rng.Next(n + 1);
-            T value = list[k];
+            int k     = rng.Next(n + 1);
+            T   value = list[k];
             list[k] = list[n];
             list[n] = value;
         }
@@ -80,12 +78,16 @@ public static class Helpers
 
         await Task.Delay(TimeSpan.FromSeconds(timer));
 
-        if (playing != Application.isPlaying)
-        {
+        if (playing != Application.isPlaying) {
             Debug.LogWarning("ActionCallback cancelled bacause playmode changed");
             return;
         }
 
+        action?.Invoke();
+    }
+    public static IEnumerator ActionCallbackCoroutine(Action action, float timer)
+    {
+        yield return GetWait(timer);
         action?.Invoke();
     }
 
@@ -111,7 +113,7 @@ public static class JsonHelper
     /// <returns></returns>
     public static T[] FromJsonArray<T>(string json)
     {
-        string newJson = "{\"array\":" + json + "}";
+        string     newJson = "{\"array\":" + json + "}";
         Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
         return wrapper.array;
     }
