@@ -11,7 +11,7 @@ public class UIGameplay : MonoBehaviour
 
     void Start()
     {
-        this.ActionCallbackCr(() => keysPanel.SetActive(false), 5);
+        Helpers.ActionCallbackCr(() => keysPanel.SetActive(false), 5);
 
         settingsBtn.AddListener(() =>
         {

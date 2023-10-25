@@ -34,7 +34,7 @@ public class TrapMono : MonoBehaviour
 
         OnCamDirectionChanged(CameraController.Instance.Direction);
 
-        this.ActionCallbackCr(Disable, lifeTime);
+        Helpers.ActionCallbackCr(Disable, lifeTime);
     }
 
     void OnCamDirectionChanged(Direction dir)
