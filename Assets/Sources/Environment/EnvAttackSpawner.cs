@@ -8,9 +8,9 @@ using UnityEngine.Serialization;
 
 public class EnvAttackSpawner : Spawner<EnvAreaAttack>
 {
-    [SerializeField]                           float maxDistFromPlayer;
-    [SerializeField]                           float closePlayerChance = 0.4f;
-    [FormerlySerializedAs("minRadius")] public float radius            = 1f;
+    [SerializeField] float maxDistFromPlayer;
+    [SerializeField] float closePlayerChance = 0.4f;
+    public           float radius            = 1f;
 
     Animator _animator;
     //public float maxRadius = 10f;
@@ -34,8 +34,8 @@ public class EnvAttackSpawner : Spawner<EnvAreaAttack>
     {
         instance.Init();
         float spike = GetDifficultySpike();
-        instance.damage = Mathf.Clamp((int)(spike * maxDamage), minDamage, maxDamage);
-        instance.onExplode += (i) => instances.Remove(i);
+        instance.damage = (int)(spike * damage);
+        instance.onExplode += i => instances.Remove(i);
     }
 
     Vector3 GetRandomPosition()
