@@ -3,19 +3,26 @@ using UnityEngine;
 
 namespace Sources.Enemy
 {
-    public sealed class EnemySpawner : Spawner<EnemyMono>
+    public sealed class EnemyNavSurfaceSpawner : RampingSpawner<EnemyMono>
     {
         public ClampedPrimitive<float> speed;
-        public override void OnAfterSpawn(EnemyMono instance)
+        public ClampedPrimitive<int>   damage;
+        public override Vector3 GetRandomPosition() => surface.GetRandomPoint();
+        protected override void OnSpawned(EnemyMono instance)
         {
-            instance.OnDied += () => instances.Remove(instance);
+            instance.OnDied += OnEnemyDied;
             instance.target = GameManager.Instance.Player;
-            float spike = GetDifficultySpike();
-            instance.powerScore = Mathf.Clamp((int)(spike * 10), 1, 10);
-            instance.damage = (int)(spike * damage);
+            float difficultyLevel = DifficultyMod;
+            instance.powerScore = Mathf.Clamp((int)(difficultyLevel * 10), 1, 10);
+            instance.damage = (int)(difficultyLevel * damage);
             var agent = instance.GetComponent<UnityEngine.AI.NavMeshAgent>();
-            speed.Value = spike * speed;
+            speed.Value = difficultyLevel * speed;
             agent.speed = speed;
+        }
+        void OnEnemyDied(EnemyMono enemy)
+        {
+            DeSpawned(enemy);
+            enemy.OnDied -= OnEnemyDied;
         }
     }
 }

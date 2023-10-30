@@ -60,7 +60,7 @@ public class TrapMono : MonoBehaviour
 
     void Trigger()
     {
-        foreach (var e in EnemySpawner.Instance.Instances)
+        foreach (var e in EnemyNavSurfaceSpawner.Instance.Instances)
             EffectManager.ApplyEffect(e, effect, effectDuration);
 
         Disable();

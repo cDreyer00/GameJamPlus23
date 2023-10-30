@@ -1,65 +1,59 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using CDreyer;
 using Sources.Enemy;
+using Sources.Types;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.AI;
 
-public class EnvAttackSpawner : Spawner<EnvAreaAttack>
+namespace Sources.Environment
 {
-    [SerializeField] float maxDistFromPlayer;
-    [SerializeField] float closePlayerChance = 0.4f;
-    public           float radius            = 1f;
-
-    Animator _animator;
-    //public float maxRadius = 10f;
-
-    protected override void SpawnInstance()
+    public class EnvAttackSpawner : RampingSpawner<EnvAreaAttack>
     {
-        Vector3 pos      = GetRandomPosition();
-        var     bounds   = GameManager.Instance.GameBounds;
-        var     instance = Instantiate(instancePrefab, pos, Quaternion.identity);
-        //float rand = UnityEngine.Random.Range(0.6f, 1f);
-        float radius = instance.radius = this.radius;
-        pos.x = Mathf.Clamp(pos.x, bounds.min.x + radius / 2, bounds.max.x - radius / 2);
-        pos.z = Mathf.Clamp(pos.z, bounds.min.z + radius / 2, bounds.max.z - radius / 2);
+        Animator _animator;
 
-        instance.transform.position = pos;
-        instances.Add(instance);
-        OnAfterSpawn(instance);
-    }
+        [SerializeField] float maxDistFromPlayer;
+        [SerializeField] float closePlayerChance = 0.4f;
 
-    public override void OnAfterSpawn(EnvAreaAttack instance)
-    {
-        instance.Init();
-        float spike = GetDifficultySpike();
-        instance.damage = (int)(spike * damage);
-        instance.onExplode += i => instances.Remove(i);
-    }
-
-    Vector3 GetRandomPosition()
-    {
-        float rand = UnityEngine.Random.Range(0f, 1f);
-
-        if (rand < closePlayerChance) {
-            float randX          = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
-            float randZ          = UnityEngine.Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
-            var   randomPosition = GameManager.Instance.Player.Pos + new Vector3(randX, elevation, randZ);
-
-            var bounds = GameManager.Instance.GameBounds;
-            randomPosition.x = Mathf.Clamp(randomPosition.x, bounds.min.x, bounds.max.x);
-            randomPosition.z = Mathf.Clamp(randomPosition.z, bounds.min.z, bounds.max.z);
-
-            return randomPosition;
-        }
-        else {
+        public float                 radius = 1f;
+        public ClampedPrimitive<int> damage;
+        protected override void OnSpawned(EnvAreaAttack instance)
+        {
+            instance.OnExplode += DeSpawned;
+            var   pos            = instance.transform.position;
             var   bounds         = GameManager.Instance.GameBounds;
-            float randX          = UnityEngine.Random.Range(bounds.min.x, bounds.max.x);
-            float randZ          = UnityEngine.Random.Range(bounds.min.z, bounds.max.z);
-            var   randomPosition = new Vector3(randX, elevation, randZ);
+            float instanceRadius = instance.radius = radius;
+            pos.x = Mathf.Clamp(pos.x, bounds.min.x + instanceRadius / 2, bounds.max.x - instanceRadius / 2);
+            pos.z = Mathf.Clamp(pos.z, bounds.min.z + instanceRadius / 2, bounds.max.z - instanceRadius / 2);
+            instance.transform.position = pos;
+            instance.Init();
+            instance.damage = (int)(DifficultyMod * damage);
+        }
+        public override Vector3 GetRandomPosition()
+        {
+            float rand = Random.Range(0f, 1f);
 
-            return randomPosition;
+            if (rand < closePlayerChance) {
+                float randX = Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
+                float randZ = Random.Range(-maxDistFromPlayer, maxDistFromPlayer);
+                NavMesh.SamplePosition(new Vector3(randX, 0, randZ), out var hit, 10, NavMesh.AllAreas);
+
+                float elevation      = hit.position.y;
+                var   randomPosition = GameManager.Instance.Player.Pos + new Vector3(randX, elevation, randZ);
+
+                var bounds = GameManager.Instance.GameBounds;
+                randomPosition.x = Mathf.Clamp(randomPosition.x, bounds.min.x, bounds.max.x);
+                randomPosition.z = Mathf.Clamp(randomPosition.z, bounds.min.z, bounds.max.z);
+
+                return randomPosition;
+            }
+            else {
+                var   bounds = GameManager.Instance.GameBounds;
+                float randX  = Random.Range(bounds.min.x, bounds.max.x);
+                float randZ  = Random.Range(bounds.min.z, bounds.max.z);
+                NavMesh.SamplePosition(new Vector3(randX, 0, randZ), out var hit, 10, NavMesh.AllAreas);
+                float elevation      = hit.position.y;
+                var   randomPosition = new Vector3(randX, elevation, randZ);
+
+                return randomPosition;
+            }
         }
     }
 }

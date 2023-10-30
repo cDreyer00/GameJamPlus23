@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CDreyer
 {
@@ -39,7 +40,7 @@ namespace CDreyer
                 return;
 
             if (_original != null)
-                MonoBehaviour.Destroy(_original.gameObject);
+                Object.Destroy(_original.gameObject);
 
             _original = newOriginal;
         }
