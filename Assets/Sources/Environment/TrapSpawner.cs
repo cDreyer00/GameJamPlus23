@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using Sources.Enemy;
+using Sources.Systems;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 namespace Sources.Environment
 {
-    public class TrapSpawner : RampingSpawner<TrapMono>
+    public class TrapSpawner : BaseSpawner<TrapMono>
     {
-        public override Vector3 GetRandomPosition() => surface.GetRandomPoint();
+        public NavMeshSurface surface;
+        public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
         protected override void OnSpawned(TrapMono instance)
         {
             instance.Init();

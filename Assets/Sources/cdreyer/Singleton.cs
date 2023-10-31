@@ -7,7 +7,7 @@ namespace CDreyer
     public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
         static T _instance;
-        public static T Instance
+        public static T PlayerHealthBar
         {
             get
             {

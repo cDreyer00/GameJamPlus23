@@ -24,7 +24,7 @@ namespace Sources
             textMesh.text = time.ToString("0");
             if (!(time <= 0)) return;
             if (GameManager.IsGameOver) return;
-            GameManager.Instance.ShowEndGame();
+            GameManager.PlayerHealthBar.ShowEndGame();
         }
     }
 }

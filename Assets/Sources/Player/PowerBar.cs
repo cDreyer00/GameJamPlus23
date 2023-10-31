@@ -1,71 +1,28 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using CDreyer;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class PowerBar : Singleton<PowerBar>
+namespace Sources.Player
 {
-    [SerializeField] Slider slider;
-    [SerializeField] float decaySpeed = 0.1f;
-    [SerializeField] float decayAmount = 1f;
-    [SerializeField] float maxPower = 100f;
-    [SerializeField] float power;
-    [SerializeField] float extraDecayMod = 1.1f;
-    [SerializeField] int powerLevel;
-    [SerializeField] private float[] powerTrashHolds;
-    public float Power => power;
-    public float MaxPower => maxPower;
-    public event Action<PowerBarEventArgs> onPowerChanged;
-
-    public int DiscretePowerLevel()
+    public class HealthBar : Singleton<HealthBar>
     {
-        for (int i = 0; i < powerTrashHolds.Length; i++)
+        [SerializeField] Slider slider;
+        [SerializeField] float  maxHealthPoints;
+        [SerializeField] float  healthPoints;
+
+        public float HealthPoints => healthPoints;
+        public float MaxHealthPoints => maxHealthPoints;
+        private void Start()
         {
-            if (power >= powerTrashHolds[i])
-                return i;
+            slider.maxValue = maxHealthPoints;
+            slider.value = maxHealthPoints - healthPoints;
         }
-
-        return powerTrashHolds.Length;
-    }
-
-    public IEnumerator DecayPower()
-    {
-        while (true)
+        public void Damage(float amount)
         {
-            yield return Helpers.GetWait(decaySpeed);
-            UpdatePower(-decayAmount * (extraDecayMod * powerLevel));
+            healthPoints -= amount;
+            healthPoints = Math.Clamp(healthPoints, 0, maxHealthPoints);
+            slider.value = maxHealthPoints - healthPoints; // HACK: Slider is inverted
         }
-    }
-
-    private void Start()
-    {
-        slider.maxValue = maxPower;
-        slider.value = power;
-        StartCoroutine(DecayPower());
-    }
-
-    public void UpdatePower(float amount)
-    {
-        power -= amount;
-        power = Math.Clamp(power, 0, maxPower);
-        slider.value = power;
-        powerLevel = DiscretePowerLevel();
-
-        onPowerChanged?.Invoke(new(power, powerLevel));
-    }
-}
-
-public class PowerBarEventArgs
-{
-    public float Power { get; }
-    public int PowerLevel { get; }
-
-    public PowerBarEventArgs(float power, int powerLevel)
-    {
-        Power = power;
-        PowerLevel = powerLevel;
     }
 }

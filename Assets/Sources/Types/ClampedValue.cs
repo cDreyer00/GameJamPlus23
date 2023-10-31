@@ -9,14 +9,13 @@ namespace Sources.Types
         [SerializeField] TValue value;
         public           TValue min;
         public           TValue max;
-
         public ClampedPrimitive(TValue value, TValue min, TValue max)
         {
             this.value = Clamp(value, min, max);
             this.min = min;
             this.max = max;
         }
-
+        public void Clamp() => value = Clamp(value, min, max);
         public TValue Value
         {
             get => value = Clamp(value, min, max);

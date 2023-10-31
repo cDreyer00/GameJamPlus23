@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using CDreyer;
+using Sources.Enemy;
 using Sources.Types;
-using UnityEngine.Serialization;
+using UnityEngine;
 
-namespace Sources.Enemy
+namespace Sources.Systems
 {
     public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>, ISpawner<T>
         where T : MonoBehaviour

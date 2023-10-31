@@ -90,7 +90,7 @@ public static class Helpers
     // Task.Delay has some problems in WebGL builds so we use a coroutine instead for it
     public static void ActionCallbackCr(Action action, float timer)
     {
-        Scheduler.Instance.ActionCallbackCr(action, timer);
+        Scheduler.PlayerHealthBar.ActionCallbackCr(action, timer);
     }
     public static void ActionCallbackCr(this MonoBehaviour mb, Action action, float timer)
     {

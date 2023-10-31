@@ -35,9 +35,9 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         if (RotateLeft)
-            CameraController.Instance.RotateLeft();
+            CameraController.PlayerHealthBar.RotateLeft();
         if (RotateRight)
-            CameraController.Instance.RotateRight();
+            CameraController.PlayerHealthBar.RotateRight();
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
@@ -47,13 +47,13 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
 
         fading = true;
-        LoadingManager.Instance.FadeIn(() =>
+        LoadingManager.PlayerHealthBar.FadeIn(() =>
         {
-            LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
+            LoadingManager.PlayerHealthBar.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
             IsGameOver = false;
             fading = false;
         });
-        SoundManager.Instance.Stop();
+        SoundManager.PlayerHealthBar.Stop();
     }
 
     public void ShowEndGame()
@@ -61,15 +61,15 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
         IsGameOver = true;
         fading = true;
-        LoadingManager.Instance.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
-        SoundManager.Instance.Stop();
+        LoadingManager.PlayerHealthBar.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
+        SoundManager.PlayerHealthBar.Stop();
         fading = false;
 
     }
 
     int GetCamId()
     {
-        Vector3 magnitudeVector = Player.Pos;
+        Vector3 magnitudeVector = Player.Position;
         Vector3 normalizedVector = magnitudeVector.normalized;
 
         float maxAbsValue = Mathf.Max(Mathf.Abs(normalizedVector.x), Mathf.Abs(normalizedVector.y),

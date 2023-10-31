@@ -13,7 +13,7 @@ public class SoundManager : Singleton<SoundManager>
         source = GetComponent<AudioSource>();
         source = source == null ? gameObject.AddComponent<AudioSource>() : source;
 
-        if (Instance == this)
+        if (PlayerHealthBar == this)
             source.Play();
     }
 
@@ -36,5 +36,5 @@ public class SoundManager : Singleton<SoundManager>
 
 public static class SounManagerHelper
 {
-    public static void Play(this AudioClip clip) => SoundManager.Instance.PlayClip(clip);
+    public static void Play(this AudioClip clip) => SoundManager.PlayerHealthBar.PlayClip(clip);
 }

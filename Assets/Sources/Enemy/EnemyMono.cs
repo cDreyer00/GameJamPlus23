@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using CDreyer;
+using Sources.Player;
 using UnityEditor;
 using UnityEngine.Serialization;
 
@@ -79,7 +80,7 @@ namespace Sources.Enemy
             }
 
             if (CanMove) {
-                SetDestination(target.Pos);
+                SetDestination(target.Position);
             }
         }
 
@@ -97,10 +98,7 @@ namespace Sources.Enemy
                 _canAttack = false;
                 SetSpeed(0f, 1f);
                 _anim.SetTrigger(AnimIsDead);
-                Helpers.ActionCallbackCr(() => {
-                    OnDied?.Invoke(this);
-                    PowerBar.Instance.UpdatePower(powerScore);
-                }, 1f);
+                Helpers.ActionCallbackCr(() => OnDied?.Invoke(this), 1f);
             }
             else {
                 _anim.SetTrigger(AnimIsWalk);

@@ -6,6 +6,7 @@ using Sources.Environment;
 using UnityEngine;
 using CDreyer;
 using Sources.Enemy;
+using Sources.Systems;
 using Unity.VisualScripting;
 using UnityEditor;
 
@@ -30,9 +31,9 @@ public class TrapMono : MonoBehaviour
         sprite = GetComponentInChildren<SpriteRenderer>();
         transform.localScale = Vector3.one * radius;
 
-        CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
+        CameraController.PlayerHealthBar.camDirectionChanged += OnCamDirectionChanged;
 
-        OnCamDirectionChanged(CameraController.Instance.Direction);
+        OnCamDirectionChanged(CameraController.PlayerHealthBar.Direction);
 
         Helpers.ActionCallbackCr(Disable, lifeTime);
     }
@@ -54,13 +55,13 @@ public class TrapMono : MonoBehaviour
     {
         // if (curCameraDir != direction) return;
 
-        if (Vector3.Distance(GameManager.Instance.Player.Pos, transform.position) < radius)
+        if (Vector3.Distance(GameManager.PlayerHealthBar.Player.Position, transform.position) < radius)
             Trigger();
     }
 
     void Trigger()
     {
-        foreach (var e in EnemyNavSurfaceSpawner.Instance.Instances)
+        foreach (var e in EnemySpawner.PlayerHealthBar.Instances)
             EffectManager.ApplyEffect(e, effect, effectDuration);
 
         Disable();
@@ -73,6 +74,6 @@ public class TrapMono : MonoBehaviour
         onTrapDisabled?.Invoke(this);
         Destroy(gameObject);
 
-        CameraController.Instance.camDirectionChanged -= OnCamDirectionChanged;
+        CameraController.PlayerHealthBar.camDirectionChanged -= OnCamDirectionChanged;
     }
 }
