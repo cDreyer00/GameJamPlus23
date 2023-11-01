@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Collections;
+using CDreyer;
 
 public static class Helpers
 {
@@ -85,7 +86,12 @@ public static class Helpers
 
         action?.Invoke();
     }
+
     // Task.Delay has some problems in WebGL builds so we use a coroutine instead for it
+    public static void ActionCallbackCr(Action action, float timer)
+    {
+        Scheduler.Instance.ActionCallbackCr(action, timer);
+    }
     public static void ActionCallbackCr(this MonoBehaviour mb, Action action, float timer)
     {
         mb.StartCoroutine(ActionCallbackCoroutine(action, timer));
@@ -139,3 +145,4 @@ public static class JsonHelper
         public T[] array;
     }
 }
+public sealed class Scheduler : Singleton<Scheduler> {}

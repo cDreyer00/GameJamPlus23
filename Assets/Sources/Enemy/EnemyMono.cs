@@ -16,8 +16,8 @@ namespace Sources.Enemy
         public        int   damage      = 1;
         public        float attackDelay = 1f;
         public        float idleTime    = 1;
-        float               curDelay;
-        bool                canAttack = true;
+        float               _curDelay;
+        bool                _canAttack = true;
         public int Identifier { get; private set; }
 
         [SerializeField] private NavMeshAgent agent;
@@ -26,23 +26,23 @@ namespace Sources.Enemy
         [SerializeField] private int          health;
 
         public IPlayer target;
-        public event Action OnDied;
+        public event Action<EnemyMono> OnDied;
 
         public Vector3 Pos => transform.position;
 
 
-        [FormerlySerializedAs("_canMove")] public bool canMove = false;
+        public bool canMove;
         public bool CanMove
         {
-            set { canMove = value; }
-            get { return canMove; }
+            set => canMove = value;
+            get => canMove;
         }
 
         [SerializeField] private FeedbackDamage feedback;
-        private                  Animator       anim;
-        private static readonly  int            AnimIsDead   = Animator.StringToHash("isDead");
-        private static readonly  int            AnimIsWalk   = Animator.StringToHash("isWalk");
-        private static readonly  int            AnimIsAttack = Animator.StringToHash("isAttack");
+        private                  Animator       _anim;
+        private readonly static  int            AnimIsDead   = Animator.StringToHash("isDead");
+        private readonly static  int            AnimIsWalk   = Animator.StringToHash("isWalk");
+        private readonly static  int            AnimIsAttack = Animator.StringToHash("isAttack");
 
         public int Health
         {
@@ -56,7 +56,7 @@ namespace Sources.Enemy
         {
             Identifier = nextId++;
             agent = GetComponent<NavMeshAgent>();
-            anim = GetComponentInChildren<Animator>();
+            _anim = GetComponentInChildren<Animator>();
         }
 
         private void Update()
@@ -70,11 +70,11 @@ namespace Sources.Enemy
                 CanMove = true;
             }
 
-            if (!canAttack) {
-                curDelay += Time.deltaTime;
-                if (curDelay >= attackDelay) {
-                    canAttack = true;
-                    curDelay = 0;
+            if (!_canAttack) {
+                _curDelay += Time.deltaTime;
+                if (_curDelay >= attackDelay) {
+                    _canAttack = true;
+                    _curDelay = 0;
                 }
             }
 
@@ -83,7 +83,7 @@ namespace Sources.Enemy
             }
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(int amount)
         {
             if (idleTime > 0) return;
 
@@ -91,45 +91,37 @@ namespace Sources.Enemy
             if (damageAudio != null)
                 damageAudio.Play();
 
-            Health -= damage;
+            Health -= amount;
 
             if (health <= 0) {
-                canAttack = false;
+                _canAttack = false;
                 SetSpeed(0f, 1f);
-                anim.SetTrigger(AnimIsDead);
-                StartCoroutine(TakeDamageCoroutine());
+                _anim.SetTrigger(AnimIsDead);
+                Helpers.ActionCallbackCr(() => {
+                    OnDied?.Invoke(this);
+                    PowerBar.Instance.UpdatePower(powerScore);
+                }, 1f);
             }
             else {
-                anim.SetTrigger(AnimIsWalk);
+                _anim.SetTrigger(AnimIsWalk);
             }
         }
-
-
-        IEnumerator TakeDamageCoroutine()
-        {
-            yield return Helpers.GetWait(1f);
-            if (this.IsDestroyed()) yield break;
-            Destroy(gameObject);
-            OnDied?.Invoke();
-            PowerBar.Instance.UpdatePower(powerScore);
-        }
-
         private IEnumerator Attack(Collision other)
         {
-            if (!canAttack) yield break;
+            if (!_canAttack) yield break;
 
             CanMove = false;
-            anim.SetBool(AnimIsWalk, false);
+            _anim.SetBool(AnimIsWalk, false);
 
-            var animClips = anim.GetCurrentAnimatorClipInfo(0);
+            var animClips = _anim.GetCurrentAnimatorClipInfo(0);
             var animClip  = animClips[0];
             if (other.gameObject.TryGetComponent<IPlayer>(out var player)) {
-                canAttack = false;
-                anim.SetTrigger(AnimIsAttack);
+                _canAttack = false;
+                _anim.SetTrigger(AnimIsAttack);
                 if (animClip.clip.name == "Attack") {
                     player.TakeDamage(damage);
                     CanMove = true;
-                    anim.SetBool(AnimIsWalk, true);
+                    _anim.SetBool(AnimIsWalk, true);
                 }
             }
 
@@ -162,6 +154,13 @@ namespace Sources.Enemy
             yield return Helpers.GetWait(timer);
             if (this.IsDestroyed()) yield break;
             agent.speed = speed;
+        }
+        void OnDisable()
+        {
+            var sprite = feedback.GetComponent<SpriteRenderer>();
+            if (!ReferenceEquals(sprite, null)) {
+                sprite.color = Color.white;
+            }
         }
     }
 }

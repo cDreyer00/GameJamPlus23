@@ -1,57 +1,54 @@
 using System;
 using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class EnvAreaAttack : MonoBehaviour
+namespace Sources.Environment
 {
-    public float radius;
-    public float damage;
-    public float timer;
-
-    Animator _animator;
-    public event Action<EnvAreaAttack> onExplode;
-
-    public void Init()
+    public class EnvAreaAttack : MonoBehaviour
     {
-        _animator = GetComponentInChildren<Animator>();
-        StartCoroutine(DealDamage());
-    }
+        public float radius;
+        public float damage;
+        public float timer;
 
-    private void Update()
-    {
-        transform.localScale = Vector3.one * radius;
-        timer -= Time.deltaTime;
-    }
+        Animator _animator;
+        public event Action<EnvAreaAttack> OnExplode;
 
-    public IEnumerator DealDamage()
-    {
-        if (this.IsDestroyed()) yield break;
-        const int Layer     = 0; // Base Layer
-        var       clipInfos = _animator.GetCurrentAnimatorClipInfo(Layer);
-        var       clipInfo  = clipInfos[0];
-
-        while (clipInfo.clip.name != "Attack") {
-            yield return null;
-            clipInfos = _animator.GetCurrentAnimatorClipInfo(Layer);
-            clipInfo  = clipInfos[0];
+        public void Init()
+        {
+            _animator = GetComponentInChildren<Animator>();
+            StartCoroutine(DealDamage());
         }
 
-        IPlayer player = GameManager.Instance.Player;
-        if (Vector3.Distance(player.Pos, transform.position) < radius) {
-            player.TakeDamage((int)damage);
+        private void Update()
+        {
+            transform.localScale = Vector3.one * radius;
+            timer -= Time.deltaTime;
         }
 
-        while (clipInfo.clip.name != "Destroy") {
-            yield return null;
-            clipInfos = _animator.GetCurrentAnimatorClipInfo(Layer);
-            clipInfo  = clipInfos[0];
-        }
+        public IEnumerator DealDamage()
+        {
+            const int Layer     = 0; // Base Layer
+            var       clipInfos = _animator.GetCurrentAnimatorClipInfo(Layer);
+            var       clipInfo  = clipInfos[0];
 
-        onExplode?.Invoke(this);
-        Destroy(gameObject);
+            while (clipInfo.clip.name != "Attack") {
+                yield return null;
+                clipInfos = _animator.GetCurrentAnimatorClipInfo(Layer);
+                clipInfo = clipInfos[0];
+            }
+
+            IPlayer player = GameManager.Instance.Player;
+            if (Vector3.Distance(player.Pos, transform.position) < radius) {
+                player.TakeDamage((int)damage);
+            }
+
+            while (clipInfo.clip.name != "Destroy") {
+                yield return null;
+                clipInfos = _animator.GetCurrentAnimatorClipInfo(Layer);
+                clipInfo = clipInfos[0];
+            }
+
+            OnExplode?.Invoke(this);
+        }
     }
 }

@@ -1,21 +1,28 @@
+using Sources.Types;
 using UnityEngine;
 
 namespace Sources.Enemy
 {
-    public sealed class EnemySpawner : Spawner<EnemyMono>
+    public sealed class EnemyNavSurfaceSpawner : RampingSpawner<EnemyMono>
     {
-        public float minSpeed = 1f;
-        public float maxSpeed = 10f;
-
-        public override void OnAfterSpawn(EnemyMono instance)
+        public ClampedPrimitive<float> speed;
+        public ClampedPrimitive<int>   damage;
+        public override Vector3 GetRandomPosition() => surface.GetRandomPoint();
+        protected override void OnSpawned(EnemyMono instance)
         {
-            instance.OnDied += () => instances.Remove(instance);
+            instance.OnDied += OnEnemyDied;
             instance.target = GameManager.Instance.Player;
-            float spike = GetDifficultySpike();
-            instance.powerScore = Mathf.Clamp((int)(spike * 10), 1, 10);
-            instance.damage = Mathf.Clamp((int)(spike * maxDamage), minDamage, maxDamage);
+            float difficultyLevel = DifficultyMod;
+            instance.powerScore = Mathf.Clamp((int)(difficultyLevel * 10), 1, 10);
+            instance.damage = (int)(difficultyLevel * damage);
             var agent = instance.GetComponent<UnityEngine.AI.NavMeshAgent>();
-            agent.speed = Mathf.Clamp(spike * maxSpeed, minSpeed, maxSpeed);
+            speed.Value = difficultyLevel * speed;
+            agent.speed = speed;
+        }
+        void OnEnemyDied(EnemyMono enemy)
+        {
+            DeSpawned(enemy);
+            enemy.OnDied -= OnEnemyDied;
         }
     }
-}  
+}

@@ -15,14 +15,14 @@ public enum Direction
 }
 public class CameraController : Singleton<CameraController>
 {
-    [SerializeField] Camera cam;
-    [SerializeField] Transform camAnchor;
+    [SerializeField] Camera     cam;
+    [SerializeField] Transform  camAnchor;
     [SerializeField] RotateMode rotateMode;
-    [SerializeField] float rotDuration;
-    [SerializeField] Transform wallRaycastAnchor;
+    [SerializeField] float      rotDuration;
+    [SerializeField] Transform  wallRaycastAnchor;
 
-    Vector3 curEuler = Vector3.zero;
-    HashSet<Transform> walls = new();
+    Vector3            curEuler = Vector3.zero;
+    HashSet<Transform> walls    = new();
     HashSet<Transform> hitWalls = new();
 
     public Direction Direction => (Direction)(Math.Abs(curEuler.y / 90) % 4);
@@ -52,13 +52,14 @@ public class CameraController : Singleton<CameraController>
 
     private void Update()
     {
-        var pos = wallRaycastAnchor.position;
-        var dir = wallRaycastAnchor.forward;
+        var pos  = wallRaycastAnchor.position;
+        var dir  = wallRaycastAnchor.forward;
         int size = Physics.RaycastNonAlloc(pos, dir, _hits, Mathf.Infinity);
 
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             var hit = _hits[i];
+            if (hit.collider.transform.childCount == 0) continue;
+
             var t = hit.collider.transform.GetChild(0);
             if (!hit.collider.CompareTag("Wall")) continue;
 
@@ -69,8 +70,7 @@ public class CameraController : Singleton<CameraController>
 
     private void LateUpdate()
     {
-        foreach (var wall in walls)
-        {
+        foreach (var wall in walls) {
             wall.gameObject.SetActive(!hitWalls.Contains(wall));
         }
 

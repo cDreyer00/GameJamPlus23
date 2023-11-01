@@ -41,10 +41,11 @@ namespace CDreyer
 
             T t = q.Dequeue();
 
-            t.transform.SetParent(null);
+            var transform = t.transform;
+            transform.SetParent(null);
 
-            t.transform.position = position;
-            t.transform.rotation = rotation;
+            transform.position = position;
+            transform.rotation = rotation;
 
             t.gameObject.SetActive(true);
 
@@ -65,10 +66,11 @@ namespace CDreyer
 
             T t = q.Dequeue();
 
-            t.transform.SetParent(parent);
+            var transform = t.transform;
+            transform.SetParent(parent);
 
-            t.transform.localPosition = Vector3.zero;
-            t.transform.localEulerAngles = Vector3.zero;
+            transform.localPosition = Vector3.zero;
+            transform.localEulerAngles = Vector3.zero;
 
             t.gameObject.SetActive(true);
 
@@ -80,19 +82,19 @@ namespace CDreyer
             return t;
         }
 
-        T obj;
+        T _obj;
         public override void Release(T obj)
         {
-            this.obj = obj;
-            this.obj.gameObject.SetActive(false);
-            this.obj.transform.SetParent(parent);
+            _obj = obj;
+            _obj.gameObject.SetActive(false);
+            _obj.transform.SetParent(parent);
 
-            if (this.obj is IPoolable<T> poolable)
+            if (_obj is IPoolable<T> poolable)
             {
                 poolable.OnRelease();
             }
 
-            q.Enqueue(this.obj);
+            q.Enqueue(_obj);
         }
 
         public override void Dispose()

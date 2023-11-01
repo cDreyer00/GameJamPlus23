@@ -34,7 +34,7 @@ public class TrapMono : MonoBehaviour
 
         OnCamDirectionChanged(CameraController.Instance.Direction);
 
-        this.ActionCallbackCr(Disable, lifeTime);
+        Helpers.ActionCallbackCr(Disable, lifeTime);
     }
 
     void OnCamDirectionChanged(Direction dir)
@@ -60,7 +60,7 @@ public class TrapMono : MonoBehaviour
 
     void Trigger()
     {
-        foreach (var e in EnemySpawner.Instance.Instances)
+        foreach (var e in EnemyNavSurfaceSpawner.Instance.Instances)
             EffectManager.ApplyEffect(e, effect, effectDuration);
 
         Disable();

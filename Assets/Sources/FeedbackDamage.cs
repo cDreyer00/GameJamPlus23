@@ -1,15 +1,22 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FeedbackDamage : MonoBehaviour
+namespace Sources
 {
-    [SerializeField] Color color, color2;
-
-    public IEnumerator DamageColor()
+    public class FeedbackDamage : MonoBehaviour
     {
-        GetComponent<SpriteRenderer>().color = color;
-        yield return new WaitForSeconds(.5f);
-        GetComponent<SpriteRenderer>().color = color2;
+        [SerializeField] Color color, color2;
+
+        SpriteRenderer _sprite;
+        void Start()
+        {
+            _sprite = GetComponent<SpriteRenderer>();
+        }
+        public IEnumerator DamageColor()
+        {
+            _sprite.color = color;
+            yield return new WaitForSeconds(.5f);
+            _sprite.color = color2;
+        }
     }
 }
