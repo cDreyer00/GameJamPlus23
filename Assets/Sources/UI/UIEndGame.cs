@@ -1,20 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using CDreyer;
 using DG.Tweening;
+using Sources.cdreyer;
+using UnityEngine;
 
-public class UIEndGame : MonoBehaviour
+namespace Sources.UI
 {
-    [SerializeField] ButtonBehaviour[] btns;
-
-    void Start()
+    public class UIEndGame : MonoBehaviour
     {
-        foreach (var b in btns)
+        [SerializeField] ButtonBehaviour[] btns;
+
+        void Start()
         {
-            b.transform.localScale = Vector3.zero;
-            b.transform.DOScale(Vector3.one, 0.5f);
-            b.AddListener(GameManager.Instance.ReloadScene, InteractionType.ClickUp);
-        };
+            foreach (var b in btns)
+            {
+                b.transform.localScale = Vector3.zero;
+                b.transform.DOScale(Vector3.one, 0.5f);
+                b.AddListener(GameManager.GameManager.Instance.ReloadScene, InteractionType.ClickUp);
+            };
+        }
     }
 }

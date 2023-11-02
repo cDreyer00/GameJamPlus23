@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace CDreyer
+namespace Sources.cdreyer.GenericPool
 {
     [Serializable]
     public abstract class GenericPool<T> where T : MonoBehaviour

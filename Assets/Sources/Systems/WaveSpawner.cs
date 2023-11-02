@@ -1,14 +1,16 @@
 using System;
-using System.Collections;
-using Sources.Enemy;
+using Sources.Characters.MeleeEnemy;
+using Sources.Types;
 using Unity.AI.Navigation;
 using UnityEngine;
 
 namespace Sources.Systems
 {
-    public sealed class WaveSpawner : EnemySpawner
+    public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
     {
-        public int currentWave;
+        public ClampedPrimitive<float> speed;
+        public NavMeshSurface          surface;
+        public int                     currentWave;
         public static int EnemyCount(int wave)
         {
             const float BaseCount  = 3;
@@ -25,39 +27,29 @@ namespace Sources.Systems
         }
         public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
 
-        protected override IEnumerator SpawnCoroutine()
+        protected override void Spawn()
         {
-            if (cancellationRequested) yield break;
-            yield return Helpers.GetWait(startSpawnTimer);
-
-            var wait = Helpers.GetWait(spawnRate);
-            while (!cancellationRequested) {
-                if (activeInstances >= maxInstances) {
-                    yield return null;
-                    continue;
-                }
-                yield return wait;
-                var enemies = EnemyCount(currentWave);
-                for (int i = 0; i < enemies; i++) {
-                    Spawned();
-                }
+            var enemyCount = EnemyCount(currentWave);
+            for (var i = 0; i < enemyCount; i++) {
+                var position = GetRandomPosition();
+                var instance = instancePool.Get(position, Quaternion.identity);
+                OnSpawnedInstance(instance);
             }
         }
-
-        protected override void OnSpawned(EnemyMono instance)
+        protected override void OnSpawnedInstance(MonoBehaviour instance)
         {
-            instance.OnDied += OnEnemyDied;
-            instance.target = GameManager.Instance.Player;
-            instance.powerScore = 10;
-            instance.damage = damage;
-            var agent = instance.GetComponent<UnityEngine.AI.NavMeshAgent>();
-            agent.speed = speed.Value = speed;
+            if (instance is IEnemy enemy) {
+                enemy.OnDied += OnEnemyDied;
+                var agent = enemy.Agent;
+                agent.speed = speed.Value = EnemySpeed(currentWave);
+            }
         }
-
-        void OnEnemyDied(EnemyMono enemy)
+        void OnEnemyDied(IEnemy meleeEnemy)
         {
-            DeSpawned(enemy);
-            enemy.OnDied -= OnEnemyDied;
+            if (meleeEnemy is MonoBehaviour monoBehaviour) {
+                DeSpawn(monoBehaviour);
+            }
+            meleeEnemy.OnDied -= OnEnemyDied;
         }
     }
 }

@@ -1,19 +1,18 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using DG.Tweening;
+using Plugins.Demigiant.DOTween.Modules;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public enum ButtonAnimation { Shake, Punch, Yoyo }
-public enum InteractionType { ClickUp, ClickDown, Enter, Exit }
-
-namespace CDreyer
+namespace Sources.cdreyer
 {
+    public enum ButtonAnimation { Shake, Punch, Yoyo }
+    public enum InteractionType { ClickUp, ClickDown, Enter, Exit }
 
     public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        public bool interactable = true;
+        public           bool              interactable = true;
         [SerializeField] FeedbackActions[] feedbackActions;
         public FeedbackActions[] FeedbackActions => feedbackActions;
 
@@ -22,7 +21,7 @@ namespace CDreyer
         public Action onEnter { get; private set; }
         public Action onExit { get; private set; }
 
-        bool dragging;
+        bool    dragging;
         Vector3 inputPos = Vector3.zero;
 
         public RectTransform RectTransform { get; private set; }
@@ -47,18 +46,18 @@ namespace CDreyer
         {
             switch (interaction)
             {
-                case InteractionType.ClickDown:
-                    onClickDown += action;
-                    return;
-                case InteractionType.ClickUp:
-                    onClickUp += action;
-                    return;
-                case InteractionType.Enter:
-                    onEnter += action;
-                    return;
-                case InteractionType.Exit:
-                    onExit += action;
-                    return;
+            case InteractionType.ClickDown:
+                onClickDown += action;
+                return;
+            case InteractionType.ClickUp:
+                onClickUp += action;
+                return;
+            case InteractionType.Enter:
+                onEnter += action;
+                return;
+            case InteractionType.Exit:
+                onExit += action;
+                return;
             }
         }
 
@@ -66,18 +65,18 @@ namespace CDreyer
         {
             switch (interaction)
             {
-                case InteractionType.ClickDown:
-                    onClickDown -= action;
-                    return;
-                case InteractionType.ClickUp:
-                    onClickUp -= action;
-                    return;
-                case InteractionType.Enter:
-                    onEnter -= action;
-                    return;
-                case InteractionType.Exit:
-                    onExit -= action;
-                    return;
+            case InteractionType.ClickDown:
+                onClickDown -= action;
+                return;
+            case InteractionType.ClickUp:
+                onClickUp -= action;
+                return;
+            case InteractionType.Enter:
+                onEnter -= action;
+                return;
+            case InteractionType.Exit:
+                onExit -= action;
+                return;
             }
         }
 
@@ -93,17 +92,17 @@ namespace CDreyer
         {
             switch (feedback.buttonFeedback)
             {
-                case ButtonAnimation.Shake:
-                    RectTransform.DOShakeAnchorPos(0.5f, 1);
-                    break;
-                case ButtonAnimation.Punch:
-                    RectTransform.DOPunchAnchorPos(new Vector2(0, 1), 1);
-                    break;
-                case ButtonAnimation.Yoyo:
-                    RectTransform.DOScale(0.5f, 2).SetEase(Ease.InOutSine);
-                    break;
-                default:
-                    break;
+            case ButtonAnimation.Shake:
+                RectTransform.DOShakeAnchorPos(0.5f, 1);
+                break;
+            case ButtonAnimation.Punch:
+                RectTransform.DOPunchAnchorPos(new Vector2(0, 1), 1);
+                break;
+            case ButtonAnimation.Yoyo:
+                RectTransform.DOScale(0.5f, 2).SetEase(Ease.InOutSine);
+                break;
+            default:
+                break;
             }
         }
 
@@ -128,10 +127,10 @@ namespace CDreyer
             Action action = interaction switch
             {
                 InteractionType.ClickDown => onClickDown,
-                InteractionType.ClickUp => onClickUp,
-                InteractionType.Enter => onEnter,
-                InteractionType.Exit => onExit,
-                _ => null,
+                InteractionType.ClickUp   => onClickUp,
+                InteractionType.Enter     => onEnter,
+                InteractionType.Exit      => onExit,
+                _                         => null,
             };
             action?.Invoke();
         }
@@ -169,7 +168,7 @@ namespace CDreyer
     {
         public ButtonAnimation buttonFeedback;
         public InteractionType interactionType;
-        public AudioClip audioClip;
+        public AudioClip       audioClip;
 
         [Tooltip("triggers the feedback when the interactable is false")]
         public bool declinedInteraction;

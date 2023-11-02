@@ -1,85 +1,86 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using CDreyer;
 using DG.Tweening;
+using Sources.cdreyer;
+using UnityEngine;
 
-public enum Direction
+namespace Sources.Camera
 {
-    Down,
-    Left,
-    Up,
-    Right,
-}
-public class CameraController : Singleton<CameraController>
-{
-    [SerializeField] Camera     cam;
-    [SerializeField] Transform  camAnchor;
-    [SerializeField] RotateMode rotateMode;
-    [SerializeField] float      rotDuration;
-    [SerializeField] Transform  wallRaycastAnchor;
-
-    Vector3            curEuler = Vector3.zero;
-    HashSet<Transform> walls    = new();
-    HashSet<Transform> hitWalls = new();
-
-    public Direction Direction => (Direction)(Math.Abs(curEuler.y / 90) % 4);
-    public Camera Cam => cam;
-
-    public event Action<Direction> camDirectionChanged;
-
-    public void RotateLeft()
+    public enum Direction
     {
-        curEuler += Vector3.up * 90;
-        Vector3 endValue = new(0, curEuler.y, 0);
-        camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
-
-        camDirectionChanged?.Invoke(Direction);
+        Down,
+        Left,
+        Up,
+        Right,
     }
-
-    public void RotateRight()
+    public class CameraController : Singleton<CameraController>
     {
-        curEuler += Vector3.down * 90;
-        Vector3 endValue = new(0, curEuler.y, 0);
-        camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
+        [SerializeField] UnityEngine.Camera cam;
+        [SerializeField] Transform          camAnchor;
+        [SerializeField] RotateMode         rotateMode;
+        [SerializeField] float              rotDuration;
+        [SerializeField] Transform          wallRaycastAnchor;
 
-        camDirectionChanged?.Invoke(Direction);
-    }
+        Vector3            curEuler = Vector3.zero;
+        HashSet<Transform> walls    = new();
+        HashSet<Transform> hitWalls = new();
 
-    readonly RaycastHit[] _hits = new RaycastHit[4];
+        public Direction Direction => (Direction)(Math.Abs(curEuler.y / 90) % 4);
+        public UnityEngine.Camera Cam => cam;
 
-    private void Update()
-    {
-        var pos  = wallRaycastAnchor.position;
-        var dir  = wallRaycastAnchor.forward;
-        int size = Physics.RaycastNonAlloc(pos, dir, _hits, Mathf.Infinity);
+        public event Action<Direction> camDirectionChanged;
 
-        for (int i = 0; i < size; i++) {
-            var hit = _hits[i];
-            if (hit.collider.transform.childCount == 0) continue;
+        public void RotateLeft()
+        {
+            curEuler += Vector3.up * 90;
+            Vector3 endValue = new(0, curEuler.y, 0);
+            camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
 
-            var t = hit.collider.transform.GetChild(0);
-            if (!hit.collider.CompareTag("Wall")) continue;
-
-            walls.Add(t);
-            hitWalls.Add(t);
-        }
-    }
-
-    private void LateUpdate()
-    {
-        foreach (var wall in walls) {
-            wall.gameObject.SetActive(!hitWalls.Contains(wall));
+            camDirectionChanged?.Invoke(Direction);
         }
 
-        hitWalls.Clear();
-    }
+        public void RotateRight()
+        {
+            curEuler += Vector3.down * 90;
+            Vector3 endValue = new(0, curEuler.y, 0);
+            camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
 
-    public void SetRotation(int rotId)
-    {
-        curEuler = new(0, 90 * rotId, 0);
-        camAnchor.DOLocalRotate(curEuler, rotDuration, rotateMode);
+            camDirectionChanged?.Invoke(Direction);
+        }
+
+        readonly RaycastHit[] _hits = new RaycastHit[4];
+
+        private void Update()
+        {
+            var pos  = wallRaycastAnchor.position;
+            var dir  = wallRaycastAnchor.forward;
+            int size = Physics.RaycastNonAlloc(pos, dir, _hits, Mathf.Infinity);
+
+            for (int i = 0; i < size; i++) {
+                var hit = _hits[i];
+                if (hit.collider.transform.childCount == 0) continue;
+
+                var t = hit.collider.transform.GetChild(0);
+                if (!hit.collider.CompareTag("Wall")) continue;
+
+                walls.Add(t);
+                hitWalls.Add(t);
+            }
+        }
+
+        private void LateUpdate()
+        {
+            foreach (var wall in walls) {
+                wall.gameObject.SetActive(!hitWalls.Contains(wall));
+            }
+
+            hitWalls.Clear();
+        }
+
+        public void SetRotation(int rotId)
+        {
+            curEuler = new(0, 90 * rotId, 0);
+            camAnchor.DOLocalRotate(curEuler, rotDuration, rotateMode);
+        }
     }
 }

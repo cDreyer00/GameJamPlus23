@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace CDreyer
+namespace Sources.cdreyer
 {
     public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {

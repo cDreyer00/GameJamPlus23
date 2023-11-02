@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using CDreyer;
-using Sources.Enemy;
+using Sources.cdreyer;
+using Sources.cdreyer.GenericPool;
 using Sources.Types;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,67 +11,54 @@ namespace Sources.Systems
     public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
         where T : MonoBehaviour
     {
-        protected QueuePool<T> instances;
-        public IEnumerable<T> Instances => instances.q;
-        public T                       instancePrefab;
-        public int                     startSpawnTimer;
+        public T                       prefab;
         public ClampedPrimitive<float> spawnRate;
         public ClampedPrimitive<int>   maxInstances;
-        public bool                    cancellationRequested;
+        public bool                    shouldSpawn;
 
-        [SerializeField] protected int activeInstances;
-
+        protected QueuePool<T> instancePool;
         public abstract Vector3 GetRandomPosition();
-
         protected override void Awake()
         {
             base.Awake();
-            instances = new QueuePool<T>(instancePrefab, maxInstances.max, transform);
+            instancePool = new QueuePool<T>(prefab, maxInstances.max, transform);
             spawnRate.Clamp();
             maxInstances.Clamp();
-            Start();
+            BeginSpawning();
         }
-
-        public void Start()
+        public void BeginSpawning()
         {
-            cancellationRequested = false;
-            instances.Init();
+            shouldSpawn = true;
+            instancePool.Init();
             StartCoroutine(SpawnCoroutine());
         }
-        public void Stop()
+        public void StopSpawning()
         {
-            cancellationRequested = true;
+            shouldSpawn = false;
             StopAllCoroutines();
         }
-        virtual protected IEnumerator SpawnCoroutine()
+        IEnumerator SpawnCoroutine()
         {
-            if (!cancellationRequested) yield break;
-            yield return Helpers.GetWait(startSpawnTimer);
+            if (!shouldSpawn) yield break;
 
             var wait = Helpers.GetWait(spawnRate);
-            while (!cancellationRequested) {
-                if (activeInstances >= maxInstances) {
-                    yield return null;
-                    continue;
-                }
+            while (shouldSpawn) {
                 yield return wait;
-                Spawned();
+                Spawn();
             }
         }
-        protected void Spawned()
+        virtual protected void Spawn()
         {
-            activeInstances++;
             var position = GetRandomPosition();
-            T   instance = instances.Get(position, Quaternion.identity);
-            OnSpawned(instance);
+            T   instance = instancePool.Get(position, Quaternion.identity);
+            OnSpawnedInstance(instance);
         }
-        protected void DeSpawned(T instance)
+        protected void DeSpawn(T instance)
         {
-            activeInstances--;
-            instances.Release(instance);
-            OnDesSpawned(instance);
+            instancePool.Release(instance);
+            OnDesSpawnedInstance(instance);
         }
-        virtual protected void OnSpawned(T instance) {}
-        virtual protected void OnDesSpawned(T instance) {}
+        virtual protected void OnSpawnedInstance(T instance) {}
+        virtual protected void OnDesSpawnedInstance(T instance) {}
     }
 }

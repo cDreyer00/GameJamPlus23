@@ -1,21 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+using Sources.cdreyer;
+using Sources.cdreyer.loading_system;
 using UnityEngine;
-using CDreyer;
 
-public class UIMainMenu : MonoBehaviour
+namespace Sources.UI.MainMenu
 {
-    [SerializeField] ButtonBehaviour startBtn;
-
-    void Start()
+    public class UIMainMenu : MonoBehaviour
     {
-        startBtn.AddListener(OnStartButtonClick, InteractionType.ClickUp);
-    }
+        [SerializeField] ButtonBehaviour startBtn;
 
-    void OnStartButtonClick()
-    {
-        LoadingManager.Instance.FadeIn(() =>
-            LoadingManager.Instance.LoadScene(SceneType.GAMEPLAY)
-        );
+        void Start()
+        {
+            startBtn.AddListener(OnStartButtonClick, InteractionType.ClickUp);
+        }
+
+        void OnStartButtonClick()
+        {
+            LoadingManager.Instance.FadeIn(() =>
+                LoadingManager.Instance.LoadScene(SceneType.GAMEPLAY)
+            );
+        }
     }
 }
