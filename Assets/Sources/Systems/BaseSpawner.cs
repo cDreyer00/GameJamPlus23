@@ -11,12 +11,15 @@ namespace Sources.Systems
     public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
         where T : MonoBehaviour
     {
+        bool                   _isSpawning;
+        protected QueuePool<T> instancePool;
+
         public T                       prefab;
         public ClampedPrimitive<float> spawnRate;
         public ClampedPrimitive<int>   maxInstances;
-        public bool                    shouldSpawn;
+        public int                     instanceCount;
 
-        protected QueuePool<T> instancePool;
+
         public abstract Vector3 GetRandomPosition();
         protected override void Awake()
         {
@@ -28,33 +31,35 @@ namespace Sources.Systems
         }
         public void BeginSpawning()
         {
-            shouldSpawn = true;
+            _isSpawning = true;
             instancePool.Init();
             StartCoroutine(SpawnCoroutine());
         }
         public void StopSpawning()
         {
-            shouldSpawn = false;
+            _isSpawning = false;
             StopAllCoroutines();
         }
-        IEnumerator SpawnCoroutine()
+        virtual protected IEnumerator SpawnCoroutine()
         {
-            if (!shouldSpawn) yield break;
+            if (!_isSpawning) yield break;
 
             var wait = Helpers.GetWait(spawnRate);
-            while (shouldSpawn) {
+            while (_isSpawning) {
                 yield return wait;
                 Spawn();
             }
         }
         virtual protected void Spawn()
         {
+            instanceCount++;
             var position = GetRandomPosition();
             T   instance = instancePool.Get(position, Quaternion.identity);
             OnSpawnedInstance(instance);
         }
         protected void DeSpawn(T instance)
         {
+            instanceCount--;
             instancePool.Release(instance);
             OnDesSpawnedInstance(instance);
         }

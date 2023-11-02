@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Sources.Characters.MeleeEnemy
 {
-    public class MelleEnemySpawner : BaseSpawner<MeleeEnemy>
+    public class MeleeEnemySpawner : BaseSpawner<MeleeEnemy>
     {
         public ClampedPrimitive<float> speed;
         public ClampedPrimitive<int>   damage;

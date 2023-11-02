@@ -95,9 +95,9 @@ namespace Sources.Characters.Player
             if (GameManager.GameManager.IsGameOver) return;
 
             feed.StartCoroutine(nameof(FeedbackDamage.DamageColor));
-
-            if (cameraShake != null) cameraShake.ShakeCamera();
-            if (damageAudio != null) damageAudio.Play();
+            
+            if (cameraShake) cameraShake.ShakeCamera();
+            if (damageAudio) damageAudio.Play();
 
             float hp = HealthBar.Instance.HealthPoints;
             if (hp > 0) {

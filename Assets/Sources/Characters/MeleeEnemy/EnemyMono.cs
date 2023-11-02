@@ -12,50 +12,40 @@ namespace Sources.Characters.MeleeEnemy
 {
     public class MeleeEnemy : MonoBehaviour, IEnemy
     {
-        public NavMeshAgent agent;
-        public int          damage      = 1;
-        public float        attackDelay = 1f;
-        public float        idleTime    = 1;
+        public int   damage      = 1;
+        public float attackDelay = 1f;
+        public float idleTime    = 1;
 
-        float _lastAttackTime;
-        bool  _canAttack = true;
+        float    _lastAttackTime;
+        bool     _canAttack = true;
+        Animator _anim;
 
+        [SerializeField] private NavMeshAgent   agent;
         [SerializeField] private AudioClip      damageAudio;
         [SerializeField] private AudioClip      attackAudio;
         [SerializeField] private int            health;
         [SerializeField] private FeedbackDamage feedback;
 
+        public bool    canMove;
         public IPlayer target;
         public event Action<IEnemy> OnDied;
         public NavMeshAgent Agent => agent;
-
         public Vector3 Position => transform.position;
 
-
-        [SerializeField] bool canMove;
-        public bool CanMove
-        {
-            get => canMove;
-            set => canMove = value;
-        }
-
-        private Animator _anim;
 
         private readonly static int AnimIsDead   = Animator.StringToHash("isDead");
         private readonly static int AnimIsWalk   = Animator.StringToHash("isWalk");
         private readonly static int AnimIsAttack = Animator.StringToHash("isAttack");
 
-        public int Health
-        {
-            get => health;
-            private set => health = value;
-        }
+        public bool IsDead => health <= 0;
+        public int Health => health;
 
-        public bool IsDead => Health <= 0;
-
-        private void Start()
+        private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+        }
+        private void Start()
+        {
             _anim = GetComponentInChildren<Animator>();
             target = GameManager.GameManager.Instance.Player;
         }
@@ -65,10 +55,8 @@ namespace Sources.Characters.MeleeEnemy
             if (GameManager.GameManager.IsGameOver) return;
 
             idleTime -= Time.deltaTime;
-            if (idleTime > 0) {
-                return;
-            }
-            CanMove = true;
+            if (idleTime > 0) return;
+            canMove = true;
 
             if (!_canAttack) {
                 _lastAttackTime += Time.deltaTime;
@@ -78,7 +66,7 @@ namespace Sources.Characters.MeleeEnemy
                 }
             }
 
-            if (CanMove) {
+            if (canMove) {
                 SetDestination(target.Position);
             }
         }
@@ -91,7 +79,7 @@ namespace Sources.Characters.MeleeEnemy
             if (damageAudio != null)
                 damageAudio.Play();
 
-            Health -= amount;
+            health -= amount;
 
             if (health <= 0) {
                 _canAttack = false;
@@ -122,8 +110,7 @@ namespace Sources.Characters.MeleeEnemy
                 }
             }
 
-            if (attackAudio != null)
-                attackAudio.Play();
+            if (attackAudio) attackAudio.Play();
 
             canMove = true;
         }
