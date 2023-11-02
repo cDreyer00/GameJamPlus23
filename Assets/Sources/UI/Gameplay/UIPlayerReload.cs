@@ -9,8 +9,8 @@ namespace Sources.UI.Gameplay
 
         public void Update()
         {
-            float cur = GameManager.PlayerHealthBar.Player.CurDelay;
-            float max = GameManager.PlayerHealthBar.Player.ShootDelay;
+            float cur = GameManager.Instance.Player.CurDelay;
+            float max = GameManager.Instance.Player.ShootDelay;
             img.fillAmount = cur / max;
         }
     }

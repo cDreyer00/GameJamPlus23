@@ -14,8 +14,8 @@ public class UIMainMenu : MonoBehaviour
 
     void OnStartButtonClick()
     {
-        LoadingManager.PlayerHealthBar.FadeIn(() =>
-            LoadingManager.PlayerHealthBar.LoadScene(SceneType.GAMEPLAY)
+        LoadingManager.Instance.FadeIn(() =>
+            LoadingManager.Instance.LoadScene(SceneType.GAMEPLAY)
         );
     }
 }

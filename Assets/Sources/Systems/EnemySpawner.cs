@@ -5,29 +5,26 @@ using UnityEngine;
 
 namespace Sources.Systems
 {
-    public sealed class EnemySpawner : BaseSpawner<EnemyMono>
+    public class EnemySpawner : BaseSpawner<EnemyMono>
     {
-        public           ClampedPrimitive<float> speed;
-        public           ClampedPrimitive<int>   damage;
-        public           NavMeshSurface          surface;
-        [SerializeField] WaveManager             wave;
+        public ClampedPrimitive<float> speed;
+        public ClampedPrimitive<int>   damage;
+        public NavMeshSurface          surface;
         protected override void Awake()
         {
             base.Awake();
             speed.Clamp();
             damage.Clamp();
         }
-
         public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
         protected override void OnSpawned(EnemyMono instance)
         {
             instance.OnDied += OnEnemyDied;
-            instance.target = GameManager.PlayerHealthBar.Player;
+            instance.target = GameManager.Instance.Player;
             instance.powerScore = 10;
             instance.damage = damage;
             var agent = instance.GetComponent<UnityEngine.AI.NavMeshAgent>();
-            speed.Value = speed;
-            agent.speed = speed;
+            agent.speed = speed.Value = speed;
         }
         void OnEnemyDied(EnemyMono enemy)
         {

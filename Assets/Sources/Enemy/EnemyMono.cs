@@ -3,10 +3,6 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using CDreyer;
-using Sources.Player;
-using UnityEditor;
-using UnityEngine.Serialization;
 
 namespace Sources.Enemy
 {
@@ -32,11 +28,11 @@ namespace Sources.Enemy
         public Vector3 Pos => transform.position;
 
 
-        public bool canMove;
+        [SerializeField] bool canMove;
         public bool CanMove
         {
-            set => canMove = value;
             get => canMove;
+            set => canMove = value;
         }
 
         [SerializeField] private FeedbackDamage feedback;
@@ -62,14 +58,13 @@ namespace Sources.Enemy
 
         private void Update()
         {
-            if (GameManager.IsGameOver)
-                return;
+            if (GameManager.IsGameOver) return;
 
             idleTime -= Time.deltaTime;
-            if (idleTime > 0) return;
-            else if (!CanMove) {
-                CanMove = true;
+            if (idleTime > 0) {
+                return;
             }
+            CanMove = true;
 
             if (!_canAttack) {
                 _curDelay += Time.deltaTime;
@@ -108,7 +103,7 @@ namespace Sources.Enemy
         {
             if (!_canAttack) yield break;
 
-            CanMove = false;
+            canMove = false;
             _anim.SetBool(AnimIsWalk, false);
 
             var animClips = _anim.GetCurrentAnimatorClipInfo(0);
@@ -118,13 +113,15 @@ namespace Sources.Enemy
                 _anim.SetTrigger(AnimIsAttack);
                 if (animClip.clip.name == "Attack") {
                     player.TakeDamage(damage);
-                    CanMove = true;
+                    canMove = true;
                     _anim.SetBool(AnimIsWalk, true);
                 }
             }
 
             if (attackAudio != null)
                 attackAudio.Play();
+
+            canMove = true;
         }
 
         private void OnCollisionStay(Collision other) => StartCoroutine(Attack(other));

@@ -30,10 +30,10 @@ namespace Sources.Player
 
         void Start()
         {
-            _cam = CameraController.PlayerHealthBar.Cam;
+            _cam = CameraController.Instance.Cam;
             _baseDrag = rb.drag;
 
-            GameManager.PlayerHealthBar.RegisterPlayer(this);
+            GameManager.Instance.RegisterPlayer(this);
         }
 
         void Update()
@@ -51,7 +51,7 @@ namespace Sources.Player
             Rotate();
 
             if (transform.position.y <= -1) {
-                GameManager.PlayerHealthBar.ReloadScene();
+                GameManager.Instance.ReloadScene();
             }
             if (Input.GetKey(KeyCode.Space)) {
                 rb.drag = _baseDrag * breakDrag;
@@ -96,12 +96,12 @@ namespace Sources.Player
             if (cameraShake != null) cameraShake.ShakeCamera();
             if (damageAudio != null) damageAudio.Play();
 
-            float hp = HealthBar.PlayerHealthBar.HealthPoints;
+            float hp = HealthBar.Instance.HealthPoints;
             if (hp > 0) {
-                HealthBar.PlayerHealthBar.Damage(amount);
+                HealthBar.Instance.Damage(amount);
             }
             else {
-                GameManager.PlayerHealthBar.ReloadScene();
+                GameManager.Instance.ReloadScene();
             }
         }
     }

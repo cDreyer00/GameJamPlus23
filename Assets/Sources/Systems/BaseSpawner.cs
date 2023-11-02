@@ -1,13 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using CDreyer;
 using Sources.Enemy;
 using Sources.Types;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Sources.Systems
 {
-    public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>, ISpawner<T>
+    public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
         where T : MonoBehaviour
     {
         protected QueuePool<T> instances;
@@ -16,22 +18,39 @@ namespace Sources.Systems
         public int                     startSpawnTimer;
         public ClampedPrimitive<float> spawnRate;
         public ClampedPrimitive<int>   maxInstances;
+        public bool                    cancellationRequested;
 
-        [SerializeField] int activeInstances;
+        [SerializeField] protected int activeInstances;
 
-        virtual protected void Start()
+        public abstract Vector3 GetRandomPosition();
+
+        protected override void Awake()
         {
+            base.Awake();
             instances = new QueuePool<T>(instancePrefab, maxInstances.max, transform);
+            spawnRate.Clamp();
+            maxInstances.Clamp();
+            Start();
+        }
+
+        public void Start()
+        {
+            cancellationRequested = false;
             instances.Init();
             StartCoroutine(SpawnCoroutine());
         }
-        public abstract Vector3 GetRandomPosition();
-        public IEnumerator SpawnCoroutine()
+        public void Stop()
         {
+            cancellationRequested = true;
+            StopAllCoroutines();
+        }
+        virtual protected IEnumerator SpawnCoroutine()
+        {
+            if (!cancellationRequested) yield break;
             yield return Helpers.GetWait(startSpawnTimer);
 
             var wait = Helpers.GetWait(spawnRate);
-            while (true) {
+            while (!cancellationRequested) {
                 if (activeInstances >= maxInstances) {
                     yield return null;
                     continue;

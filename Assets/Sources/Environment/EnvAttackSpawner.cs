@@ -19,7 +19,7 @@ namespace Sources.Environment
         {
             instance.OnExplode += DeSpawned;
             var   pos            = instance.transform.position;
-            var   bounds         = GameManager.PlayerHealthBar.GameBounds;
+            var   bounds         = GameManager.Instance.GameBounds;
             float instanceRadius = instance.radius = radius;
             pos.x = Mathf.Clamp(pos.x, bounds.min.x + instanceRadius / 2, bounds.max.x - instanceRadius / 2);
             pos.z = Mathf.Clamp(pos.z, bounds.min.z + instanceRadius / 2, bounds.max.z - instanceRadius / 2);
@@ -37,16 +37,16 @@ namespace Sources.Environment
                 NavMesh.SamplePosition(new Vector3(randX, 0, randZ), out var hit, 10, NavMesh.AllAreas);
 
                 float elevation      = hit.position.y;
-                var   randomPosition = GameManager.PlayerHealthBar.Player.Position + new Vector3(randX, elevation, randZ);
+                var   randomPosition = GameManager.Instance.Player.Position + new Vector3(randX, elevation, randZ);
 
-                var bounds = GameManager.PlayerHealthBar.GameBounds;
+                var bounds = GameManager.Instance.GameBounds;
                 randomPosition.x = Mathf.Clamp(randomPosition.x, bounds.min.x, bounds.max.x);
                 randomPosition.z = Mathf.Clamp(randomPosition.z, bounds.min.z, bounds.max.z);
 
                 return randomPosition;
             }
             else {
-                var   bounds = GameManager.PlayerHealthBar.GameBounds;
+                var   bounds = GameManager.Instance.GameBounds;
                 float randX  = Random.Range(bounds.min.x, bounds.max.x);
                 float randZ  = Random.Range(bounds.min.z, bounds.max.z);
                 NavMesh.SamplePosition(new Vector3(randX, 0, randZ), out var hit, 10, NavMesh.AllAreas);

@@ -37,7 +37,7 @@ namespace Sources.Environment
                 clipInfo = clipInfos[0];
             }
 
-            IPlayer player = GameManager.PlayerHealthBar.Player;
+            IPlayer player = GameManager.Instance.Player;
             if (Vector3.Distance(player.Position, transform.position) < radius) {
                 player.TakeDamage((int)damage);
             }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
-namespace Sources.Enemy
+namespace Sources.Systems
 {
     public interface ISpawner<in T>
     {
-        Vector3 GetRandomPosition();
         IEnumerator SpawnCoroutine();
     }
 }

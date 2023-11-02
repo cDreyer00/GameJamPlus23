@@ -31,9 +31,9 @@ public class TrapMono : MonoBehaviour
         sprite = GetComponentInChildren<SpriteRenderer>();
         transform.localScale = Vector3.one * radius;
 
-        CameraController.PlayerHealthBar.camDirectionChanged += OnCamDirectionChanged;
+        CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
 
-        OnCamDirectionChanged(CameraController.PlayerHealthBar.Direction);
+        OnCamDirectionChanged(CameraController.Instance.Direction);
 
         Helpers.ActionCallbackCr(Disable, lifeTime);
     }
@@ -55,13 +55,13 @@ public class TrapMono : MonoBehaviour
     {
         // if (curCameraDir != direction) return;
 
-        if (Vector3.Distance(GameManager.PlayerHealthBar.Player.Position, transform.position) < radius)
+        if (Vector3.Distance(GameManager.Instance.Player.Position, transform.position) < radius)
             Trigger();
     }
 
     void Trigger()
     {
-        foreach (var e in EnemySpawner.PlayerHealthBar.Instances)
+        foreach (var e in EnemySpawner.Instance.Instances)
             EffectManager.ApplyEffect(e, effect, effectDuration);
 
         Disable();
@@ -74,6 +74,6 @@ public class TrapMono : MonoBehaviour
         onTrapDisabled?.Invoke(this);
         Destroy(gameObject);
 
-        CameraController.PlayerHealthBar.camDirectionChanged -= OnCamDirectionChanged;
+        CameraController.Instance.camDirectionChanged -= OnCamDirectionChanged;
     }
 }

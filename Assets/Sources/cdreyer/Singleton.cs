@@ -7,12 +7,11 @@ namespace CDreyer
     public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
         static T _instance;
-        public static T PlayerHealthBar
+        public static T Instance
         {
             get
             {
-                if (_instance == null)
-                {
+                if (_instance == null) {
                     GameObject go = new($"{typeof(T).Name}_Singleton");
                     _instance = go.AddComponent<T>();
                 }
@@ -28,21 +27,22 @@ namespace CDreyer
         protected virtual void Awake()
         {
             if (_instance == this) return;
-            if (_instance != null)
-            {
+            if (_instance != null) {
                 Destroy(gameObject);
                 return;
             }
 
             _instance = this as T;
 
-            if (dontDestroyOnLoad)
-            {
+            if (dontDestroyOnLoad) {
                 transform.SetParent(null);
                 DontDestroyOnLoad(this);
             }
         }
 
-        public virtual void Dispose() { Destroy(gameObject); }
+        public virtual void Dispose()
+        {
+            Destroy(gameObject);
+        }
     }
 }

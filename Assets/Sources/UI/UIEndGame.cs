@@ -14,7 +14,7 @@ public class UIEndGame : MonoBehaviour
         {
             b.transform.localScale = Vector3.zero;
             b.transform.DOScale(Vector3.one, 0.5f);
-            b.AddListener(GameManager.PlayerHealthBar.ReloadScene, InteractionType.ClickUp);
+            b.AddListener(GameManager.Instance.ReloadScene, InteractionType.ClickUp);
         };
     }
 }

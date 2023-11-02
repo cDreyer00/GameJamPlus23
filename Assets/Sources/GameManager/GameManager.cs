@@ -35,9 +35,9 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         if (RotateLeft)
-            CameraController.PlayerHealthBar.RotateLeft();
+            CameraController.Instance.RotateLeft();
         if (RotateRight)
-            CameraController.PlayerHealthBar.RotateRight();
+            CameraController.Instance.RotateRight();
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
@@ -47,13 +47,13 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
 
         fading = true;
-        LoadingManager.PlayerHealthBar.FadeIn(() =>
+        LoadingManager.Instance.FadeIn(() =>
         {
-            LoadingManager.PlayerHealthBar.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
+            LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
             IsGameOver = false;
             fading = false;
         });
-        SoundManager.PlayerHealthBar.Stop();
+        SoundManager.Instance.Stop();
     }
 
     public void ShowEndGame()
@@ -61,8 +61,8 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
         IsGameOver = true;
         fading = true;
-        LoadingManager.PlayerHealthBar.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
-        SoundManager.PlayerHealthBar.Stop();
+        LoadingManager.Instance.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
+        SoundManager.Instance.Stop();
         fading = false;
 
     }
