@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5044286541477164782}
-  - component: {fileID: -5656992903076782827}
+  - component: {fileID: 2395199984281271198}
   m_Layer: 0
-  m_Name: Trap
+  m_Name: EffectSign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 8976412925564630638}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5656992903076782827
+--- !u!114 &2395199984281271198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,14 +42,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2381143710097290516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b714ed17a89bef40ae96aeb3672f2d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 0590064896fc7e4418c79273d9a71105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 0
-  effect: 0
-  radius: 2
-  effectDuration: 1
-  lifeTime: 99
+  radius: 1
+  effectDuration: 0
+  lifeTime: 0
 --- !u!1 &7682247932671280182
 GameObject:
   m_ObjectHideFlags: 0

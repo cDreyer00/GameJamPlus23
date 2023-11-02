@@ -21,7 +21,7 @@ namespace CDreyer
 
                     if (_instance == null)
                     {
-                        GameLogger.Log($"{typeof(T).Name} instance not found, getting Standard", "red", "error");
+                        GameLogger.Log($"{typeof(T).Name} instance not found", "red", "error");
                     }
 
                 }
