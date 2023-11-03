@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace CDreyer
+namespace Sources.cdreyer
 {
     public abstract class SingletonAddressableSO<T> : ScriptableObject where T : SingletonAddressableSO<T>
     {
@@ -21,7 +18,7 @@ namespace CDreyer
 
                     if (_instance == null)
                     {
-                        GameLogger.Log($"{typeof(T).Name} instance not found", "red", "error");
+                        GameLogger.GameLogger.Log($"{typeof(T).Name} instance not found", "red", "error");
                     }
 
                 }

@@ -1,16 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIPlayerReload : MonoBehaviour
+namespace Sources.UI.Gameplay
 {
-    [SerializeField] Image img;
-
-    public void Update()
+    public class UIPlayerReload : MonoBehaviour
     {
-        float cur = GameManager.Instance.Player.CurDelay;
-        float max = GameManager.Instance.Player.ShootDelay;
-        img.fillAmount = cur / max;
+        [SerializeField] Image img;
+
+        public void Update()
+        {
+            float cur = GameManager.GameManager.Instance.Player.CurDelay;
+            float max = GameManager.GameManager.Instance.Player.ShootDelay;
+            img.fillAmount = cur / max;
+        }
     }
 }

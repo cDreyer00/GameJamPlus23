@@ -1,40 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
-using CDreyer;
+using Sources.cdreyer;
 using UnityEngine;
 
-public class SoundManager : Singleton<SoundManager>
-{
-    AudioSource source;
-
-    protected override void Awake()
+namespace Sources.SoundManager {
+    public class SoundManager : Singleton<SoundManager>
     {
-        base.Awake();
-        source = GetComponent<AudioSource>();
-        source = source == null ? gameObject.AddComponent<AudioSource>() : source;
+        AudioSource source;
 
-        if (Instance == this)
-            source.Play();
-    }
+        protected override void Awake()
+        {
+            base.Awake();
+            source = GetComponent<AudioSource>();
+            source = source == null ? gameObject.AddComponent<AudioSource>() : source;
 
-    public void PlayClip(AudioClip clip)
-    {
-        source.PlayOneShot(clip);
+            if (Instance == this)
+                source.Play();
+        }
 
-    }
-    public void Stop()
-    {
-        source.Stop();
-    }
+        public void PlayClip(AudioClip clip)
+        {
+            source.PlayOneShot(clip);
 
-    void OnDisable()
-    {
-        if (source != null)
+        }
+        public void Stop()
+        {
             source.Stop();
-    }
-}
+        }
 
-public static class SounManagerHelper
-{
-    public static void Play(this AudioClip clip) => SoundManager.Instance.PlayClip(clip);
+        void OnDisable()
+        {
+            if (source != null)
+                source.Stop();
+        }
+    }
+
+    public static class SounManagerHelper
+    {
+        public static void Play(this AudioClip clip) => SoundManager.Instance.PlayClip(clip);
+    }
 }

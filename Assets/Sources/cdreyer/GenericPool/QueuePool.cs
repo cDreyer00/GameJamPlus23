@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CDreyer
+namespace Sources.cdreyer.GenericPool
 {
     [Serializable]
     public class QueuePool<T> : GenericPool<T> where T : MonoBehaviour
