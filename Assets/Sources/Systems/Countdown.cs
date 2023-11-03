@@ -21,8 +21,8 @@ namespace Sources.Systems
             time -= Time.deltaTime;
             textMesh.text = time.ToString("0");
             if (!(time <= 0)) return;
-            if (GameManager.GameManager.IsGameOver) return;
-            GameManager.GameManager.Instance.ShowEndGame();
+            if (GameManager.IsGameOver) return;
+            GameManager.Instance.ShowEndGame();
         }
     }
 }

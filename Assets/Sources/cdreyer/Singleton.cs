@@ -1,46 +1,46 @@
 using UnityEngine;
 
-namespace Sources.cdreyer
+public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
-    public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
+    static T _instance;
+    public static T Instance
     {
-        static T _instance;
-        public static T Instance
+        get
         {
-            get
+            if (_instance == null)
             {
-                if (_instance == null) {
-                    GameObject go = new($"{typeof(T).Name}_Singleton");
-                    _instance = go.AddComponent<T>();
-                }
-
-                return _instance;
+                GameObject go = new($"{typeof(T).Name}_Singleton");
+                _instance = go.AddComponent<T>();
             }
+
+            return _instance;
         }
+    }
 
-        [SerializeField] bool dontDestroyOnLoad = true;
+    [SerializeField] bool dontDestroyOnLoad = true;
 
-        // [SerializeField] bool InstantiateIfNull { get => false; }
+    // [SerializeField] bool InstantiateIfNull { get => false; }
 
-        protected virtual void Awake()
-        {
-            if (_instance == this) return;
-            if (_instance != null) {
-                Destroy(gameObject);
-                return;
-            }
-
-            _instance = this as T;
-
-            if (dontDestroyOnLoad) {
-                transform.SetParent(null);
-                DontDestroyOnLoad(this);
-            }
-        }
-
-        public virtual void Dispose()
+    protected virtual void Awake()
+    {
+        if (_instance == this) return;
+        if (_instance != null)
         {
             Destroy(gameObject);
+            return;
         }
+
+        _instance = this as T;
+
+        if (dontDestroyOnLoad)
+        {
+            transform.SetParent(null);
+            DontDestroyOnLoad(this);
+        }
+    }
+
+    public virtual void Dispose()
+    {
+        Destroy(gameObject);
     }
 }

@@ -6,12 +6,12 @@ namespace Sources.UI.Gameplay
 {
     public class UIGameplay : MonoBehaviour
     {
-        [SerializeField] GameObject      keysPanel;
+        [SerializeField] GameObject keysPanel;
         [SerializeField] ButtonBehaviour settingsBtn;
 
         void Start()
         {
-            Helpers.ActionCallbackCr(() => keysPanel.SetActive(false), 5);
+            Helpers.Delay(5f, () => keysPanel.SetActive(false));
 
             settingsBtn.AddListener(() =>
             {

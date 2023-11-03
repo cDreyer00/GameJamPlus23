@@ -2,46 +2,43 @@ using Sources.Camera;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Sources.Effects
+public class EffectSign : MonoBehaviour
 {
-    public class EffectSign : MonoBehaviour
+    [SerializeField] Direction direction;
+    [FormerlySerializedAs("effect")][SerializeField] BaseEffect baseEffect;
+    [SerializeField] float radius = 1f;
+    [SerializeField] float effectDuration;
+    [SerializeField] float lifeTime;
+
+    public float Radius => radius;
+    public BaseEffect BaseEffect
     {
-        [SerializeField]                                  Direction  direction;
-        [FormerlySerializedAs("effect")] [SerializeField] BaseEffect baseEffect;
-        [SerializeField]                                  float      radius = 1f;
-        [SerializeField]                                  float      effectDuration;
-        [SerializeField]                                  float      lifeTime;
+        get => baseEffect;
+        set => baseEffect = value;
+    }
 
-        public float Radius => radius;
-        public BaseEffect BaseEffect
-        {
-            get => baseEffect;
-            set => baseEffect = value;
-        }
+    SpriteRenderer _sprite;
+    Direction _curCameraDir;
 
-        SpriteRenderer _sprite;
-        Direction      _curCameraDir;
+    public void Init()
+    {
+        direction = (Direction)UnityEngine.Random.Range(0, 4);
+        _sprite = GetComponentInChildren<SpriteRenderer>();
+        transform.localScale = Vector3.one * radius;
 
-        public void Init()
-        {
-            direction = (Direction)UnityEngine.Random.Range(0, 4);
-            _sprite = GetComponentInChildren<SpriteRenderer>();
-            transform.localScale = Vector3.one * radius;
+        CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
 
-            CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
+        OnCamDirectionChanged(CameraController.Instance.Direction);
+    }
 
-            OnCamDirectionChanged(CameraController.Instance.Direction);
-        }
+    void OnCamDirectionChanged(Direction dir)
+    {
+        _curCameraDir = dir;
+    }
 
-        void OnCamDirectionChanged(Direction dir)
-        {
-            _curCameraDir = dir;
-        }
-
-        void Update()
-        {
-            Color c = _curCameraDir == direction ? Color.green : Color.white;
-            _sprite.color = c;
-        }
+    void Update()
+    {
+        Color c = _curCameraDir == direction ? Color.green : Color.white;
+        _sprite.color = c;
     }
 }

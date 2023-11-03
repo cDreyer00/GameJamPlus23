@@ -14,7 +14,7 @@ namespace Sources.UI
             {
                 b.transform.localScale = Vector3.zero;
                 b.transform.DOScale(Vector3.one, 0.5f);
-                b.AddListener(GameManager.GameManager.Instance.ReloadScene, InteractionType.ClickUp);
+                b.AddListener(GameManager.Instance.ReloadScene, InteractionType.ClickUp);
             };
         }
     }
