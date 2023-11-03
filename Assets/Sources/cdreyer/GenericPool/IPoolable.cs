@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CDreyer
+namespace Sources.cdreyer.GenericPool
 {
     public interface IPoolable<T> where T : MonoBehaviour
     {

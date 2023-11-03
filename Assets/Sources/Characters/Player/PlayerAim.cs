@@ -1,30 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using CDreyer;
 using UnityEngine;
 
-public class PlayerAim : MonoBehaviour
+namespace Sources.Characters.Player
 {
-    [SerializeField] LineRenderer lr;
-    [SerializeField] float distance = 10;
-
-    void Start()
+    public class PlayerAim : MonoBehaviour
     {
-        lr = lr == null ? GetComponent<LineRenderer>() : lr;
-    }
+        [SerializeField] LineRenderer lr;
+        [SerializeField] float        distance = 10;
 
-    public void SetAim(Vector3 dir)
-    {
-        float dist = distance;
-        var pos = transform.localPosition;
-
-        if (Physics.Raycast(transform.position, dir, out RaycastHit hit))
+        void Start()
         {
-            dist = Vector3.Distance(transform.position, hit.point);
+            lr = lr == null ? GetComponent<LineRenderer>() : lr;
         }
 
-        dir.Normalize();
-        lr.SetPosition(0, pos);
-        lr.SetPosition(1, pos + dir * dist);
+        public void SetAim(Vector3 dir)
+        {
+            float dist = distance;
+            var   pos  = transform.localPosition;
+
+            if (Physics.Raycast(transform.position, dir, out RaycastHit hit))
+            {
+                dist = Vector3.Distance(transform.position, hit.point);
+            }
+
+            dir.Normalize();
+            lr.SetPosition(0, pos);
+            lr.SetPosition(1, pos + dir * dist);
+        }
     }
 }

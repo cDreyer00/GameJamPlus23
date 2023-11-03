@@ -1,83 +1,73 @@
+using Sources.Camera;
+using Sources.SoundManager;
+using Sources.Systems;
 using UnityEngine;
 
-namespace Sources.Player
+namespace Sources.Characters.Player
 {
     public class PlayerController : MonoBehaviour, IPlayer
     {
-        [SerializeField] GameObject model;
-        [SerializeField] Projectile projPrefab;
-        [SerializeField] Transform anchor;
-        [SerializeField] Rigidbody rb;
-        [SerializeField] PlayerAim aim;
-        [SerializeField] float dashForce = 3;
-        [SerializeField] float shootDelay = 1.3f;
-        [SerializeField] float shootDelayDelta = 0.15f;
-        [SerializeField] float breakDrag = 5f;
-        [Space][SerializeField] AudioClip[] shootAudios;
-        [SerializeField] AudioClip damageAudio;
+        [SerializeField]        GameObject            model;
+        [SerializeField]        Projectile.Projectile projPrefab;
+        [SerializeField]        Transform             anchor;
+        [SerializeField]        Rigidbody             rb;
+        [SerializeField]        PlayerAim             aim;
+        [SerializeField]        float                 dashForce  = 3;
+        [SerializeField]        float                 shootDelay = 1.3f;
+        [SerializeField]        float                 breakDrag  = 5f;
+        [Space, SerializeField] AudioClip[]           shootAudios;
+        [SerializeField]        AudioClip             damageAudio;
 
-        Camera cam;
-        float initShootDelay;
-        float curDelay;
-        float baseDrag;
+        UnityEngine.Camera _cam;
+        float  _curDelay;
+        float  _baseDrag;
 
-        public Vector3 Pos => transform.position;
+        public Vector3 Position => transform.position;
 
-        public float CurDelay => curDelay;
+        public float CurDelay => _curDelay;
         public float ShootDelay => shootDelay;
 
         [SerializeField] FeedbackDamage feed;
-        [SerializeField] CameraShake came;
-        public CameraShake Came => came;
-        private void Awake()
-        {
-            initShootDelay = shootDelay;
-        }
+        [SerializeField] CameraShake    cameraShake;
+        public CameraShake Came => cameraShake;
 
         void Start()
         {
-            PowerBar.Instance.onPowerChanged += OnPowerChanged;
-            cam = CameraController.Instance.Cam;
-            baseDrag = rb.drag;
+            _cam = CameraController.Instance.Cam;
+            _baseDrag = rb.drag;
 
-            GameManager.Instance.RegisterPlayer(this);
+            GameManager.GameManager.Instance.RegisterPlayer(this);
         }
 
         void Update()
         {
-            if (GameManager.IsGameOver)
-                return;
+            if (GameManager.GameManager.IsGameOver) return;
 
-            curDelay += Time.deltaTime;
-            if (Input.GetMouseButton(0))
-            {
-                if (curDelay >= shootDelay)
-                {
+            _curDelay += Time.deltaTime;
+            if (Input.GetMouseButton(0)) {
+                if (_curDelay >= shootDelay) {
                     Shoot();
-                    curDelay = 0;
+                    _curDelay = 0;
                 }
             }
 
             Rotate();
 
-            if (transform.position.y <= -1)
-                GameManager.Instance.ReloadScene();
-
-            if (Input.GetKey(KeyCode.Space))
-            {
-                rb.drag = baseDrag * breakDrag;
+            if (transform.position.y <= -1) {
+                GameManager.GameManager.Instance.ReloadScene();
             }
-            else
-            {
-                rb.drag = baseDrag;
+            if (Input.GetKey(KeyCode.Space)) {
+                rb.drag = _baseDrag * breakDrag;
+            }
+            else {
+                rb.drag = _baseDrag;
             }
         }
 
         void Rotate()
         {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100))
-            {
+            Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100)) {
                 Vector3 lookAtPos = hit.point;
                 lookAtPos.y = anchor.position.y;
                 anchor.LookAt(lookAtPos, Vector3.up);
@@ -87,7 +77,7 @@ namespace Sources.Player
 
         void Shoot()
         {
-            Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
+            Projectile.Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
             Dash(-proj.transform.forward);
 
             if (shootAudios.Length > 0)
@@ -100,30 +90,22 @@ namespace Sources.Player
             rb.AddForce(dir * dashForce, ForceMode.Impulse);
         }
 
-        void OnPowerChanged(PowerBarEventArgs args)
-        {
-            shootDelay = initShootDelay - args.PowerLevel * shootDelayDelta;
-        }
-
         public void TakeDamage(int amount)
         {
-            if (GameManager.IsGameOver)
-                return;
-            feed.StartCoroutine("DamageColor");
-            if (came != null) came.ShakeCamera();
+            if (GameManager.GameManager.IsGameOver) return;
 
-            if (damageAudio != null)
-                damageAudio.Play();
+            feed.StartCoroutine(nameof(FeedbackDamage.DamageColor));
+            
+            if (cameraShake) cameraShake.ShakeCamera();
+            if (damageAudio) damageAudio.Play();
 
-            float power = PowerBar.Instance.Power;
-            float maxPower = PowerBar.Instance.MaxPower;
-            if (power >= maxPower)
-            {
-                GameManager.Instance.ReloadScene();
-                return;
+            float hp = HealthBar.Instance.HealthPoints;
+            if (hp > 0) {
+                HealthBar.Instance.Damage(amount);
             }
-
-            PowerBar.Instance.UpdatePower(-amount);
+            else {
+                GameManager.GameManager.Instance.ReloadScene();
+            }
         }
     }
 }

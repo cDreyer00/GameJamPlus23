@@ -1,13 +1,8 @@
-using System;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 
-
-namespace CDreyer
+namespace Sources.cdreyer.GameLogger
 {
     public class UILog : MonoBehaviour
     {

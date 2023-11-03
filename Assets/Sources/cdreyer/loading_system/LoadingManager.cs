@@ -1,15 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-
 using DG.Tweening;
+using Plugins.Demigiant.DOTween.Modules;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-namespace CDreyer
+namespace Sources.cdreyer.loading_system
 {
     public class LoadingManager : Singleton<LoadingManager>
     {

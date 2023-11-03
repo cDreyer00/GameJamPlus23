@@ -1,12 +1,10 @@
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using UnityEngine;
 
-namespace CDreyer
+namespace Sources.cdreyer.SaveSystem
 {
     public static class SaveSystem
     {
@@ -37,7 +35,7 @@ namespace CDreyer
             }
             catch
             {
-                GameLogger.Log($"data for {typeof(TData).Name} not found", "yellow");
+                GameLogger.GameLogger.Log($"data for {typeof(TData).Name} not found", "yellow");
 
                 if (typeof(ISavable<TData>).IsAssignableFrom(typeof(TData)))
                 {

@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class Character : MonoBehaviour
+namespace Sources.Characters
 {
+    public class Character : MonoBehaviour
+    {
     
+    }
 }
