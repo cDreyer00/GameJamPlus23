@@ -26,6 +26,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
                 poolable.OnCreated();
             }
 
+            InstanceCreated(obj);
             s.Push(obj);
         }
     }
@@ -51,6 +52,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
             poolable.OnGet(this);
         }
 
+        InstanceTaken(t);
         return t;
     }
 
@@ -75,6 +77,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
             poolable.OnGet(this);
         }
 
+        InstanceTaken(t);
         return t;
     }
 
@@ -88,6 +91,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
             poolable.OnRelease();
         }
 
+        InstanceReleased(obj);
         s.Push(obj);
     }
 

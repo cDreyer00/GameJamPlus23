@@ -14,7 +14,6 @@ public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
     public ClampedPrimitive<int> maxInstances;
     public int instanceCount;
 
-
     public abstract Vector3 GetRandomPosition();
     protected override void Awake()
     {

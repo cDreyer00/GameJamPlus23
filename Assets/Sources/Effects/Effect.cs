@@ -1,15 +1,18 @@
-using Sources.Characters;
-using UnityEngine;
+public abstract class Effect
+{
+    public abstract void ApplyEffect(IEnemy character);
+}
 
-public abstract class BaseEffect : MonoBehaviour
+public class ConfusionEffect : Effect
 {
-    public abstract void ApplyEffect(Character character);
+    public override void ApplyEffect(IEnemy character) { 
+        character.TakeDamage(1000);
+    }
 }
-public class ConfusionEffect : BaseEffect
+
+public class FreezeEffect : Effect
 {
-    public override void ApplyEffect(Character character) { }
-}
-public class FreezeEffect : BaseEffect
-{
-    public override void ApplyEffect(Character character) { }
+    public override void ApplyEffect(IEnemy character) { 
+
+    }
 }

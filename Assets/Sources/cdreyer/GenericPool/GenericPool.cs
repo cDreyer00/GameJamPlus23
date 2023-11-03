@@ -9,6 +9,10 @@ public abstract class GenericPool<T> where T : MonoBehaviour
     [SerializeField] T _original;
     [SerializeField] protected Transform parent = null;
 
+    public event Action<T> onInstanceCreated;
+    public event Action<T> onInstanceReleased;
+    public event Action<T> onInstanceTaken;
+
     bool _initialized = false;
 
     public GenericPool(T original, int amount, Transform parent = null)
@@ -41,6 +45,10 @@ public abstract class GenericPool<T> where T : MonoBehaviour
 
         _original = newOriginal;
     }
+
+    protected void InstanceCreated(T i) => onInstanceCreated?.Invoke(i);
+    protected void InstanceTaken(T i) => onInstanceTaken?.Invoke(i);
+    protected void InstanceReleased(T i) => onInstanceReleased?.Invoke(i);
 
     protected abstract void CreateObjects(T original, int amount, Transform parent = null, bool active = false);
     public abstract T Get(Vector3 position, Quaternion rotation);

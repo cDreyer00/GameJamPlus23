@@ -2,75 +2,72 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Sources.cdreyer.GameLogger
+public class GameLogger : Singleton<GameLogger>
 {
-    public class GameLogger : Singleton<GameLogger>
+    [SerializeField] UILog logPrefab;
+    [SerializeField] Transform logsParent;
+    [SerializeField] List<Log> logs = new();
+    [SerializeField] ButtonBehaviour hideOrShowButton;
+
+    bool isActive = false;
+    void Start()
     {
-        [SerializeField] UILog logPrefab;
-        [SerializeField] Transform logsParent;
-        [SerializeField] List<Log> logs = new();
-        [SerializeField] ButtonBehaviour hideOrShowButton;
-
-        bool isActive = false;
-        void Start()
+        hideOrShowButton.AddListener(() =>
         {
-            hideOrShowButton.AddListener(() =>
-            {
-                isActive = !isActive;
-                logsParent.parent.gameObject.SetActive(isActive);
-            },
-            InteractionType.ClickUp);
-        }
-
-        void OnEnable()
-        {
-            Application.logMessageReceived += LogRecieved;
-            Debug.Log("Logger enabled");
-        }
-
-        void OnDisable()
-        {
-            Application.logMessageReceived -= LogRecieved;
-        }
-
-        void LogRecieved(string message, string stackTrace, LogType type)
-        {
-            Log l = new(message, stackTrace, type);
-            logs.Add(l);
-            UILog uiLog = Instantiate(logPrefab, logsParent);
-            uiLog.Init(l);
-        }
-
-        static string curCode = "";
-        public static void Log(object message, string color = "white", string code = "")
-        {
-            if (!Debug.isDebugBuild) return;
-
-            if (curCode != "")
-                if (code != curCode) return;
-
-            Debug.Log($"<color={color}>{message}</color>");
-        }
+            isActive = !isActive;
+            logsParent.parent.gameObject.SetActive(isActive);
+        },
+        InteractionType.ClickUp);
     }
 
-    [Serializable]
-    public class Log
+    void OnEnable()
     {
-        public string message;
-        public string[] traceMessages;
-        public LogType type;
+        Application.logMessageReceived += LogRecieved;
+        Debug.Log("Logger enabled");
+    }
 
-        public Log(string message, string stackTrace, LogType type)
-        {
-            this.message = message;
+    void OnDisable()
+    {
+        Application.logMessageReceived -= LogRecieved;
+    }
 
-            this.traceMessages = stackTrace.Split(
-                new string[] { "\n" },
-                StringSplitOptions.RemoveEmptyEntries
-            );
-            Array.Reverse(traceMessages);
+    void LogRecieved(string message, string stackTrace, LogType type)
+    {
+        Log l = new(message, stackTrace, type);
+        logs.Add(l);
+        UILog uiLog = Instantiate(logPrefab, logsParent);
+        uiLog.Init(l);
+    }
 
-            this.type = type;
-        }
+    static string curCode = "";
+    public static void Log(object message, string color = "white", string code = "")
+    {
+        if (!Debug.isDebugBuild) return;
+
+        if (curCode != "")
+            if (code != curCode) return;
+
+        Debug.Log($"<color={color}>{message}</color>");
+    }
+}
+
+[Serializable]
+public class Log
+{
+    public string message;
+    public string[] traceMessages;
+    public LogType type;
+
+    public Log(string message, string stackTrace, LogType type)
+    {
+        this.message = message;
+
+        this.traceMessages = stackTrace.Split(
+            new string[] { "\n" },
+            StringSplitOptions.RemoveEmptyEntries
+        );
+        Array.Reverse(traceMessages);
+
+        this.type = type;
     }
 }

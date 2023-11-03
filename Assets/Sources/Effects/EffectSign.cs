@@ -1,34 +1,60 @@
-using Sources.Camera;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class EffectSign : MonoBehaviour
+public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 {
     [SerializeField] Direction direction;
-    [FormerlySerializedAs("effect")][SerializeField] BaseEffect baseEffect;
+    [SerializeField] Effect effect;
     [SerializeField] float radius = 1f;
     [SerializeField] float effectDuration;
     [SerializeField] float lifeTime;
 
     public float Radius => radius;
-    public BaseEffect BaseEffect
+
+    public GenericPool<EffectSign> Pool { get; set; }
+    public Effect Effect
     {
-        get => baseEffect;
-        set => baseEffect = value;
+        get => effect;
+        set => effect = value;
     }
 
     SpriteRenderer _sprite;
     Direction _curCameraDir;
 
+    Color BaseColor => effect is FreezeEffect ? Color.cyan : Color.yellow;
+
     public void Init()
     {
-        direction = (Direction)UnityEngine.Random.Range(0, 4);
         _sprite = GetComponentInChildren<SpriteRenderer>();
+
+        direction = (Direction)Random.Range(0, 4);
+        Vector3 lookAt = CameraController.DirectionToVector3(direction) + transform.position;
+        transform.LookAt(lookAt);
         transform.localScale = Vector3.one * radius;
 
-        CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
+        // set effect
+        int randEffect = Random.Range(0, 2);
+        effect = randEffect switch { 0 => new FreezeEffect(), 1 => new ConfusionEffect() };
+        _sprite.color = BaseColor;
 
+        CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
         OnCamDirectionChanged(CameraController.Instance.Direction);
+    }
+
+    void OnValidate()
+    {
+        transform.localScale = Vector3.one * radius;
+    }
+
+    void Update()
+    {
+        Color c = _curCameraDir == direction ? Color.green : BaseColor;
+        _sprite.color = c;
+
+        float dist = Vector3.Distance(transform.position, GameManager.Instance.Player.Position);
+        if (dist <= radius)
+        {
+            ApplyEffect();
+        }
     }
 
     void OnCamDirectionChanged(Direction dir)
@@ -36,9 +62,25 @@ public class EffectSign : MonoBehaviour
         _curCameraDir = dir;
     }
 
-    void Update()
+    void ApplyEffect()
     {
-        Color c = _curCameraDir == direction ? Color.green : Color.white;
-        _sprite.color = c;
+        var enemies = SpawnerSrevice.MeleeEnemySpawner.GetAllEnemies();
+        foreach (var e in enemies)
+            effect.ApplyEffect(e);
+    }
+
+    public void OnGet(GenericPool<EffectSign> pool)
+    {
+        this.Pool = pool;
+    }
+
+    public void OnRelease()
+    {
+
+    }
+
+    public void OnCreated()
+    {
+
     }
 }

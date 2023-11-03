@@ -27,6 +27,7 @@ using UnityEngine;
                 }
 
                 q.Enqueue(obj);
+                InstanceCreated(obj);
             }
         }
 
@@ -52,6 +53,7 @@ using UnityEngine;
                 poolable.OnGet(this);
             }
 
+            InstanceTaken(t);
             return t;
         }
 
@@ -77,22 +79,22 @@ using UnityEngine;
                 poolable.OnGet(this);
             }
 
+            InstanceTaken(t);
             return t;
         }
 
-        T _obj;
         public override void Release(T obj)
         {
-            _obj = obj;
-            _obj.gameObject.SetActive(false);
-            _obj.transform.SetParent(parent);
+            obj.gameObject.SetActive(false);
+            obj.transform.SetParent(parent);
 
-            if (_obj is IPoolable<T> poolable)
+            if (obj is IPoolable<T> poolable)
             {
                 poolable.OnRelease();
             }
 
-            q.Enqueue(_obj);
+            InstanceReleased(obj);
+            q.Enqueue(obj);
         }
 
         public override void Dispose()
