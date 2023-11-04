@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 
 using Unity.VisualScripting;
@@ -16,15 +17,13 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
     bool _canAttack = true;
     Animator _anim;
 
-    [SerializeField] private NavMeshAgent agent;
+
     [SerializeField] private AudioClip damageAudio;
     [SerializeField] private AudioClip attackAudio;
     [SerializeField] private FeedbackDamage feedback;
 
     public bool canMove;
-    public ICharacter target;
-
-    public NavMeshAgent Agent => agent;
+    public Transform target;
 
     public GenericPool<MeleeEnemy> Pool { get; set; }
 
@@ -35,7 +34,6 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
     protected override void Awake()
     {
         base.Awake();
-        agent = GetComponent<NavMeshAgent>();
     }
 
     void OnEnable()
@@ -59,7 +57,11 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
     private void Start()
     {
         _anim = GetComponentInChildren<Animator>();
-        target = GameManager.Instance.Player;
+        target = GameManager.Instance.Player.transform;
+
+        NavMeshMovement movement = Modules.OfType<NavMeshMovement>().FirstOrDefault();
+        if(movement != null)
+            movement.Target = target;
     }
 
     private void Update()
@@ -79,11 +81,6 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
                 _lastAttackTime = 0;
             }
         }
-
-        if (canMove)
-        {
-            SetDestination(target.Position);
-        }
     }
 
     void OnTakeDamage(float amount)
@@ -101,7 +98,6 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
     void OnDied()
     {
         _canAttack = false;
-        SetSpeed(0f, 1f);
         _anim.SetTrigger(AnimIsDead);
         Helpers.Delay(0.8f, () => { Pool.Release(this); });
     }
@@ -133,30 +129,6 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
 
     private void OnCollisionStay(Collision other) => StartCoroutine(Attack(other));
     private void OnCollisionEnter(Collision collision) => StartCoroutine(Attack(collision));
-
-    public void SetDestination(Vector3 position)
-    {
-        agent.SetDestination(position);
-    }
-
-    public void SetDestForTimer(Vector3 dest, float timer)
-    {
-        idleTime = timer;
-        SetDestination(dest);
-    }
-
-    public void SetSpeed(float speed, float timer)
-    {
-        float normalSpeed = agent.speed;
-        agent.speed = speed;
-        StartCoroutine(SetSpeedCoroutine(normalSpeed, timer));
-    }
-    IEnumerator SetSpeedCoroutine(float speed, float timer)
-    {
-        yield return Helpers.GetWait(timer);
-        if (this.IsDestroyed()) yield break;
-        agent.speed = speed;
-    }
 
     public void OnGet(GenericPool<MeleeEnemy> pool)
     {

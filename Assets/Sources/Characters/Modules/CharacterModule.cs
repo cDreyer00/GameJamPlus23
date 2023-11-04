@@ -13,9 +13,23 @@ public abstract class CharacterModule : MonoBehaviour
             Destroy(this);
             return;
         }
-
+        Character.AddModule(this);
         Init();
     }
-    
+
     protected abstract void Init();
+
+    void OnDestroy()
+    {
+        if (Character == null) return;
+
+        Character.RemoveModule(this);
+    }
+
+    public void Enable() => enabled = true;
+    public void Disable() => enabled = true;
 }
+
+public interface IModule { }
+public interface IMovementModule : IModule { }
+public interface IAttackModule : IModule { }

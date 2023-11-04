@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1516845875696123519}
   - component: {fileID: 6025422007174435882}
   - component: {fileID: 8319797883635615551}
+  - component: {fileID: 6223743307461556125}
   m_Layer: 6
   m_Name: MelleEnemy
   m_TagString: Untagged
@@ -52,11 +53,11 @@ MonoBehaviour:
   damage: 10
   attackDelay: 0.5
   idleTime: 1.1
-  agent: {fileID: 0}
   damageAudio: {fileID: 0}
   attackAudio: {fileID: 0}
   feedback: {fileID: 798822857582975139}
   canMove: 0
+  target: {fileID: 0}
 --- !u!54 &1516845875696123519
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,6 +130,21 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &6223743307461556125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6089110235842682470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277ce2849e3145041a73399a48c2909f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _agent: {fileID: 8319797883635615551}
+  _moveType: 0
+  _target: {fileID: 0}
 --- !u!1 &6462346100620335737
 GameObject:
   m_ObjectHideFlags: 0

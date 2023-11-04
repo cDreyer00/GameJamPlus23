@@ -55,7 +55,7 @@ public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
         if (instance is MeleeEnemy enemy)
         {
             enemy.Pool.onInstanceReleased += OnEnemyDied;
-            enemy.Agent.speed = speed.Apply(currentWave);
+            // enemy.Agent.speed = speed.Apply(currentWave);
         }
     }
     protected override void OnDesSpawnedInstance(MonoBehaviour instance)
