@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MeleeEnemy : Character
+public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
 {
     public int damage = 1;
     public float attackDelay = 1f;
@@ -25,6 +26,8 @@ public class MeleeEnemy : Character
 
     public NavMeshAgent Agent => agent;
 
+    public GenericPool<MeleeEnemy> Pool { get; set; }
+
     private readonly static int AnimIsDead = Animator.StringToHash("isDead");
     private readonly static int AnimIsWalk = Animator.StringToHash("isWalk");
     private readonly static int AnimIsAttack = Animator.StringToHash("isAttack");
@@ -33,6 +36,24 @@ public class MeleeEnemy : Character
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    void OnEnable()
+    {
+        Events.onTakeDamage += OnTakeDamage;
+        Events.onDied += OnDied;
+    }
+
+    void OnDisable()
+    {
+        Events.onTakeDamage -= OnTakeDamage;
+        Events.onDied -= OnDied;
+
+        var sprite = feedback.GetComponent<SpriteRenderer>();
+        if (!ReferenceEquals(sprite, null))
+        {
+            sprite.color = Color.white;
+        }
     }
 
     private void Start()
@@ -65,7 +86,7 @@ public class MeleeEnemy : Character
         }
     }
 
-    public void TakeDamage(int amount)
+    void OnTakeDamage(float amount)
     {
         if (IsDead) return;
         if (idleTime > 0) return;
@@ -77,12 +98,12 @@ public class MeleeEnemy : Character
         _anim.SetTrigger(AnimIsWalk);
     }
 
-    void OnDied(ICharacter c) => OnDied();
     void OnDied()
     {
         _canAttack = false;
         SetSpeed(0f, 1f);
         _anim.SetTrigger(AnimIsDead);
+        Helpers.Delay(0.8f, () => { Pool.Release(this); });
     }
 
     private IEnumerator Attack(Collision other)
@@ -136,12 +157,18 @@ public class MeleeEnemy : Character
         if (this.IsDestroyed()) yield break;
         agent.speed = speed;
     }
-    void OnDisable()
+
+    public void OnGet(GenericPool<MeleeEnemy> pool)
     {
-        var sprite = feedback.GetComponent<SpriteRenderer>();
-        if (!ReferenceEquals(sprite, null))
-        {
-            sprite.color = Color.white;
-        }
+        this.Pool = pool;
+        Events.onInitialized?.Invoke();
+    }
+
+    public void OnRelease()
+    {
+    }
+
+    public void OnCreated()
+    {
     }
 }

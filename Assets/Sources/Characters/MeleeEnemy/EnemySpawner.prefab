@@ -55,9 +55,9 @@ MonoBehaviour:
     max: 10
   instanceCount: 0
   speed:
-    value: 0
+    value: 5
     min: 0
-    max: 0
+    max: 5
   damage:
     value: 1
     min: 0

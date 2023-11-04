@@ -17,7 +17,10 @@ public abstract class BaseSpawner<T> : MonoBehaviour
     public abstract Vector3 GetRandomPosition();
     protected virtual void Awake()
     {
-        instancePool = new QueuePool<T>(prefab, maxInstances.max, transform);
+        instancePool = new QueuePool<T>(prefab, maxInstances.max);
+        foreach (var i in instancePool.Instances)
+            i.transform.SetParent(transform);
+            
         spawnRate.Clamp();
         maxInstances.Clamp();
         BeginSpawning();

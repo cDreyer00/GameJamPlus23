@@ -25,6 +25,6 @@ public class Projectile : MonoBehaviour
         if (col.GetComponent<PlayerController>() != null) return;
         Destroy(gameObject);
         if (!col.TryGetComponent<MeleeEnemy>(out var enemy)) return;
-        enemy.TakeDamage(damage);
+        enemy.Events.onTakeDamage?.Invoke(damage);
     }
 }

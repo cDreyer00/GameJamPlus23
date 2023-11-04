@@ -7,6 +7,8 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
 {
     public Stack<T> s = new();
 
+    public override IEnumerable<T> Instances => s;
+
     public StackPool(T original, int amount, Transform parent = null) : base(original, amount, parent)
     {
 

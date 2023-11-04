@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterHealth : CharacterModule
+public class HealthModule : CharacterModule
 {
-    [SerializeField] ClampedPrimitive<float> _health;
+    [SerializeField] Canvas canvas;
     [SerializeField] Slider _healthSlider;
+    [SerializeField] ClampedPrimitive<float> _health;
 
     void OnEnable()
     {
         Character.Events.onTakeDamage += OnTakeDamage;
+        Character.Events.onInitialized += Init;
     }
 
     void OnDisable()
     {
         Character.Events.onTakeDamage -= OnTakeDamage;
+        Character.Events.onInitialized -= Init;
     }
 
-    void Start()
+    protected override void Init()
     {
+        canvas.worldCamera = Camera.main;
+
+        _health.Value = _health.max;
         UpdateSlider();
     }
 
@@ -29,7 +35,7 @@ public class CharacterHealth : CharacterModule
         _health.Value -= amount;
 
         if (_health <= 0)
-            Character.Events.onDied?.Invoke(Character);
+            Character.Events.onDied?.Invoke();
 
         UpdateSlider();
     }

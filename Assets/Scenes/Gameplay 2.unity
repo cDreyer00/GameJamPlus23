@@ -2175,6 +2175,10 @@ PrefabInstance:
       propertyPath: surface
       value: 
       objectReference: {fileID: 4930184713420487662}
+    - target: {fileID: 1208282930953043979, guid: 718f7369c27103743a9466f85a988b4a, type: 3}
+      propertyPath: spawnRate.value
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1918859001859256221, guid: 718f7369c27103743a9466f85a988b4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2221,7 +2225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5368131256275469320, guid: 718f7369c27103743a9466f85a988b4a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2712,17 +2716,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7946965549111466079, guid: 19124c8d9d552214b9357a474b213851, type: 3}
   m_PrefabInstance: {fileID: 7311854121871379019}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1820946391 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 801224001967799504, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
-  m_PrefabInstance: {fileID: 4674151972180916947}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ee4206b8a14c2c41a6ddd37da66c134, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1826503812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2897,10 +2890,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 167829896736789762, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 167829896736789762, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2941,44 +2930,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1908170297110836979, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_AnchorMax.y
+      propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2799235822207906874, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2799235822207906874, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_IsKinematic
+    - target: {fileID: 1908170297110836979, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6087302238658029148, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087302238658029148, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: came
-      value: 
-      objectReference: {fileID: 1820946391}
-    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7580601439425547171, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_Extents.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7580601439425547171, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_Extents.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7580601439425547171, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_Extents.z
-      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3421,6 +3382,10 @@ PrefabInstance:
     - target: {fileID: 9050830198852225600, guid: 19124c8d9d552214b9357a474b213851, type: 3}
       propertyPath: m_Name
       value: EffectSignSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050830198852225600, guid: 19124c8d9d552214b9357a474b213851, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
