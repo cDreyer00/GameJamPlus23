@@ -4,14 +4,20 @@ using UnityEngine;
 public class EffectSignSpawner : BaseSpawner<EffectSign>
 {
     public NavMeshSurface surface;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SpawnerSrevice.EffectSignSpawner = this;
+    }
+
     public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
     protected override void OnSpawnedInstance(EffectSign instance)
     {
         instance.Pool.onInstanceReleased += OnReleased;
 
         instance.Init();
-
-        SpawnerSrevice.EffecSignSpawner = this;
     }
 
     //TODO: temp logic, change later

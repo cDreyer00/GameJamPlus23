@@ -11,6 +11,7 @@ public class MeleeEnemySpawner : BaseSpawner<MeleeEnemy>
     protected override void Awake()
     {
         base.Awake();
+
         speed.Clamp();
         damage.Clamp();
         _enemies = new();
@@ -20,7 +21,7 @@ public class MeleeEnemySpawner : BaseSpawner<MeleeEnemy>
     public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
     protected override void OnSpawnedInstance(MeleeEnemy instance)
     {
-        instance.OnDied += OnEnemyDied;
+        instance.onDied += OnEnemyDied;
         instance.damage = damage;
         var agent = instance.GetComponent<UnityEngine.AI.NavMeshAgent>();
         agent.speed = speed.Value = speed;
@@ -33,10 +34,10 @@ public class MeleeEnemySpawner : BaseSpawner<MeleeEnemy>
         _enemies.Remove(instance);
     }
 
-    void OnEnemyDied(IEnemy meleeEnemy)
+    void OnEnemyDied(ICharacter meleeEnemy)
     {
         DeSpawn((MeleeEnemy)meleeEnemy);
-        meleeEnemy.OnDied -= OnEnemyDied;
+        meleeEnemy.onDied -= OnEnemyDied;
     }
 
     public IEnumerable<IEnemy> GetAllEnemies()

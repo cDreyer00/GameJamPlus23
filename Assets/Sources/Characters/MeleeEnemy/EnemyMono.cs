@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MeleeEnemy : MonoBehaviour, IEnemy
+public class MeleeEnemy : Character, IEnemy
 {
     public int damage = 1;
     public float attackDelay = 1f;
@@ -23,22 +23,18 @@ public class MeleeEnemy : MonoBehaviour, IEnemy
 
     public bool canMove;
     public IPlayer target;
-    public event Action<IEnemy> OnDied;
-    public NavMeshAgent Agent => agent;
-    public Vector3 Position => transform.position;
 
+    public NavMeshAgent Agent => agent;
 
     private readonly static int AnimIsDead = Animator.StringToHash("isDead");
     private readonly static int AnimIsWalk = Animator.StringToHash("isWalk");
     private readonly static int AnimIsAttack = Animator.StringToHash("isAttack");
 
-    public bool IsDead => health <= 0;
-    public int Health => health;
-
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
+
     private void Start()
     {
         _anim = GetComponentInChildren<Animator>();
@@ -69,7 +65,7 @@ public class MeleeEnemy : MonoBehaviour, IEnemy
         }
     }
 
-    public void TakeDamage(int amount)
+    public override void TakeDamage(int amount)
     {
         if (idleTime > 0) return;
 
@@ -84,7 +80,7 @@ public class MeleeEnemy : MonoBehaviour, IEnemy
             _canAttack = false;
             SetSpeed(0f, 1f);
             _anim.SetTrigger(AnimIsDead);
-            Helpers.Delay(1f, () => OnDied?.Invoke(this));
+            Helpers.Delay(1f, () => Died(this));
         }
         else
         {

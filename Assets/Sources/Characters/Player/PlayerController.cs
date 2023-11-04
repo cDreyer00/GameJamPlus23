@@ -25,7 +25,14 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     [SerializeField] FeedbackDamage feed;
     [SerializeField] CameraShake cameraShake;
+
+    public event System.Action<ICharacter> onDied;
+
     public CameraShake Came => cameraShake;
+
+    public int Health => 1;
+
+    public bool IsDead => Health <= 0;
 
     void Start()
     {

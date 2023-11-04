@@ -3370,6 +3370,10 @@ PrefabInstance:
       propertyPath: surface
       value: 
       objectReference: {fileID: 4930184713420487662}
+    - target: {fileID: 4620742696593623630, guid: 19124c8d9d552214b9357a474b213851, type: 3}
+      propertyPath: spawnRate.value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7946965549111466079, guid: 19124c8d9d552214b9357a474b213851, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

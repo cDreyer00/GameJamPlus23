@@ -93,7 +93,7 @@ public static class Helpers
     class AsyncHolder : MonoBehaviour { }
     static AsyncHolder ayncHolder;
 
-    public static void Delay(int frames, Action action)
+    public static void DelayFrames(int frames, Action action)
     {
         if (ayncHolder == null)
             ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();

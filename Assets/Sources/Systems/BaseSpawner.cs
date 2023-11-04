@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
+public abstract class BaseSpawner<T> : MonoBehaviour
     where T : MonoBehaviour
 {
     bool _isSpawning;
@@ -15,9 +15,8 @@ public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
     public int instanceCount;
 
     public abstract Vector3 GetRandomPosition();
-    protected override void Awake()
+    protected virtual void Awake()
     {
-        base.Awake();
         instancePool = new QueuePool<T>(prefab, maxInstances.max, transform);
         spawnRate.Clamp();
         maxInstances.Clamp();

@@ -8,6 +8,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     [SerializeField] float effectDuration;
     [SerializeField] float lifeTime;
 
+    [Header("Sprites")]
+    [SerializeField] SpriteRenderer _circleSr;
+    [SerializeField] SpriteRenderer _arrowSr;
+
     public float Radius => radius;
 
     public GenericPool<EffectSign> Pool { get; set; }
@@ -19,8 +23,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     SpriteRenderer _sprite;
     Direction _curCameraDir;
+    float _curLifeTime;
 
-    Color BaseColor => effect is FreezeEffect ? Color.cyan : Color.yellow;
+    Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.yellow;
+    bool CanInteract => _curCameraDir == direction;
 
     public void Init()
     {
@@ -31,10 +37,13 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         transform.LookAt(lookAt);
         transform.localScale = Vector3.one * radius;
 
+        SetColor();
+
         // set effect
         int randEffect = Random.Range(0, 2);
-        effect = randEffect switch { 0 => new FreezeEffect(), 1 => new ConfusionEffect() };
-        _sprite.color = BaseColor;
+        effect = randEffect switch { 0 => new FreezeEffect(), 1 => new ConfusionEffect(), _ => null };
+        _sprite.color = ColorByType;
+        _curLifeTime = lifeTime;
 
         CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
         OnCamDirectionChanged(CameraController.Instance.Direction);
@@ -47,19 +56,32 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     void Update()
     {
-        Color c = _curCameraDir == direction ? Color.green : BaseColor;
-        _sprite.color = c;
+        _curLifeTime -= Time.deltaTime;
+        if (_curLifeTime <= 0)
+        {
+            Pool.Release(this);
+            return;
+        }
 
-        float dist = Vector3.Distance(transform.position, GameManager.Instance.Player.Position);
-        if (dist <= radius)
+        if (CheckInteraction())
         {
             ApplyEffect();
+            Pool.Release(this);
         }
+    }
+
+    bool CheckInteraction()
+    {
+        if (!CanInteract) return false;
+
+        float dist = Vector3.Distance(transform.position, GameManager.Instance.Player.Position);
+        return dist <= radius;
     }
 
     void OnCamDirectionChanged(Direction dir)
     {
         _curCameraDir = dir;
+        SetColor();
     }
 
     void ApplyEffect()
@@ -72,6 +94,12 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     public void OnGet(GenericPool<EffectSign> pool)
     {
         this.Pool = pool;
+    }
+
+    void SetColor()
+    {
+        Color c = CanInteract ? Color.green : ColorByType;
+        _sprite.color = c;
     }
 
     public void OnRelease()
