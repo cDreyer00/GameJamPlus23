@@ -1,20 +1,46 @@
 using System;
-
 using UnityEngine;
 using Unity.AI.Navigation;
+using UnityEngine.Serialization;
 
+
+public enum EasingFunction
+{
+    Linear,
+    Exponential,
+}
+
+[Serializable]
+public struct EasingVariable
+{
+    public float                   t;
+    public ClampedPrimitive<float> value;
+    public EasingFunction          function;
+    public float Apply(int wave)
+    {
+        switch (function) {
+        case EasingFunction.Linear:
+            return Mathf.Lerp(value.min, value.max, t * wave);
+        case EasingFunction.Exponential:
+            return Mathf.Lerp(value.min, value.max, Mathf.Pow(t, wave));
+        default:
+            throw new ArgumentOutOfRangeException();
+        }
+    }
+}
 public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
 {
-    public ClampedPrimitive<float> speed;
     public NavMeshSurface surface;
-    public int currentWave;
+    public int            currentWave;
+    public EasingVariable maxInstanceScaling;
+    public EasingVariable speed;
+
     public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
 
     protected override void Spawn()
     {
-        maxInstances.Value = MeleeEnemyCount(currentWave);
-        for (var i = 0; i < maxInstances; i++)
-        {
+        maxInstances.Value = (int)maxInstanceScaling.Apply(currentWave);
+        for (var i = 0; i < maxInstances; i++) {
             instanceCount++;
             var position = GetRandomPosition();
             var instance = instancePool.Get(position, Quaternion.identity);
@@ -24,37 +50,23 @@ public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
     }
     protected override void OnSpawnedInstance(MonoBehaviour instance)
     {
-        if (instance is IEnemy enemy)
-        {
+        if (instance is IEnemy enemy) {
             enemy.OnDied += OnEnemyDied;
-            enemy.Agent.speed = speed.Value = MeleeEnemySpeed(currentWave);
+            enemy.Agent.speed = speed.Apply(currentWave);
         }
     }
     protected override void OnDesSpawnedInstance(MonoBehaviour instance)
     {
-        if (instanceCount == 0)
-        {
+        if (instanceCount == 0) {
             currentWave++;
             BeginSpawning();
         }
     }
     void OnEnemyDied(IEnemy enemy)
     {
-        if (enemy is MonoBehaviour monoBehaviour)
-        {
+        if (enemy is MonoBehaviour monoBehaviour) {
             DeSpawn(monoBehaviour);
         }
         enemy.OnDied -= OnEnemyDied;
-    }
-
-    static int MeleeEnemyCount(int wave)
-    {
-        const float Base = 2;
-        return (int)MathF.Pow(Base, wave) + 1;
-    }
-    static float MeleeEnemySpeed(int wave)
-    {
-        const float Base = 1.3f;
-        return MathF.Pow(Base, wave) + 1;
     }
 }
