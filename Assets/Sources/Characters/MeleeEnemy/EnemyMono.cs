@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MeleeEnemy : Character, IEnemy
+public class MeleeEnemy : Character
 {
     public int damage = 1;
     public float attackDelay = 1f;
@@ -18,11 +18,10 @@ public class MeleeEnemy : Character, IEnemy
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private AudioClip damageAudio;
     [SerializeField] private AudioClip attackAudio;
-    [SerializeField] private int health;
     [SerializeField] private FeedbackDamage feedback;
 
     public bool canMove;
-    public IPlayer target;
+    public ICharacter target;
 
     public NavMeshAgent Agent => agent;
 
@@ -30,8 +29,9 @@ public class MeleeEnemy : Character, IEnemy
     private readonly static int AnimIsWalk = Animator.StringToHash("isWalk");
     private readonly static int AnimIsAttack = Animator.StringToHash("isAttack");
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -65,28 +65,26 @@ public class MeleeEnemy : Character, IEnemy
         }
     }
 
-    public override void TakeDamage(int amount)
+    public void TakeDamage(int amount)
     {
+        if (IsDead) return;
         if (idleTime > 0) return;
 
         feedback.StartCoroutine(nameof(FeedbackDamage.DamageColor));
         if (damageAudio != null)
             damageAudio.Play();
 
-        health -= amount;
-
-        if (health <= 0)
-        {
-            _canAttack = false;
-            SetSpeed(0f, 1f);
-            _anim.SetTrigger(AnimIsDead);
-            Helpers.Delay(1f, () => Died(this));
-        }
-        else
-        {
-            _anim.SetTrigger(AnimIsWalk);
-        }
+        _anim.SetTrigger(AnimIsWalk);
     }
+
+    void OnDied(ICharacter c) => OnDied();
+    void OnDied()
+    {
+        _canAttack = false;
+        SetSpeed(0f, 1f);
+        _anim.SetTrigger(AnimIsDead);
+    }
+
     private IEnumerator Attack(Collision other)
     {
         if (!_canAttack) yield break;
@@ -96,13 +94,13 @@ public class MeleeEnemy : Character, IEnemy
 
         var animClips = _anim.GetCurrentAnimatorClipInfo(0);
         var animClip = animClips[0];
-        if (other.gameObject.TryGetComponent<IPlayer>(out var player))
+        if (other.gameObject.TryGetComponent<PlayerController>(out var player))
         {
             _canAttack = false;
             _anim.SetTrigger(AnimIsAttack);
             if (animClip.clip.name == "Attack")
             {
-                player.TakeDamage(damage);
+                player.Events.onTakeDamage?.Invoke(damage);
                 canMove = true;
                 _anim.SetBool(AnimIsWalk, true);
             }

@@ -1,7 +1,7 @@
 using Sources.Camera;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IPlayer
+public class PlayerController : Character
 {
     [SerializeField] GameObject model;
     [SerializeField] Projectile projPrefab;
@@ -18,21 +18,11 @@ public class PlayerController : MonoBehaviour, IPlayer
     float _curDelay;
     float _baseDrag;
 
-    public Vector3 Position => transform.position;
-
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
 
     [SerializeField] FeedbackDamage feed;
     [SerializeField] CameraShake cameraShake;
-
-    public event System.Action<ICharacter> onDied;
-
-    public CameraShake Came => cameraShake;
-
-    public int Health => 1;
-
-    public bool IsDead => Health <= 0;
 
     void Start()
     {

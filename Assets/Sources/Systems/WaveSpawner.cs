@@ -50,8 +50,8 @@ public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
     }
     protected override void OnSpawnedInstance(MonoBehaviour instance)
     {
-        if (instance is IEnemy enemy) {
-            enemy.onDied += OnEnemyDied;
+        if (instance is MeleeEnemy enemy) {
+            enemy.Events.onDied += OnEnemyDied;
             enemy.Agent.speed = speed.Apply(currentWave);
         }
     }
@@ -67,6 +67,6 @@ public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
         if (enemy is MonoBehaviour monoBehaviour) {
             DeSpawn(monoBehaviour);
         }
-        enemy.onDied -= OnEnemyDied;
+        enemy.Events.onDied -= OnEnemyDied;
     }
 }

@@ -3,32 +3,15 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour, ICharacter
 {
-    [SerializeField] int _health;
-
-    public int Health => _health;
-    public bool IsDead => _health <= 0;
+    bool _isDead = false;
+    public bool IsDead { get => _isDead; set => _isDead = value; }
     public Vector3 Position => transform.position;
 
-    public event Action<ICharacter> onDied;
-    public void Died(ICharacter c) => onDied?.Invoke(this);
+    CharacterEvents _events;
+    public CharacterEvents Events => _events;
 
-    public virtual void TakeDamage(int amount)
+    protected virtual void Awake()
     {
-        if (IsDead) return;
-
-        _health -= amount;
-        if (IsDead)
-            onDied?.Invoke(this);
+        _events = new();
     }
-}
-
-public interface ICharacter
-{
-    int Health { get; }
-    Vector3 Position { get; }
-    bool IsDead { get; }
-
-    void TakeDamage(int amount);
-    event Action<ICharacter> onDied;
-
 }
