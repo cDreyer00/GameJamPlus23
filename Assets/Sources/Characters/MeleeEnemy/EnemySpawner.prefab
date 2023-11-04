@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8135059297603922165, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
   spawnRate:
-    value: 0
+    value: 2
     min: 1
     max: 5
   maxInstances:
@@ -59,7 +59,7 @@ MonoBehaviour:
     min: 0
     max: 5
   damage:
-    value: 1
+    value: 2
     min: 0
     max: 2
   surface: {fileID: 0}

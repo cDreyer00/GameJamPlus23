@@ -24,6 +24,16 @@ public class PlayerController : Character
     [SerializeField] FeedbackDamage feed;
     [SerializeField] CameraShake cameraShake;
 
+    void OnEnable()
+    {
+        Events.onDied += OnDie;
+    }
+
+    void OnDisable()
+    {
+        Events.onDied -= OnDie;
+    }
+
     void Start()
     {
         _cam = CameraController.Instance.Cam;
@@ -89,23 +99,8 @@ public class PlayerController : Character
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
 
-    public void TakeDamage(int amount)
+    public void OnDie()
     {
-        if (GameManager.IsGameOver) return;
-
-        feed.StartCoroutine(nameof(FeedbackDamage.DamageColor));
-
-        if (cameraShake) cameraShake.ShakeCamera();
-        if (damageAudio) damageAudio.Play();
-
-        float hp = HealthBar.Instance.HealthPoints;
-        if (hp > 0)
-        {
-            HealthBar.Instance.Damage(amount);
-        }
-        else
-        {
-            GameManager.Instance.ReloadScene();
-        }
+        GameManager.Instance.ReloadScene();
     }
 }
