@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class CharacterModule : MonoBehaviour
 {
-    ICharacter _character;
-    public ICharacter Character
+    Character _character;
+    public Character Character
     {
         get
         {
@@ -13,7 +13,7 @@ public class CharacterModule : MonoBehaviour
             if (!transform.root.TryGetComponent(out _character))
                 Debug.LogWarning($"character for {GetType().Name} not found");
 
-            return null;
+            return _character;
         }
     }
 }

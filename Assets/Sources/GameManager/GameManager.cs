@@ -5,11 +5,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] MeshRenderer groundMr;
     [SerializeField] Canvas endGameCanvas;
 
-    public ICharacter Player { get; private set; }
+    public Character Player { get; private set; }
 
     public static bool IsGameOver { get; private set; }
 
-    public void RegisterPlayer(ICharacter player) => Player = player;
+    public void RegisterPlayer(Character player) => Player = player;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);

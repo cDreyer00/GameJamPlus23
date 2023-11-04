@@ -88,7 +88,6 @@ public class MeleeEnemy : Character
     private IEnumerator Attack(Collision other)
     {
         if (!_canAttack) yield break;
-
         canMove = false;
         _anim.SetBool(AnimIsWalk, false);
 

@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6222209b55c50074db25563dd4541b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 0
   prefab: {fileID: 8135059297603922165, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
   spawnRate:
     value: 0
@@ -60,7 +59,7 @@ MonoBehaviour:
     min: 0
     max: 0
   damage:
-    value: 0
+    value: 1
     min: 0
-    max: 0
+    max: 2
   surface: {fileID: 0}

@@ -14,7 +14,7 @@ public class PlayerController : Character
     [Space, SerializeField] AudioClip[] shootAudios;
     [SerializeField] AudioClip damageAudio;
 
-    UnityEngine.Camera _cam;
+    Camera _cam;
     float _curDelay;
     float _baseDrag;
 

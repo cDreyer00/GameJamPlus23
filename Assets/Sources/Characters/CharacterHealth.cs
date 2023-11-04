@@ -23,6 +23,7 @@ public class CharacterHealth : CharacterModule
         UpdateSlider();
     }
 
+
     void OnTakeDamage(float amount)
     {
         _health.Value -= amount;
