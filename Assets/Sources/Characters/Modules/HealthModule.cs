@@ -35,7 +35,7 @@ public class HealthModule : CharacterModule
         _health.Value -= amount;
 
         if (_health <= 0)
-            Character.Events.onDied?.Invoke();
+            Character.Events.onDied?.Invoke(Character);
 
         UpdateSlider();
     }

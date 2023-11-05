@@ -5,19 +5,18 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour, ICharacter
 {
     HashSet<CharacterModule> _modules = new();
-    CharacterEvents _events = new();
-    bool _isDead = false;
+    CharacterEvents          _events  = new();
+    bool                     _isDead  = false;
 
-    public bool IsDead { get => _isDead; set => _isDead = value; }
+    public bool IsDead
+    {
+        get => _isDead;
+        set => _isDead = value;
+    }
     public Vector3 Position => transform.position;
     public CharacterEvents Events => _events;
     public IEnumerable<CharacterModule> Modules => _modules;
-
-    protected virtual void Awake()
-    {
-
-    }
-
+    public abstract string Team { get; }
     public void AddModule(CharacterModule module)
     {
         _modules.Add(module);

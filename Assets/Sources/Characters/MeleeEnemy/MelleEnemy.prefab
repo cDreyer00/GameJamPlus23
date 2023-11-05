@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6223743307461556125}
   m_Layer: 6
   m_Name: MelleEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68e39aea157127f429b84e80ac51d973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: 0
   damage: 10
   attackDelay: 0.5
   idleTime: 1.1

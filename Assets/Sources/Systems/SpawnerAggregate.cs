@@ -7,9 +7,12 @@ namespace Sources.Systems
     public class SpawnerAggregate : MonoBehaviour
     {
         public BaseSpawner<MonoBehaviour>[] spawners;
+        public bool                         isSpawning;
         void Awake()
         {
-            BeginSpawning();
+            if (isSpawning) {
+                BeginSpawning();
+            }
         }
         public void BeginSpawning()
         {

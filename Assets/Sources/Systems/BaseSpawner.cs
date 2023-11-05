@@ -1,48 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 
 public abstract class BaseSpawner<T> : MonoBehaviour
     where T : MonoBehaviour
 {
-    bool _isSpawning;
     protected QueuePool<T> instancePool;
 
-    public T prefab;
+    public bool                    isSpawning;
+    public T                       prefab;
     public ClampedPrimitive<float> spawnRate;
-    public ClampedPrimitive<int> maxInstances;
-    public int instanceCount;
+    public EasingVariable          maxInstances;
+    public int                     instanceCount;
 
     public abstract Vector3 GetRandomPosition();
-    protected virtual void Awake()
+    virtual protected void Awake()
     {
-        instancePool = new QueuePool<T>(prefab, maxInstances.max);
-        foreach (var i in instancePool.Instances)
-            i.transform.SetParent(transform);
-            
         spawnRate.Clamp();
-        maxInstances.Clamp();
-        BeginSpawning();
+        if (isSpawning) {
+            BeginSpawning();
+        }
     }
     public void BeginSpawning()
     {
-        _isSpawning = true;
+        instancePool ??= new QueuePool<T>(prefab, (int)maxInstances.b, transform);
+        isSpawning = true;
         instancePool.Init();
         StartCoroutine(SpawnCoroutine());
     }
     public void StopSpawning()
     {
-        _isSpawning = false;
+        isSpawning = false;
         StopAllCoroutines();
     }
     virtual protected IEnumerator SpawnCoroutine()
     {
-        if (!_isSpawning) yield break;
+        if (!isSpawning) yield break;
 
         var wait = Helpers.GetWait(spawnRate);
-        while (_isSpawning)
-        {
+        while (isSpawning) {
             yield return wait;
             Spawn();
         }
@@ -51,7 +47,7 @@ public abstract class BaseSpawner<T> : MonoBehaviour
     {
         instanceCount++;
         var position = GetRandomPosition();
-        T instance = instancePool.Get(position, Quaternion.identity);
+        T   instance = instancePool.Get(position, Quaternion.identity);
         OnSpawnedInstance(instance);
     }
     protected void DeSpawn(T instance)
@@ -60,6 +56,6 @@ public abstract class BaseSpawner<T> : MonoBehaviour
         instancePool.Release(instance);
         OnDesSpawnedInstance(instance);
     }
-    virtual protected void OnSpawnedInstance(T instance) { }
-    virtual protected void OnDesSpawnedInstance(T instance) { }
+    virtual protected void OnSpawnedInstance(T instance) {}
+    virtual protected void OnDesSpawnedInstance(T instance) {}
 }

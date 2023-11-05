@@ -1,67 +1,42 @@
 using System;
-using System.Linq;
 using System.Collections;
-
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
+public class MeleeEnemy : Character
 {
-    public int damage = 1;
+    public int   damage      = 1;
     public float attackDelay = 1f;
-    public float idleTime = 1;
+    public float idleTime    = 1;
 
-    float _lastAttackTime;
-    bool _canAttack = true;
+    float    _lastAttackTime;
+    bool     _canAttack = true;
     Animator _anim;
 
-
-    [SerializeField] private AudioClip damageAudio;
-    [SerializeField] private AudioClip attackAudio;
+    [SerializeField] private NavMeshAgent   agent;
+    [SerializeField] private AudioClip      damageAudio;
+    [SerializeField] private AudioClip      attackAudio;
+    [SerializeField] private int            health;
     [SerializeField] private FeedbackDamage feedback;
 
     public bool canMove;
-    public Transform target;
+    public NavMeshAgent Agent => agent;
+    public override string Team => "Enemy";
+    public ICharacter target;
 
-    public GenericPool<MeleeEnemy> Pool { get; set; }
-
-    private readonly static int AnimIsDead = Animator.StringToHash("isDead");
-    private readonly static int AnimIsWalk = Animator.StringToHash("isWalk");
+    private readonly static int AnimIsDead   = Animator.StringToHash("isDead");
+    private readonly static int AnimIsWalk   = Animator.StringToHash("isWalk");
     private readonly static int AnimIsAttack = Animator.StringToHash("isAttack");
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        agent = GetComponent<NavMeshAgent>();
     }
-
-    void OnEnable()
-    {
-        Events.onTakeDamage += OnTakeDamage;
-        Events.onDied += OnDied;
-    }
-
-    void OnDisable()
-    {
-        Events.onTakeDamage -= OnTakeDamage;
-        Events.onDied -= OnDied;
-
-        var sprite = feedback.GetComponent<SpriteRenderer>();
-        if (!ReferenceEquals(sprite, null))
-        {
-            sprite.color = Color.white;
-        }
-    }
-
     private void Start()
     {
         _anim = GetComponentInChildren<Animator>();
-        target = GameManager.Instance.Player.transform;
-
-        NavMeshMovement movement = Modules.OfType<NavMeshMovement>().FirstOrDefault();
-        if(movement != null)
-            movement.Target = target;
+        target = GameManager.Instance.Player;
     }
 
     private void Update()
@@ -72,51 +47,53 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
         if (idleTime > 0) return;
         canMove = true;
 
-        if (!_canAttack)
-        {
+        if (!_canAttack) {
             _lastAttackTime += Time.deltaTime;
-            if (_lastAttackTime >= attackDelay)
-            {
+            if (_lastAttackTime >= attackDelay) {
                 _canAttack = true;
                 _lastAttackTime = 0;
             }
         }
+
+        if (canMove) {
+            SetDestination(target.Position);
+        }
     }
 
-    void OnTakeDamage(float amount)
+    public void TakeDamage(int amount)
     {
-        if (IsDead) return;
         if (idleTime > 0) return;
 
         feedback.StartCoroutine(nameof(FeedbackDamage.DamageColor));
         if (damageAudio != null)
             damageAudio.Play();
 
-        _anim.SetTrigger(AnimIsWalk);
-    }
+        health -= amount;
 
-    void OnDied()
-    {
-        _canAttack = false;
-        _anim.SetTrigger(AnimIsDead);
-        Helpers.Delay(0.8f, () => { Pool.Release(this); });
+        if (health <= 0) {
+            _canAttack = false;
+            SetSpeed(0f, 1f);
+            _anim.SetTrigger(AnimIsDead);
+            Helpers.Delay(1f, () => Events.onDied(this));
+        }
+        else {
+            _anim.SetTrigger(AnimIsWalk);
+        }
     }
-
     private IEnumerator Attack(Collision other)
     {
         if (!_canAttack) yield break;
+
         canMove = false;
         _anim.SetBool(AnimIsWalk, false);
 
         var animClips = _anim.GetCurrentAnimatorClipInfo(0);
-        var animClip = animClips[0];
-        if (other.gameObject.TryGetComponent<PlayerController>(out var player))
-        {
+        var animClip  = animClips[0];
+        if (other.gameObject.TryGetComponent<Character>(out var player)) {
             _canAttack = false;
             _anim.SetTrigger(AnimIsAttack);
-            if (animClip.clip.name == "Attack")
-            {
-                player.Events.onTakeDamage?.Invoke(damage);
+            if (animClip.clip.name == "Attack") {
+                player.Events.onTakeDamage(damage);
                 canMove = true;
                 _anim.SetBool(AnimIsWalk, true);
             }
@@ -130,17 +107,34 @@ public class MeleeEnemy : Character, IPoolable<MeleeEnemy>
     private void OnCollisionStay(Collision other) => StartCoroutine(Attack(other));
     private void OnCollisionEnter(Collision collision) => StartCoroutine(Attack(collision));
 
-    public void OnGet(GenericPool<MeleeEnemy> pool)
+    public void SetDestination(Vector3 position)
     {
-        this.Pool = pool;
-        Events.onInitialized?.Invoke();
+        agent.SetDestination(position);
     }
 
-    public void OnRelease()
+    public void SetDestForTimer(Vector3 dest, float timer)
     {
+        idleTime = timer;
+        SetDestination(dest);
     }
 
-    public void OnCreated()
+    public void SetSpeed(float speed, float timer)
     {
+        float normalSpeed = agent.speed;
+        agent.speed = speed;
+        StartCoroutine(SetSpeedCoroutine(normalSpeed, timer));
+    }
+    IEnumerator SetSpeedCoroutine(float speed, float timer)
+    {
+        yield return Helpers.GetWait(timer);
+        if (this.IsDestroyed()) yield break;
+        agent.speed = speed;
+    }
+    void OnDisable()
+    {
+        var sprite = feedback.GetComponent<SpriteRenderer>();
+        if (!ReferenceEquals(sprite, null)) {
+            sprite.color = Color.white;
+        }
     }
 }

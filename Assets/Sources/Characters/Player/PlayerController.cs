@@ -3,36 +3,36 @@ using UnityEngine;
 
 public class PlayerController : Character
 {
-    [SerializeField] GameObject model;
-    [SerializeField] Projectile projPrefab;
-    [SerializeField] Transform anchor;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] PlayerAim aim;
-    [SerializeField] float dashForce = 3;
-    [SerializeField] float shootDelay = 1.3f;
-    [SerializeField] float breakDrag = 5f;
+    [SerializeField]        GameObject  model;
+    [SerializeField]        Projectile  projPrefab;
+    [SerializeField]        Transform   anchor;
+    [SerializeField]        Rigidbody   rb;
+    [SerializeField]        PlayerAim   aim;
+    [SerializeField]        float       dashForce  = 3;
+    [SerializeField]        float       shootDelay = 1.3f;
+    [SerializeField]        float       breakDrag  = 5f;
     [Space, SerializeField] AudioClip[] shootAudios;
-    [SerializeField] AudioClip damageAudio;
+    [SerializeField]        AudioClip   damageAudio;
 
     Camera _cam;
-    float _curDelay;
-    float _baseDrag;
+    float  _curDelay;
+    float  _baseDrag;
 
+    public Vector3 Position => transform.position;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
+    public override string Team => "Player";
 
     [SerializeField] FeedbackDamage feed;
-    [SerializeField] CameraShake cameraShake;
+    [SerializeField] CameraShake    cameraShake;
 
-    void OnEnable()
-    {
-        Events.onDied += OnDie;
-    }
+    public event System.Action<ICharacter> onDied;
 
-    void OnDisable()
-    {
-        Events.onDied -= OnDie;
-    }
+    public CameraShake Came => cameraShake;
+
+    public int Health => 1;
+
+    public bool IsDead => Health <= 0;
 
     void Start()
     {
@@ -47,10 +47,8 @@ public class PlayerController : Character
         if (GameManager.IsGameOver) return;
 
         _curDelay += Time.deltaTime;
-        if (Input.GetMouseButton(0))
-        {
-            if (_curDelay >= shootDelay)
-            {
+        if (Input.GetMouseButton(0)) {
+            if (_curDelay >= shootDelay) {
                 Shoot();
                 _curDelay = 0;
             }
@@ -58,16 +56,13 @@ public class PlayerController : Character
 
         Rotate();
 
-        if (transform.position.y <= -1)
-        {
+        if (transform.position.y <= -1) {
             GameManager.Instance.ReloadScene();
         }
-        if (Input.GetKey(KeyCode.Space))
-        {
+        if (Input.GetKey(KeyCode.Space)) {
             rb.drag = _baseDrag * breakDrag;
         }
-        else
-        {
+        else {
             rb.drag = _baseDrag;
         }
     }
@@ -75,8 +70,7 @@ public class PlayerController : Character
     void Rotate()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100))
-        {
+        if (Physics.Raycast(ray, out RaycastHit hit, 100)) {
             Vector3 lookAtPos = hit.point;
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
@@ -87,6 +81,7 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
+        proj.ignoreList.Add(Team);
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)
@@ -99,8 +94,21 @@ public class PlayerController : Character
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
 
-    public void OnDie()
+    public void TakeDamage(int amount)
     {
-        GameManager.Instance.ReloadScene();
+        if (GameManager.IsGameOver) return;
+
+        feed.StartCoroutine(nameof(FeedbackDamage.DamageColor));
+
+        if (cameraShake) cameraShake.ShakeCamera();
+        if (damageAudio) damageAudio.Play();
+
+        float hp = HealthBar.Instance.HealthPoints;
+        if (hp > 0) {
+            HealthBar.Instance.Damage(amount);
+        }
+        else {
+            GameManager.Instance.ReloadScene();
+        }
     }
 }

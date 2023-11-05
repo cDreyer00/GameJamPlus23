@@ -21,7 +21,7 @@ public class MeleeEnemySpawner : BaseSpawner<MeleeEnemy>
     public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
     protected override void OnSpawnedInstance(MeleeEnemy instance)
     {
-        instance.Pool.onInstanceReleased += OnReleased;
+        instancePool.onInstanceReleased += OnReleased;
         instance.damage = damage;
         var agent = instance.GetComponent<UnityEngine.AI.NavMeshAgent>();
         agent.speed = speed.Value = speed;
