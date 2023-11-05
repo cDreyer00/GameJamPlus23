@@ -5,8 +5,8 @@ using UnityEngine;
 public struct ClampedPrimitive<TValue> where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>
 {
     [SerializeField] TValue value;
-    public TValue min;
-    public TValue max;
+    public           TValue min;
+    public           TValue max;
     public ClampedPrimitive(TValue value, TValue min, TValue max)
     {
         this.value = Clamp(value, min, max);
@@ -21,12 +21,10 @@ public struct ClampedPrimitive<TValue> where TValue : unmanaged, IComparable<TVa
     }
     public static TValue Clamp(TValue value, TValue min, TValue max)
     {
-        if (value.CompareTo(min) <= 0)
-        {
+        if (value.CompareTo(min) <= 0) {
             return min;
         }
-        else if (value.CompareTo(max) >= 0)
-        {
+        else if (value.CompareTo(max) >= 0) {
             return max;
         }
         return value;

@@ -4,67 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum StateVariable
-{
-    Idle,
-    Chasing,
-    Attacking,
-    Controlled,
-}
-public enum EventVariable
-{
-    Stop,
-    Chase,
-    Attack,
-    YieldControl,
-}
-[Serializable]
-public struct Transition
-{
-    public StateVariable origin;
-    public EventVariable eventVariable;
-    public StateVariable destination;
-}
 
 [Serializable]
-public class StateMachine : IEnumerable<Transition>
+public class StateMachine<TState, TEvent> : IEnumerable<StateMachine<TState, TEvent>.Transition>
+    where TState : Enum
+    where TEvent : Enum
 {
+    EqualityComparer<TState> _stateEq = EqualityComparer<TState>.Default;
+    EqualityComparer<TEvent> _eventEq = EqualityComparer<TEvent>.Default;
+
     public List<Transition> transitions = new();
-    public StateVariable    currentState;
+    public TState           currentState;
 
-    StateVariable this[StateVariable origin, EventVariable eventVariable]
-    {
-        get
-        {
-            int index = transitions.FindIndex(Exists);
-            return index == -1 ? origin : transitions[index].destination;
-            bool Exists(Transition t) => t.origin == origin && t.eventVariable == eventVariable;
-        }
-        set => Allow(origin, eventVariable, value);
-    }
-
-    public static StateMachine FullyConnectedGraph => new()
-    {
-        currentState = StateVariable.Idle,
-        // Idle
-        [StateVariable.Idle, EventVariable.Chase] = StateVariable.Chasing,
-        [StateVariable.Idle, EventVariable.Attack] = StateVariable.Attacking,
-        [StateVariable.Idle, EventVariable.YieldControl] = StateVariable.Controlled,
-        // Chasing
-        [StateVariable.Chasing, EventVariable.Stop] = StateVariable.Idle,
-        [StateVariable.Chasing, EventVariable.Attack] = StateVariable.Attacking,
-        [StateVariable.Chasing, EventVariable.YieldControl] = StateVariable.Controlled,
-        // Attacking
-        [StateVariable.Attacking, EventVariable.Stop] = StateVariable.Idle,
-        [StateVariable.Attacking, EventVariable.Chase] = StateVariable.Chasing,
-        [StateVariable.Attacking, EventVariable.YieldControl] = StateVariable.Controlled,
-        // Controlled
-        [StateVariable.Controlled, EventVariable.Stop] = StateVariable.Idle,
-        [StateVariable.Controlled, EventVariable.Chase] = StateVariable.Chasing,
-        [StateVariable.Controlled, EventVariable.Attack] = StateVariable.Attacking,
-    };
-
-    public void Allow(StateVariable origin, EventVariable eventVariable, StateVariable destination)
+    public void Add(TState origin, TEvent eventVariable, TState destination)
     {
         var transition = new Transition
         {
@@ -76,8 +28,7 @@ public class StateMachine : IEnumerable<Transition>
             transitions.Add(transition);
         }
     }
-
-    public void Forbid(StateVariable origin, EventVariable eventVariable, StateVariable destination)
+    public void Remove(TState origin, TEvent eventVariable, TState destination)
     {
         var transition = new Transition
         {
@@ -89,29 +40,65 @@ public class StateMachine : IEnumerable<Transition>
             transitions.Remove(transition);
         }
     }
+    public event Action<TState> OnStateEnter;
+    public event Action<TState> OnStateExit;
 
-    public event Action<StateVariable> onStateEnter;
-    public event Action<StateVariable> onStateExit;
-
-    virtual protected void StateEnter(StateVariable obj)
+    virtual protected void StateEnter(TState obj)
     {
-        onStateEnter?.Invoke(obj);
+        OnStateEnter?.Invoke(obj);
     }
-    virtual protected void StateExit(StateVariable obj)
+    virtual protected void StateExit(TState obj)
     {
-        onStateExit?.Invoke(obj);
+        OnStateExit?.Invoke(obj);
     }
-
-    public void MoveNext(EventVariable eventVariable)
+    public TState PeekNext(TEvent eventVariable)
     {
-        int index = transitions.FindIndex(Exists);
+        int index = transitions.FindIndex(TransitionPredicate);
+        return index != -1 ? transitions[index].destination : currentState;
+
+        bool TransitionPredicate(Transition t)
+        {
+            return _stateEq.Equals(t.origin, currentState) && _eventEq.Equals(t.eventVariable, eventVariable);
+        }
+    }
+    public void MoveNext(TEvent eventVariable)
+    {
+        int index = transitions.FindIndex(TransitionPredicate);
         if (index != -1) {
             StateExit(currentState);
             currentState = transitions[index].destination;
             StateEnter(currentState);
         }
-        bool Exists(Transition t) => t.origin == currentState && t.eventVariable == eventVariable;
+
+        bool TransitionPredicate(Transition t)
+        {
+            return _stateEq.Equals(t.origin, currentState) && _eventEq.Equals(t.eventVariable, eventVariable);
+        }
     }
+    public static StateMachine<TState, TEvent> FullyConnectedGraph
+    {
+        get
+        {
+            var sm = new StateMachine<TState, TEvent>();
+            foreach (TState origin in Cached.EnumValues<TState>()) {
+                foreach (TEvent eventVariable in Cached.EnumValues<TEvent>()) {
+                    foreach (TState destination in Cached.EnumValues<TState>()) {
+                        sm.Add(origin, eventVariable, destination);
+                    }
+                }
+            }
+            return sm;
+        }
+    }
+
     public IEnumerator<Transition> GetEnumerator() => transitions.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    [Serializable]
+    public struct Transition
+    {
+        public TState origin;
+        public TEvent eventVariable;
+        public TState destination;
+    }
 }

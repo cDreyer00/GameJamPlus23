@@ -17,22 +17,14 @@ public class PlayerController : Character
     Camera _cam;
     float  _curDelay;
     float  _baseDrag;
-
-    public Vector3 Position => transform.position;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
     public override string Team => "Player";
 
     [SerializeField] FeedbackDamage feed;
     [SerializeField] CameraShake    cameraShake;
-
-    public event System.Action<ICharacter> onDied;
-
     public CameraShake Came => cameraShake;
-
     public int Health => 1;
-
-    public bool IsDead => Health <= 0;
 
     void Start()
     {
@@ -40,8 +32,8 @@ public class PlayerController : Character
         _baseDrag = rb.drag;
 
         GameManager.Instance.RegisterPlayer(this);
+        Events.onDied += Died;
     }
-
     void Update()
     {
         if (GameManager.IsGameOver) return;
@@ -81,7 +73,7 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        proj.ignoreList.Add(Team);
+        proj.IgnoreTeam(Team);
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)
@@ -93,22 +85,8 @@ public class PlayerController : Character
         rb.velocity = Vector3.zero;
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
-
-    public void TakeDamage(int amount)
+    static void Died(ICharacter character)
     {
-        if (GameManager.IsGameOver) return;
-
-        feed.StartCoroutine(nameof(FeedbackDamage.DamageColor));
-
-        if (cameraShake) cameraShake.ShakeCamera();
-        if (damageAudio) damageAudio.Play();
-
-        float hp = HealthBar.Instance.HealthPoints;
-        if (hp > 0) {
-            HealthBar.Instance.Damage(amount);
-        }
-        else {
-            GameManager.Instance.ReloadScene();
-        }
+        GameManager.Instance.ReloadScene();
     }
 }

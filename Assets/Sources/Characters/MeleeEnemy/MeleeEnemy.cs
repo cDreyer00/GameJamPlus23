@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using Sources.Systems;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(LookAtCamera))]
 public class MeleeEnemy : Character
 {
     public int   damage      = 1;

@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class HealthModule : CharacterModule
 {
-    [SerializeField] Canvas canvas;
-    [SerializeField] Slider _healthSlider;
-    [SerializeField] ClampedPrimitive<float> _health;
+    [SerializeField] Canvas                  canvas;
+    [SerializeField] Slider                  healthSlider;
+    [SerializeField] ClampedPrimitive<float> health;
 
     void OnEnable()
     {
@@ -25,16 +26,16 @@ public class HealthModule : CharacterModule
     {
         canvas.worldCamera = Camera.main;
 
-        _health.Value = _health.max;
+        health.Value = health.max;
         UpdateSlider();
     }
 
 
     void OnTakeDamage(float amount)
     {
-        _health.Value -= amount;
+        health.Value -= amount;
 
-        if (_health <= 0)
+        if (health <= 0)
             Character.Events.onDied?.Invoke(Character);
 
         UpdateSlider();
@@ -42,8 +43,8 @@ public class HealthModule : CharacterModule
 
     void UpdateSlider()
     {
-        _healthSlider.maxValue = _health.max;
-        _healthSlider.minValue = _health.min;
-        _healthSlider.value = _health.Value;
+        healthSlider.maxValue = health.max;
+        healthSlider.minValue = health.min;
+        healthSlider.value = health.Value;
     }
 }

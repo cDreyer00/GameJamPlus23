@@ -9,37 +9,17 @@ public enum EasingFunction
     Linear,
     Exponential,
 }
-
-[Serializable]
-public struct EasingVariable
+public sealed class WaveSpawner : BaseSpawner<Character>
 {
-    public float          a;
-    public float          b;
-    public float          t;
-    public EasingFunction function;
-    public float Apply(int wave)
-    {
-        switch (function) {
-        case EasingFunction.Linear:
-            return Mathf.Lerp(a, b, t * wave);
-        case EasingFunction.Exponential:
-            return Mathf.Lerp(a, b, MathF.Pow(wave, t));
-        default:
-            throw new ArgumentOutOfRangeException();
-        }
-    }
-}
-public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
-{
+    public AnimationCurve speed;
     public NavMeshSurface surface;
     public int            currentWave;
-    public EasingVariable speed;
 
     public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
 
     protected override void Spawn()
     {
-        var count = maxInstances.Apply(currentWave);
+        var count = Mathf.RoundToInt(maxInstances.Evaluate(currentWave));
         for (var i = 0; i < count; i++) {
             instanceCount++;
             var position = GetRandomPosition();
@@ -48,26 +28,22 @@ public sealed class WaveSpawner : BaseSpawner<MonoBehaviour>
         }
         StopSpawning();
     }
-    protected override void OnSpawnedInstance(MonoBehaviour instance)
+    protected override void OnSpawnedInstance(Character character)
     {
-        if (instance is Character character) {
-            character.Events.onDied += OnEnemyDied;
-            var navAgent = character.GetComponent<NavMeshAgent>();
-            navAgent.speed = speed.Apply(currentWave);
-        }
+        character.Events.onDied += OnEnemyDied;
+        var navAgent = character.GetComponent<NavMeshAgent>();
+        navAgent.speed = speed.Evaluate(currentWave);
     }
-    protected override void OnDesSpawnedInstance(MonoBehaviour instance)
+    protected override void OnDesSpawnedInstance(Character instance)
     {
         if (instanceCount == 0) {
             currentWave++;
             BeginSpawning();
         }
     }
-    void OnEnemyDied(ICharacter enemy)
+    void OnEnemyDied(ICharacter character)
     {
-        if (enemy is MonoBehaviour monoBehaviour) {
-            DeSpawn(monoBehaviour);
-        }
-        enemy.Events.onDied -= OnEnemyDied;
+        DeSpawn((Character)character);
+        character.Events.onDied -= OnEnemyDied;
     }
 }

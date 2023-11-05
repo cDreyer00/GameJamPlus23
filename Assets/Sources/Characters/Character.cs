@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class Character : MonoBehaviour, ICharacter
 {
-    HashSet<CharacterModule> _modules = new();
-    CharacterEvents          _events  = new();
-    bool                     _isDead  = false;
-
+    readonly HashSet<CharacterModule> _modules = new();
+    readonly CharacterEvents          _events  = new();
+    bool                              _isDead  = false;
+    public abstract string Team { get; }
     public bool IsDead
     {
         get => _isDead;
@@ -15,15 +16,31 @@ public abstract class Character : MonoBehaviour, ICharacter
     }
     public Vector3 Position => transform.position;
     public CharacterEvents Events => _events;
-    public IEnumerable<CharacterModule> Modules => _modules;
-    public abstract string Team { get; }
+    public IReadOnlyCollection<CharacterModule> Modules => _modules;
     public void AddModule(CharacterModule module)
     {
         _modules.Add(module);
     }
-
     public void RemoveModule(CharacterModule module)
     {
         _modules.Remove(module);
     }
+    public CharacterModule GetModule<T>() where T : CharacterModule
+    {
+        return _modules.FirstOrDefault(m => m is T);
+    }
+}
+public enum FsmCharState
+{
+    Idle,
+    Chasing,
+    Attacking,
+    Controlled,
+}
+public enum FsmCharEvent
+{
+    Stop,
+    Chase,
+    Attack,
+    YieldControl,
 }

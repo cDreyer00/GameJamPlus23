@@ -277,7 +277,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.1000061, y: 3}
+  m_AnchoredPosition: {x: 0.10003662, y: 3}
   m_SizeDelta: {x: 2, y: 0.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4407851742069190068
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &1982055292203938766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,11 +356,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 4407851742069190068}
-  _healthSlider: {fileID: 932813993166912499}
-  _health:
-    value: 30
+  healthSlider: {fileID: 932813993166912499}
+  health:
+    value: 0
     min: 0
-    max: 30
+    max: 0
 --- !u!114 &6428178883716034399
 MonoBehaviour:
   m_ObjectHideFlags: 0

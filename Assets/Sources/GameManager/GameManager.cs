@@ -1,12 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
-    [SerializeField] Canvas endGameCanvas;
+    [SerializeField] Canvas       endGameCanvas;
 
     public Character Player { get; private set; }
-
     public static bool IsGameOver { get; private set; }
 
     public void RegisterPlayer(Character player) => Player = player;
@@ -15,6 +15,8 @@ public class GameManager : Singleton<GameManager>
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
     bool fading;
+
+    Scene _currentScene;
 
     public Bounds GameBounds
     {
@@ -26,6 +28,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        _currentScene = SceneManager.GetActiveScene();
         _initTime = Time.time;
     }
 
@@ -44,9 +47,9 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
 
         fading = true;
-        LoadingManager.Instance.FadeIn(() =>
-        {
-            LoadingManager.Instance.SetLoading(true).LoadScene(SceneType.GAMEPLAY);
+        LoadingManager.Instance.FadeIn(() => {
+            LoadingManager.Instance.SetLoading(true)
+                .LoadScene( /*TODO: Fix Hacky Solution(criminal)*/(SceneType)_currentScene.buildIndex);
             IsGameOver = false;
             fading = false;
         });
@@ -61,12 +64,11 @@ public class GameManager : Singleton<GameManager>
         LoadingManager.Instance.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
         SoundManager.Instance.Stop();
         fading = false;
-
     }
 
     int GetCamId()
     {
-        Vector3 magnitudeVector = Player.Position;
+        Vector3 magnitudeVector  = Player.Position;
         Vector3 normalizedVector = magnitudeVector.normalized;
 
         float maxAbsValue = Mathf.Max(Mathf.Abs(normalizedVector.x), Mathf.Abs(normalizedVector.y),
@@ -74,16 +76,13 @@ public class GameManager : Singleton<GameManager>
 
         Vector3 closestDirectionVector;
 
-        if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.x)))
-        {
+        if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.x))) {
             closestDirectionVector = new Vector3(Mathf.Sign(normalizedVector.x), 0, 0);
         }
-        else if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.y)))
-        {
+        else if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.y))) {
             closestDirectionVector = new Vector3(0, Mathf.Sign(normalizedVector.y), 0);
         }
-        else
-        {
+        else {
             closestDirectionVector = new Vector3(0, 0, Mathf.Sign(normalizedVector.z));
         }
 

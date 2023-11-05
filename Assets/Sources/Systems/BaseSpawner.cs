@@ -10,7 +10,7 @@ public abstract class BaseSpawner<T> : MonoBehaviour
     public bool                    isSpawning;
     public T                       prefab;
     public ClampedPrimitive<float> spawnRate;
-    public EasingVariable          maxInstances;
+    public AnimationCurve          maxInstances;
     public int                     instanceCount;
 
     public abstract Vector3 GetRandomPosition();
@@ -23,7 +23,7 @@ public abstract class BaseSpawner<T> : MonoBehaviour
     }
     public void BeginSpawning()
     {
-        instancePool ??= new QueuePool<T>(prefab, (int)maxInstances.b, transform);
+        instancePool ??= new QueuePool<T>(prefab, (int)maxInstances.Evaluate(1), transform);
         isSpawning = true;
         instancePool.Init();
         StartCoroutine(SpawnCoroutine());
@@ -50,7 +50,7 @@ public abstract class BaseSpawner<T> : MonoBehaviour
         T   instance = instancePool.Get(position, Quaternion.identity);
         OnSpawnedInstance(instance);
     }
-    protected void DeSpawn(T instance)
+    virtual protected void DeSpawn(T instance)
     {
         instanceCount--;
         instancePool.Release(instance);

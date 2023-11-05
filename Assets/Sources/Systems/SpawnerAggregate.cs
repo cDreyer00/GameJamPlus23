@@ -6,8 +6,8 @@ namespace Sources.Systems
 {
     public class SpawnerAggregate : MonoBehaviour
     {
-        public BaseSpawner<MonoBehaviour>[] spawners;
-        public bool                         isSpawning;
+        public BaseSpawner<Character>[] spawners;
+        public bool                     isSpawning;
         void Awake()
         {
             if (isSpawning) {
