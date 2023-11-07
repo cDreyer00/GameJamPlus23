@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,8 +12,7 @@ public static class Helpers
     {
         get
         {
-            if (cam == null)
-            {
+            if (cam == null) {
                 cam = Camera.main;
             }
             return cam;
@@ -29,8 +27,8 @@ public static class Helpers
         return waitDictionary[time];
     }
 
-    private static PointerEventData eventDataCurrentPosition;
-    static List<RaycastResult> results;
+    private static PointerEventData    eventDataCurrentPosition;
+    static         List<RaycastResult> results;
     public static bool IsOverUI
     {
         get
@@ -52,8 +50,7 @@ public static class Helpers
         if (children == null) children = new();
         if (transform.childCount < 1) return children;
 
-        foreach (Transform child in transform)
-        {
+        foreach (Transform child in transform) {
             children.Add(child);
 
             GetAllChildren(child, children);
@@ -66,8 +63,7 @@ public static class Helpers
     public static void Shuffle<T>(this IList<T> list)
     {
         int n = list.Count;
-        while (n > 1)
-        {
+        while (n > 1) {
             n--;
             int k = rng.Next(n + 1);
             (list[n], list[k]) = (list[k], list[n]);
@@ -80,8 +76,7 @@ public static class Helpers
 
         await Task.Delay(TimeSpan.FromSeconds(timer));
 
-        if (playing != Application.isPlaying)
-        {
+        if (playing != Application.isPlaying) {
             Debug.LogWarning("ActionCallback cancelled bacause playmode changed");
             return;
         }
@@ -90,7 +85,8 @@ public static class Helpers
     }
 
     #region Delay
-    class AsyncHolder : MonoBehaviour { }
+
+    class AsyncHolder : MonoBehaviour {}
     static AsyncHolder ayncHolder;
 
     public static void DelayFrames(int frames, Action action)
@@ -108,7 +104,7 @@ public static class Helpers
             e?.Invoke();
         }
     }
-    
+
     public static void Delay(float secs, Action action)
     {
         if (ayncHolder == null)
@@ -122,8 +118,22 @@ public static class Helpers
             action?.Invoke();
         }
     }
+    public static void WaitUntil(Func<bool> predicate, Action action)
+    {
+        if (ayncHolder == null)
+            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+
+        ayncHolder.StartCoroutine(C(action, predicate));
+
+        static IEnumerator C(Action action, Func<bool> predicate)
+        {
+            yield return new WaitUntil(predicate);
+            action?.Invoke();
+        }
+    }
+
     #endregion
-    
+
     public static void ChangeObjectLayer(Transform tr, int layer)
     {
         tr.gameObject.layer = layer;
@@ -146,7 +156,7 @@ public static class JsonHelper
     /// <returns></returns>
     public static T[] FromJsonArray<T>(string json)
     {
-        string newJson = "{\"array\":" + json + "}";
+        string     newJson = "{\"array\":" + json + "}";
         Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
         return wrapper.array;
     }

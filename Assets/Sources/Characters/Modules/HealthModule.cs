@@ -33,12 +33,14 @@ public class HealthModule : CharacterModule
 
     void OnTakeDamage(float amount)
     {
+        Character.ReferenceCount++;
         health.Value -= amount;
 
         if (health <= 0)
             Character.Events.onDied?.Invoke(Character);
 
         UpdateSlider();
+        Character.ReferenceCount--;
     }
 
     void UpdateSlider()

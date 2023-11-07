@@ -7,12 +7,20 @@ using UnityEngine.AI;
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent _agent;
-    [SerializeField] MoveType _moveType;
-    [SerializeField] Transform _target;
+    //[SerializeField] MoveType     _moveType;
+    [SerializeField] Transform    _target;
 
     public NavMeshAgent Agent => _agent;
-    public Transform Target { get => _target; set => _target = value; }
-    public MoveType MoveType { get => _moveType; set => _moveType = value; }
+    public Transform Target
+    {
+        get => _target;
+        set => _target = value;
+    }
+    // public MoveType MoveType
+    // {
+    //     get => _moveType;
+    //     set => _moveType = value;
+    // }
 
     public void SetTarget(Transform target)
     {
@@ -21,11 +29,23 @@ public class NavMeshMovement : CharacterModule, IMovementModule
 
     void Update()
     {
-        if (_moveType == MoveType.Chase)
-            SetDestination(Target.position);
+        if (!_agent) return;
 
-        if (_moveType == MoveType.Idle)
+        // if (_moveType == MoveType.Chase) {
+        //     if (!_target) return;
+        //     SetDestination(_target.position);
+        // }
+        // if (_moveType == MoveType.Idle) {
+        //     SetDestination(transform.position);
+        // }
+
+        if (Character.stateMachine.currentState == FsmCharState.Chasing) {
+            if (!_target) return;
+            SetDestination(_target.position);
+        }
+        if (Character.stateMachine.currentState == FsmCharState.Idle) {
             SetDestination(transform.position);
+        }
     }
 
     protected override void Init()
@@ -36,8 +56,13 @@ public class NavMeshMovement : CharacterModule, IMovementModule
 
     public void SetDestination(Vector3 position)
     {
-        Agent.SetDestination(position);
+        _agent.SetDestination(position);
     }
 }
 
-public enum MoveType { Chase, Idle, Random }
+public enum MoveType
+{
+    Chase,
+    Idle,
+    Random
+}

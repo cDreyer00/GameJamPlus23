@@ -3,8 +3,8 @@ using UnityEngine;
 
 public interface ICharacter
 {
+    public int ReferenceCount { get; set; }
     Vector3 Position { get; }
-    bool IsDead { get; }
     CharacterEvents Events { get; }
 }
 

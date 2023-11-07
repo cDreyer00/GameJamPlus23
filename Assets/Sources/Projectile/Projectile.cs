@@ -78,15 +78,6 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
         position.y = _anchor.y * (1 + eval);
         _transform.position = position;
     }
-
-
-    static float MapRange(float value,
-        float min, float max,
-        float newMin, float newMax)
-    {
-        return (value - min) / (max - min) * (newMax - newMin) + newMin;
-    }
-
     void OnTriggerEnter(Collider col)
     {
         if (col.TryGetComponent<Character>(out var character)) {

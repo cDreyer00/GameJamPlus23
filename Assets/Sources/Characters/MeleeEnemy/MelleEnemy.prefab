@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6025422007174435882}
   - component: {fileID: 8319797883635615551}
   - component: {fileID: 6223743307461556125}
+  - component: {fileID: 2793757733321064199}
   m_Layer: 6
   m_Name: MelleEnemy
   m_TagString: Enemy
@@ -50,15 +51,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68e39aea157127f429b84e80ac51d973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 0
   damage: 10
   attackDelay: 0.5
   idleTime: 1.1
+  agent: {fileID: 8319797883635615551}
   damageAudio: {fileID: 0}
   attackAudio: {fileID: 0}
+  health: 0
   feedback: {fileID: 798822857582975139}
   canMove: 0
-  target: {fileID: 0}
 --- !u!54 &1516845875696123519
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -146,6 +147,19 @@ MonoBehaviour:
   _agent: {fileID: 8319797883635615551}
   _moveType: 0
   _target: {fileID: 0}
+--- !u!114 &2793757733321064199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6089110235842682470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe4bf95f87a79b4d9fcc0a561206d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  atSameDirection: 0
 --- !u!1 &6462346100620335737
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +303,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4864197767820366391}
     m_Modifications:
+    - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: health.max
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: health.value
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2666873333853790762, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

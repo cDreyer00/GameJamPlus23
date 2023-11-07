@@ -43,7 +43,14 @@ public sealed class WaveSpawner : BaseSpawner<Character>
     }
     void OnEnemyDied(ICharacter character)
     {
-        DeSpawn((Character)character);
-        character.Events.onDied -= OnEnemyDied;
+        Helpers.WaitUntil(ShouldCollect, Collect);
+
+        bool ShouldCollect() => character.ReferenceCount == 0;
+
+        void Collect()
+        {
+            DeSpawn((Character)character);
+            character.Events.onDied -= OnEnemyDied;
+        }
     }
 }
