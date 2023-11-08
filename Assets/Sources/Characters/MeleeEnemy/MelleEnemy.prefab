@@ -51,15 +51,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68e39aea157127f429b84e80ac51d973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateMachine:
+    transitions: []
+    currentState: 0
   damage: 10
   attackDelay: 0.5
   idleTime: 1.1
   agent: {fileID: 8319797883635615551}
   damageAudio: {fileID: 0}
   attackAudio: {fileID: 0}
-  health: 0
   feedback: {fileID: 798822857582975139}
-  canMove: 0
 --- !u!54 &1516845875696123519
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -145,7 +146,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _agent: {fileID: 8319797883635615551}
-  _moveType: 0
   _target: {fileID: 0}
 --- !u!114 &2793757733321064199
 MonoBehaviour:

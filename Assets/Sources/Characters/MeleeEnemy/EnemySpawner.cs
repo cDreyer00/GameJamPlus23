@@ -5,20 +5,16 @@ using System.Collections.Generic;
 public class MeleeEnemySpawner : BaseSpawner<MeleeEnemy>
 {
     public ClampedPrimitive<float> speed;
-    public ClampedPrimitive<int> damage;
-    public NavMeshSurface surface;
-    List<MeleeEnemy> _enemies;
-    protected override void Awake()
+    public ClampedPrimitive<int>   damage;
+    List<MeleeEnemy>               _enemies;
+    protected void Awake()
     {
-        base.Awake();
-
         speed.Clamp();
         damage.Clamp();
         _enemies = new();
-
         SpawnerSrevice.MeleeEnemySpawner = this;
     }
-    public override Vector3 GetRandomPosition() => NavMeshRandom.InsideBounds(surface.navMeshData.sourceBounds);
+    public override Vector3 GetSpawnPosition() => NavMeshRandom.InsideBounds(navMeshSurface.navMeshData.sourceBounds);
     protected override void OnSpawnedInstance(MeleeEnemy instance)
     {
         instancePool.onInstanceReleased += OnReleased;

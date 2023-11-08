@@ -7,17 +7,11 @@ public abstract class Character : MonoBehaviour, ICharacter
 {
     public StateMachine<FsmCharState, FsmCharEvent> stateMachine;
 
-    int                               _referenceCount;
     readonly HashSet<CharacterModule> _modules = new();
     readonly CharacterEvents          _events  = new();
 
 
     public abstract string Team { get; }
-    public int ReferenceCount
-    {
-        get => Mathf.Max(0, _referenceCount);
-        set => _referenceCount = Mathf.Max(0, value);
-    }
     public Vector3 Position => transform.position;
     public CharacterEvents Events => _events;
     public IReadOnlyCollection<CharacterModule> Modules => _modules;
@@ -32,9 +26,15 @@ public abstract class Character : MonoBehaviour, ICharacter
         _modules.Remove(module);
     }
 
-    public CharacterModule GetModule<T>() where T : CharacterModule
+    public T GetModule<T>() where T : CharacterModule
     {
-        return _modules.FirstOrDefault(m => m is T);
+        return _modules.OfType<T>().FirstOrDefault();
+    }
+
+    public bool TryGetModule<T>(out T module) where T : CharacterModule
+    {
+        module = GetModule<T>();
+        return module != null;
     }
 }
 public enum FsmCharState

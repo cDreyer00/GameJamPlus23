@@ -104,6 +104,21 @@ public static class Helpers
             e?.Invoke();
         }
     }
+    public static void DelayFrames<TState>(int frames, Action<TState> action, TState state)
+    {
+        if (ayncHolder == null)
+            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+
+        ayncHolder.StartCoroutine(C(frames, action, state));
+
+        static IEnumerator C(int frames, Action<TState> e, TState state)
+        {
+            for (; frames > 0; frames--)
+                yield return null; // wait a frame loop
+
+            e?.Invoke(state);
+        }
+    }
 
     public static void Delay(float secs, Action action)
     {

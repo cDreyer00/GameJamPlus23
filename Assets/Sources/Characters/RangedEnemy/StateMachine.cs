@@ -16,6 +16,12 @@ public class StateMachine<TState, TEvent> : IEnumerable<StateMachine<TState, TEv
     public List<Transition> transitions = new();
     public TState           currentState;
 
+    public TState this[TState state, TEvent @event]
+    {
+        get => GetState(state, @event);
+        set => Add(state, @event, value);
+    }
+
     public void Add(TState origin, TEvent eventVariable, TState destination)
     {
         var transition = new Transition
@@ -61,6 +67,16 @@ public class StateMachine<TState, TEvent> : IEnumerable<StateMachine<TState, TEv
             return _stateEq.Equals(t.origin, currentState) && _eventEq.Equals(t.eventVariable, eventVariable);
         }
     }
+    public TState GetState(TState state, TEvent eventVariable)
+    {
+        int index = transitions.FindIndex(TransitionPredicate);
+        return index != -1 ? transitions[index].destination : state;
+
+        bool TransitionPredicate(Transition t)
+        {
+            return _stateEq.Equals(t.origin, state) && _eventEq.Equals(t.eventVariable, eventVariable);
+        }
+    }
     public void MoveNext(TEvent eventVariable)
     {
         int index = transitions.FindIndex(TransitionPredicate);
@@ -75,22 +91,6 @@ public class StateMachine<TState, TEvent> : IEnumerable<StateMachine<TState, TEv
             return _stateEq.Equals(t.origin, currentState) && _eventEq.Equals(t.eventVariable, eventVariable);
         }
     }
-    public static StateMachine<TState, TEvent> FullyConnectedGraph
-    {
-        get
-        {
-            var sm = new StateMachine<TState, TEvent>();
-            foreach (TState origin in Cached.EnumValues<TState>()) {
-                foreach (TEvent eventVariable in Cached.EnumValues<TEvent>()) {
-                    foreach (TState destination in Cached.EnumValues<TState>()) {
-                        sm.Add(origin, eventVariable, destination);
-                    }
-                }
-            }
-            return sm;
-        }
-    }
-
     public IEnumerator<Transition> GetEnumerator() => transitions.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5116867611742168604}
   - component: {fileID: 2161651929954241776}
   - component: {fileID: 2321365576416800683}
+  - component: {fileID: 5206894433577858594}
   m_Layer: 6
   m_Name: RangedEnemy
   m_TagString: Enemy
@@ -77,6 +78,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16e4bab2d88cf79458abdba649438357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateMachine:
+    transitions: []
+    currentState: 0
   projPrefab: {fileID: 3364622944419438653, guid: 44b178d1a07e72a4080778ca2517f7ad, type: 3}
   idleTime: 1.1
   attackDelay: 0.4
@@ -142,6 +146,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atSameDirection: 0
+--- !u!114 &5206894433577858594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5976046371013820665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce48db17c8ad4954d88b159b31d32c7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 0}
+  color2: {r: 0.8867924, g: 0.055773012, b: 0.055773012, a: 0}
 --- !u!1 &7294085985294971187
 GameObject:
   m_ObjectHideFlags: 0

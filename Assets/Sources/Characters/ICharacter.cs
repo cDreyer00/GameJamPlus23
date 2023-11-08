@@ -3,7 +3,6 @@ using UnityEngine;
 
 public interface ICharacter
 {
-    public int ReferenceCount { get; set; }
     Vector3 Position { get; }
     CharacterEvents Events { get; }
 }

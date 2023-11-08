@@ -7,8 +7,9 @@ using UnityEngine.AI;
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent _agent;
+
     //[SerializeField] MoveType     _moveType;
-    [SerializeField] Transform    _target;
+    [SerializeField] Transform _target;
 
     public NavMeshAgent Agent => _agent;
     public Transform Target
@@ -29,8 +30,6 @@ public class NavMeshMovement : CharacterModule, IMovementModule
 
     void Update()
     {
-        if (!_agent) return;
-
         // if (_moveType == MoveType.Chase) {
         //     if (!_target) return;
         //     SetDestination(_target.position);
@@ -38,9 +37,8 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         // if (_moveType == MoveType.Idle) {
         //     SetDestination(transform.position);
         // }
-
+        
         if (Character.stateMachine.currentState == FsmCharState.Chasing) {
-            if (!_target) return;
             SetDestination(_target.position);
         }
         if (Character.stateMachine.currentState == FsmCharState.Idle) {

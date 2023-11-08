@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(LookAtCamera))]
+[RequireComponent(typeof(FeedbackDamage))]
 public class MeleeEnemy : Character, IPoolable<Character>
 {
     public int   damage      = 1;
@@ -22,7 +23,6 @@ public class MeleeEnemy : Character, IPoolable<Character>
     [SerializeField] private FeedbackDamage feedback;
     public NavMeshAgent Agent => agent;
     public override string Team => "Enemy";
-    public ICharacter target;
 
     private readonly static int AnimIsDead   = Animator.StringToHash("isDead");
     private readonly static int AnimIsWalk   = Animator.StringToHash("isWalk");
@@ -30,20 +30,43 @@ public class MeleeEnemy : Character, IPoolable<Character>
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        stateMachine = new StateMachine<FsmCharState, FsmCharEvent>
+        {
+            currentState = FsmCharState.Idle,
+
+            [FsmCharState.Idle, FsmCharEvent.Chase] = FsmCharState.Chasing,
+            [FsmCharState.Idle, FsmCharEvent.Attack] = FsmCharState.Attacking,
+            [FsmCharState.Idle, FsmCharEvent.Stop] = FsmCharState.Idle,
+            [FsmCharState.Idle, FsmCharEvent.Die] = FsmCharState.Dying,
+
+            [FsmCharState.Chasing, FsmCharEvent.Stop] = FsmCharState.Idle,
+            [FsmCharState.Chasing, FsmCharEvent.Attack] = FsmCharState.Attacking,
+            [FsmCharState.Chasing, FsmCharEvent.Chase] = FsmCharState.Chasing,
+            [FsmCharState.Chasing, FsmCharEvent.Die] = FsmCharState.Dying,
+
+            [FsmCharState.Attacking, FsmCharEvent.Stop] = FsmCharState.Idle,
+            [FsmCharState.Attacking, FsmCharEvent.Chase] = FsmCharState.Chasing,
+            [FsmCharState.Attacking, FsmCharEvent.Attack] = FsmCharState.Attacking,
+            [FsmCharState.Attacking, FsmCharEvent.Die] = FsmCharState.Dying,
+        };
     }
     private void Start()
     {
+        if (TryGetModule<NavMeshMovement>(out var meshMovement)) {
+            meshMovement.Target = GameManager.Instance.Player.transform;
+        }
         _anim = GetComponentInChildren<Animator>();
-        target = GameManager.Instance.Player;
-        Events.onTakeDamage += DamageEffects;
-        Events.onDied += DeathEffects;
+        Events.onTakeDamage += OnTakeDamage;
+        Events.onDied += OnDied;
     }
     private void Update()
     {
         if (GameManager.IsGameOver) return;
 
         idleTime -= Time.deltaTime;
-        if (idleTime > 0) return;
+        if (idleTime <= 0) {
+            stateMachine.MoveNext(FsmCharEvent.Chase);
+        }
 
         if (!_canAttack) {
             _lastAttackTime += Time.deltaTime;
@@ -53,17 +76,19 @@ public class MeleeEnemy : Character, IPoolable<Character>
             }
         }
     }
-    void DeathEffects(ICharacter character)
+    void OnDied(ICharacter character)
     {
         if (GameManager.IsGameOver) return;
-
-        ReferenceCount++;
         _anim.SetBool(AnimIsDead, true);
-        Helpers.DelayFrames(60, () => {
-            ReferenceCount--;
-        });
+        Helpers.DelayFrames(
+            frames: 60,
+            action: static state => {
+                var (pool, self) = state;
+                pool.Release(self);
+            }, (Pool, this)
+        );
     }
-    void DamageEffects(float amount)
+    void OnTakeDamage(float amount)
     {
         if (GameManager.IsGameOver) return;
         if (idleTime > 0) return;
@@ -113,7 +138,7 @@ public class MeleeEnemy : Character, IPoolable<Character>
             StartCoroutine(Attack(collision));
         }
     }
-    void OnDisable()
+    public void OnRelease()
     {
         var sprite = feedback.GetComponent<SpriteRenderer>();
         if (!ReferenceEquals(sprite, null)) {

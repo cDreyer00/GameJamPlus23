@@ -5,14 +5,15 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(LookAtCamera))]
+[RequireComponent(typeof(FeedbackDamage))]
 public class RangedEnemy : Character, IPoolable<Character>
 {
     [SerializeField] Projectile projPrefab;
     QueuePool<Projectile>       _projPool;
 
-    public float                                      idleTime;
-    public float                                      attackDelay = 1f;
-    public NavMeshAgent                               agent;
+    public float                                    idleTime;
+    public float                                    attackDelay = 1f;
+    public NavMeshAgent                             agent;
     public StateMachine<FsmCharState, FsmCharEvent> stateMachine;
 
     public GenericPool<Character> Pool { get; set; }
@@ -27,7 +28,26 @@ public class RangedEnemy : Character, IPoolable<Character>
     {
         _projPool = new QueuePool<Projectile>(projPrefab, 10, transform);
         _projPool.Init();
-        stateMachine = StateMachine<FsmCharState, FsmCharEvent>.FullyConnectedGraph;
+        stateMachine = new StateMachine<FsmCharState, FsmCharEvent>
+        {
+            currentState = FsmCharState.Idle,
+
+            [FsmCharState.Idle, FsmCharEvent.Chase] = FsmCharState.Chasing,
+            [FsmCharState.Idle, FsmCharEvent.Attack] = FsmCharState.Attacking,
+            [FsmCharState.Idle, FsmCharEvent.Stop] = FsmCharState.Idle,
+            [FsmCharState.Idle, FsmCharEvent.Die] = FsmCharState.Dying,
+
+            [FsmCharState.Chasing, FsmCharEvent.Stop] = FsmCharState.Idle,
+            [FsmCharState.Chasing, FsmCharEvent.Attack] = FsmCharState.Attacking,
+            [FsmCharState.Chasing, FsmCharEvent.Chase] = FsmCharState.Chasing,
+            [FsmCharState.Chasing, FsmCharEvent.Die] = FsmCharState.Dying,
+
+            [FsmCharState.Attacking, FsmCharEvent.Stop] = FsmCharState.Idle,
+            [FsmCharState.Attacking, FsmCharEvent.Chase] = FsmCharState.Chasing,
+            [FsmCharState.Attacking, FsmCharEvent.Attack] = FsmCharState.Attacking,
+            [FsmCharState.Attacking, FsmCharEvent.Die] = FsmCharState.Dying,
+        };
+        Events.onDied += OnDied;
     }
     void Update()
     {
@@ -56,6 +76,17 @@ public class RangedEnemy : Character, IPoolable<Character>
         var proj      = _projPool.Get(position, playerDir);
         proj.target = playerPos + _playerDelta;
         proj.IgnoreTeam(Team);
+    }
+    void OnDied(ICharacter character)
+    {
+        if (GameManager.IsGameOver) return;
+        Helpers.DelayFrames(
+            frames: 60,
+            action: state => {
+                var (pool, self) = state;
+                pool.Release(self);
+            }, (Pool, this)
+        );
     }
     public void OnGet(GenericPool<Character> pool)
     {
