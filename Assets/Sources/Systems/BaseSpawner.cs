@@ -1,24 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 
-public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
-    where T : MonoBehaviour
+public abstract class BaseSpawner<T> : MonoBehaviour where T : MonoBehaviour
 {
-    bool _isSpawning;
+    bool                   _isSpawning;
     protected QueuePool<T> instancePool;
 
-    public T prefab;
+    public T                       prefab;
     public ClampedPrimitive<float> spawnRate;
-    public ClampedPrimitive<int> maxInstances;
-    public int instanceCount;
+    public ClampedPrimitive<int>   maxInstances;
+    public int                     instanceCount;
 
 
     public abstract Vector3 GetRandomPosition();
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         instancePool = new QueuePool<T>(prefab, maxInstances.max, transform);
         spawnRate.Clamp();
         maxInstances.Clamp();
@@ -40,8 +37,7 @@ public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
         if (!_isSpawning) yield break;
 
         var wait = Helpers.GetWait(spawnRate);
-        while (_isSpawning)
-        {
+        while (_isSpawning) {
             yield return wait;
             Spawn();
         }
@@ -50,7 +46,7 @@ public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
     {
         instanceCount++;
         var position = GetRandomPosition();
-        T instance = instancePool.Get(position, Quaternion.identity);
+        T   instance = instancePool.Get(position, Quaternion.identity);
         OnSpawnedInstance(instance);
     }
     protected void DeSpawn(T instance)
@@ -59,6 +55,6 @@ public abstract class BaseSpawner<T> : Singleton<BaseSpawner<T>>
         instancePool.Release(instance);
         OnDesSpawnedInstance(instance);
     }
-    virtual protected void OnSpawnedInstance(T instance) { }
-    virtual protected void OnDesSpawnedInstance(T instance) { }
+    virtual protected void OnSpawnedInstance(T instance) {}
+    virtual protected void OnDesSpawnedInstance(T instance) {}
 }
