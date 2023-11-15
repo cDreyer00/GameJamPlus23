@@ -1,23 +1,29 @@
 ﻿using System.Collections;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public abstract class BaseSpawner<T> : MonoBehaviour
-    where T : MonoBehaviour
+public abstract class BaseSpawner<T> : MonoBehaviour where T : MonoBehaviour
 {
     protected QueuePool<T> instancePool;
 
-    public bool                    isSpawning;
-    public T                       prefab;
-    public ClampedPrimitive<float> spawnRate;
-    public AnimationCurve          maxInstances;
-    public int                     instanceCount;
-    public NavMeshSurface          navMeshSurface;
+    [Header("References")]
+    public T prefab;
+    public NavMeshSurface navMeshSurface;
+
+    [Header("Curves")]
+    public AnimationCurve speed;
+    public AnimationCurve maxInstances;
+    public AnimationCurve spawnRate;
+
+    [Header("Values")]
+    public int waveNumber;
+    public bool isSpawning;
+    public int  instanceCount;
     public virtual Vector3 GetSpawnPosition() => NavMeshRandom.InsideBounds(navMeshSurface.navMeshData.sourceBounds);
 
     void Start()
     {
-        spawnRate.Clamp();
         if (isSpawning) {
             BeginSpawning();
         }
@@ -41,21 +47,32 @@ public abstract class BaseSpawner<T> : MonoBehaviour
     {
         if (!isSpawning) yield break;
 
-        var wait = Helpers.GetWait(spawnRate);
+        var wait = Helpers.GetWait(spawnRate.Evaluate(waveNumber));
         while (isSpawning) {
             yield return wait;
             Spawn();
         }
     }
-    virtual protected void Spawn()
+    public void Spawn()
     {
-        instanceCount++;
-        T instance = instancePool.Get(GetSpawnPosition(), Quaternion.identity);
-        OnSpawnedInstance(instance);
+        var count = Mathf.RoundToInt(maxInstances.Evaluate(waveNumber));
+        for (var i = 0; i < count; i++) {
+            instanceCount++;
+            var position = GetSpawnPosition();
+            var instance = instancePool.Get(position, Quaternion.identity);
+            if (instance is Character character && character.TryGetModule<NavMeshMovement>(out var navMeshMovement)) {
+                navMeshMovement.Agent.speed = speed.Evaluate(waveNumber);
+            }
+            OnSpawnedInstance(instance);
+        }
+        StopSpawning();
     }
-    virtual protected void DeSpawn(T instance)
+    public void DeSpawn(T instance)
     {
-        instanceCount--;
+        if (instanceCount-- == 0) {
+            waveNumber++;
+            BeginSpawning();
+        }
         OnDesSpawnedInstance(instance);
     }
     virtual protected void OnSpawnedInstance(T instance) {}
