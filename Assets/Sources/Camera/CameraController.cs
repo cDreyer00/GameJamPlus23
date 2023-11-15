@@ -82,4 +82,13 @@ public class CameraController : Singleton<CameraController>
         curEuler = new(0, 90 * rotId, 0);
         camAnchor.DOLocalRotate(curEuler, rotDuration, rotateMode);
     }
+
+    public static Vector3 DirectionToVector3(Direction dir) => dir switch
+    {
+        Direction.Up => Vector3.forward,
+        Direction.Down => Vector3.back,
+        Direction.Right => Vector3.right,
+        Direction.Left => Vector3.left,
+        _ => Vector3.forward
+    };
 }

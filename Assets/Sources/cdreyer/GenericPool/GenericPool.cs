@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -8,6 +10,12 @@ public abstract class GenericPool<T> where T : MonoBehaviour
     [SerializeField] int _amount;
     [SerializeField] T _original;
     [SerializeField] protected Transform parent = null;
+
+    public abstract IEnumerable<T> Instances { get; }
+
+    public event Action<T> onInstanceCreated;
+    public event Action<T> onInstanceReleased;
+    public event Action<T> onInstanceTaken;
 
     bool _initialized = false;
 
@@ -41,6 +49,10 @@ public abstract class GenericPool<T> where T : MonoBehaviour
 
         _original = newOriginal;
     }
+
+    protected void InstanceCreated(T i) => onInstanceCreated?.Invoke(i);
+    protected void InstanceTaken(T i) => onInstanceTaken?.Invoke(i);
+    protected void InstanceReleased(T i) => onInstanceReleased?.Invoke(i);
 
     protected abstract void CreateObjects(T original, int amount, Transform parent = null, bool active = false);
     public abstract T Get(Vector3 position, Quaternion rotation);

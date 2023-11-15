@@ -1,31 +1,30 @@
 using Sources.Camera;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IPlayer
+public class PlayerController : Character
 {
-    [SerializeField] GameObject model;
-    [SerializeField] Projectile projPrefab;
-    [SerializeField] Transform anchor;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] PlayerAim aim;
-    [SerializeField] float dashForce = 3;
-    [SerializeField] float shootDelay = 1.3f;
-    [SerializeField] float breakDrag = 5f;
+    [SerializeField]        GameObject  model;
+    [SerializeField]        Projectile  projPrefab;
+    [SerializeField]        Transform   anchor;
+    [SerializeField]        Rigidbody   rb;
+    [SerializeField]        PlayerAim   aim;
+    [SerializeField]        float       dashForce  = 3;
+    [SerializeField]        float       shootDelay = 1.3f;
+    [SerializeField]        float       breakDrag  = 5f;
     [Space, SerializeField] AudioClip[] shootAudios;
-    [SerializeField] AudioClip damageAudio;
+    [SerializeField]        AudioClip   damageAudio;
 
-    UnityEngine.Camera _cam;
-    float _curDelay;
-    float _baseDrag;
-
-    public Vector3 Position => transform.position;
-
+    Camera _cam;
+    float  _curDelay;
+    float  _baseDrag;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
+    public override string Team => "Player";
 
     [SerializeField] FeedbackDamage feed;
-    [SerializeField] CameraShake cameraShake;
+    [SerializeField] CameraShake    cameraShake;
     public CameraShake Came => cameraShake;
+    public int Health => 1;
 
     void Start()
     {
@@ -33,17 +32,15 @@ public class PlayerController : MonoBehaviour, IPlayer
         _baseDrag = rb.drag;
 
         GameManager.Instance.RegisterPlayer(this);
+        Events.onDied += Died;
     }
-
     void Update()
     {
         if (GameManager.IsGameOver) return;
 
         _curDelay += Time.deltaTime;
-        if (Input.GetMouseButton(0))
-        {
-            if (_curDelay >= shootDelay)
-            {
+        if (Input.GetMouseButton(0)) {
+            if (_curDelay >= shootDelay) {
                 Shoot();
                 _curDelay = 0;
             }
@@ -51,16 +48,13 @@ public class PlayerController : MonoBehaviour, IPlayer
 
         Rotate();
 
-        if (transform.position.y <= -1)
-        {
+        if (transform.position.y <= -1) {
             GameManager.Instance.ReloadScene();
         }
-        if (Input.GetKey(KeyCode.Space))
-        {
+        if (Input.GetKey(KeyCode.Space)) {
             rb.drag = _baseDrag * breakDrag;
         }
-        else
-        {
+        else {
             rb.drag = _baseDrag;
         }
     }
@@ -68,8 +62,7 @@ public class PlayerController : MonoBehaviour, IPlayer
     void Rotate()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100))
-        {
+        if (Physics.Raycast(ray, out RaycastHit hit, 100)) {
             Vector3 lookAtPos = hit.point;
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
@@ -80,6 +73,7 @@ public class PlayerController : MonoBehaviour, IPlayer
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
+        proj.IgnoreTeam(Team);
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)
@@ -91,24 +85,8 @@ public class PlayerController : MonoBehaviour, IPlayer
         rb.velocity = Vector3.zero;
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
-
-    public void TakeDamage(int amount)
+    static void Died(ICharacter character)
     {
-        if (GameManager.IsGameOver) return;
-
-        feed.StartCoroutine(nameof(FeedbackDamage.DamageColor));
-
-        if (cameraShake) cameraShake.ShakeCamera();
-        if (damageAudio) damageAudio.Play();
-
-        float hp = HealthBar.Instance.HealthPoints;
-        if (hp > 0)
-        {
-            HealthBar.Instance.Damage(amount);
-        }
-        else
-        {
-            GameManager.Instance.ReloadScene();
-        }
+        GameManager.Instance.ReloadScene();
     }
 }

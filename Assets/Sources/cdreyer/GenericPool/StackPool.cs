@@ -7,6 +7,8 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
 {
     public Stack<T> s = new();
 
+    public override IEnumerable<T> Instances => s;
+
     public StackPool(T original, int amount, Transform parent = null) : base(original, amount, parent)
     {
 
@@ -26,6 +28,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
                 poolable.OnCreated();
             }
 
+            InstanceCreated(obj);
             s.Push(obj);
         }
     }
@@ -51,6 +54,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
             poolable.OnGet(this);
         }
 
+        InstanceTaken(t);
         return t;
     }
 
@@ -75,6 +79,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
             poolable.OnGet(this);
         }
 
+        InstanceTaken(t);
         return t;
     }
 
@@ -88,6 +93,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
             poolable.OnRelease();
         }
 
+        InstanceReleased(obj);
         s.Push(obj);
     }
 
