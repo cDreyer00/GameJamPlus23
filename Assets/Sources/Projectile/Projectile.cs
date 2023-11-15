@@ -1,30 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IPoolable<Projectile>
 {
-    [SerializeField] int damage;
-    [SerializeField] float moveSpeed = 1;
-    [SerializeField] float lifeTime;
+    [SerializeField] int            damage;
+    [SerializeField] float          moveSpeed = 1;
+    [SerializeField] float          lifeTime;
+    [SerializeField] AnimationCurve yAxisTrajectory;
 
+    public Vector3 target;
+
+    Transform _transform;
+    float     _currentLifeTime;
+    Vector3   _anchor;
+
+
+    public List<string> ignoreList;
+    public GenericPool<Projectile> Pool { get; set; }
+    public void OnGet(GenericPool<Projectile> pool)
+    {
+        Pool = pool;
+        Init();
+    }
+    public void OnRelease()
+    {
+        Init();
+    }
+    public void OnCreated()
+    {
+        Init();
+    }
+    void Awake()
+    {
+        Init();
+    }
+    void Init()
+    {
+        _currentLifeTime = lifeTime;
+        _transform = transform;
+        _anchor = _transform.position;
+    }
     void Update()
     {
-        Move();
+        Move(moveSpeed * Time.deltaTime);
 
-        lifeTime -= Time.deltaTime;
-        if (lifeTime <= 0)
-            Destroy(gameObject);
+        _currentLifeTime -= Time.deltaTime;
+        if (_currentLifeTime <= 0) {
+            if (Pool != null) Pool.Release(this);
+            else Destroy(gameObject);
+        }
     }
-
-    public void Move()
+    public void IgnoreTeam(string team)
     {
-        transform.position += moveSpeed * Time.deltaTime * transform.forward;
+        ignoreList ??= new List<string>();
+        if (!ignoreList.Contains(team))
+            ignoreList.Add(team);
     }
+    void Move(float step)
+    {
+        var position = _transform.position;
+        var forward  = _transform.forward;
 
+        var maxSqrDistance = Vector3.SqrMagnitude(_anchor - target);
+        var sqrDistance    = Vector3.SqrMagnitude(target - position);
+        var magnitude01    = ClampedPrimitiveExtensions.MapRangeTo01(sqrDistance, 0, maxSqrDistance);
+
+        //print(magnitude01);
+
+        float eval = yAxisTrajectory.Evaluate(magnitude01);
+        position.x += step * forward.x;
+        position.z += step * forward.z;
+        position.y = _anchor.y * (1 + eval);
+        _transform.position = position;
+    }
     void OnTriggerEnter(Collider col)
     {
-        if (col.GetComponent<IPlayer>() != null) return;
-        Destroy(gameObject);
-        if (!col.TryGetComponent<IEnemy>(out var enemy)) return;
-        enemy.TakeDamage(damage);
+        if (col.TryGetComponent<Character>(out var character)) {
+            if (ignoreList.Contains(character.Team)) {
+                return;
+            }
+            character.Events.onTakeDamage?.Invoke(damage);
+        }
+        if (Pool != null) Pool.Release(this);
+        else Destroy(gameObject);
     }
 }

@@ -18,7 +18,7 @@ namespace Sources.cdreyer
 
                     if (_instance == null)
                     {
-                        GameLogger.GameLogger.Log($"{typeof(T).Name} instance not found", "red", "error");
+                        GameLogger.Log($"{typeof(T).Name} instance not found", "red", "error");
                     }
 
                 }

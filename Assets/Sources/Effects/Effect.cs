@@ -1,15 +1,22 @@
-using Sources.Characters;
 using UnityEngine;
 
-public abstract class BaseEffect : MonoBehaviour
+public abstract class Effect
 {
-    public abstract void ApplyEffect(Character character);
+    public abstract void ApplyEffect(ICharacter character);
 }
-public class ConfusionEffect : BaseEffect
+
+public class ConfusionEffect : Effect
 {
-    public override void ApplyEffect(Character character) { }
+    public override void ApplyEffect(ICharacter character)
+    {
+        // character.Movement.SetDirection(Vector3.one);
+    }
 }
-public class FreezeEffect : BaseEffect
+
+public class FreezeEffect : Effect
 {
-    public override void ApplyEffect(Character character) { }
+    public override void ApplyEffect(ICharacter character)
+    {
+
+    }
 }

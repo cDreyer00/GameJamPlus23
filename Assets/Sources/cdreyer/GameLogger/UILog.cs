@@ -2,38 +2,35 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-namespace Sources.cdreyer.GameLogger
+public class UILog : MonoBehaviour
 {
-    public class UILog : MonoBehaviour
+    [SerializeField] TextMeshProUGUI messageTMRPO;
+    [SerializeField] TextMeshProUGUI stackTraceTMRPO;
+    [SerializeField] int maxTraceAmount;
+
+    string[] traceMessages;
+
+    public void Init(Log log)
     {
-        [SerializeField] TextMeshProUGUI messageTMRPO;
-        [SerializeField] TextMeshProUGUI stackTraceTMRPO;
-        [SerializeField] int maxTraceAmount;
+        messageTMRPO.text = log.message;
+        traceMessages = log.traceMessages;
 
-        string[] traceMessages;
-
-        public void Init(Log log)
+        if (maxTraceAmount == 0)
         {
-            messageTMRPO.text = log.message;
-            traceMessages = log.traceMessages;
+            stackTraceTMRPO.text = "";
+            return;
+        }
 
-            if (maxTraceAmount == 0)
-            {
-                stackTraceTMRPO.text = "";
-                return;
-            }
+        stackTraceTMRPO.text = traceMessages.LastOrDefault() ?? "";
+        int count = 1;
+        for (int i = traceMessages.Length - 2; i >= 0; i--)
+        {
+            if (count >= maxTraceAmount) break;
 
-            stackTraceTMRPO.text = traceMessages.LastOrDefault() ?? "";
-            int count = 1;
-            for (int i = traceMessages.Length - 2; i >= 0; i--)
-            {
-                if (count >= maxTraceAmount) break;
+            TextMeshProUGUI newTrace = Instantiate(stackTraceTMRPO, stackTraceTMRPO.transform.parent);
+            newTrace.text = traceMessages[i];
 
-                TextMeshProUGUI newTrace = Instantiate(stackTraceTMRPO, stackTraceTMRPO.transform.parent);
-                newTrace.text = traceMessages[i];
-
-                count++;
-            }
+            count++;
         }
     }
 }

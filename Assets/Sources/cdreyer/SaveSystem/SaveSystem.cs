@@ -35,7 +35,7 @@ namespace Sources.cdreyer.SaveSystem
             }
             catch
             {
-                GameLogger.GameLogger.Log($"data for {typeof(TData).Name} not found", "yellow");
+                GameLogger.Log($"data for {typeof(TData).Name} not found", "yellow");
 
                 if (typeof(ISavable<TData>).IsAssignableFrom(typeof(TData)))
                 {

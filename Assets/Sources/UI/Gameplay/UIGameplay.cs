@@ -1,22 +1,17 @@
-using Sources.cdreyer;
-using Sources.cdreyer.GameLogger;
 using UnityEngine;
 
-namespace Sources.UI.Gameplay
+public class UIGameplay : MonoBehaviour
 {
-    public class UIGameplay : MonoBehaviour
+    [SerializeField] GameObject keysPanel;
+    [SerializeField] ButtonBehaviour settingsBtn;
+
+    void Start()
     {
-        [SerializeField] GameObject keysPanel;
-        [SerializeField] ButtonBehaviour settingsBtn;
+        Helpers.Delay(5f, () => keysPanel.SetActive(false));
 
-        void Start()
+        settingsBtn.AddListener(() =>
         {
-            Helpers.Delay(5f, () => keysPanel.SetActive(false));
-
-            settingsBtn.AddListener(() =>
-            {
-                GameLogger.Log("Open settings");
-            }, InteractionType.ClickUp);
-        }
+            GameLogger.Log("Open settings");
+        }, InteractionType.ClickUp);
     }
 }
