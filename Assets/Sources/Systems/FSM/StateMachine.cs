@@ -1,104 +1,117 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-
-[Serializable]
-public class StateMachine<TState, TEvent> : IEnumerable<StateMachine<TState, TEvent>.Transition>
-    where TState : Enum
-    where TEvent : Enum
+namespace Sources.Systems.FSM
 {
-    EqualityComparer<TState> _stateEq = EqualityComparer<TState>.Default;
-    EqualityComparer<TEvent> _eventEq = EqualityComparer<TEvent>.Default;
-
-    public List<Transition> transitions = new();
-    public TState           currentState;
-
-    public TState this[TState state, TEvent @event]
+    public enum LifeCycle
     {
-        get => GetState(state, @event);
-        set => Add(state, @event, value);
+        Enter,
+        FixedUpdate,
+        Update,
+        Exit
     }
-
-    public void Add(TState origin, TEvent eventVariable, TState destination)
-    {
-        var transition = new Transition
-        {
-            origin = origin,
-            eventVariable = eventVariable,
-            destination = destination,
-        };
-        if (!transitions.Contains(transition)) {
-            transitions.Add(transition);
-        }
-    }
-    public void Remove(TState origin, TEvent eventVariable, TState destination)
-    {
-        var transition = new Transition
-        {
-            origin = origin,
-            eventVariable = eventVariable,
-            destination = destination,
-        };
-        if (transitions.Contains(transition)) {
-            transitions.Remove(transition);
-        }
-    }
-    public event Action<TState> OnStateEnter;
-    public event Action<TState> OnStateExit;
-
-    virtual protected void StateEnter(TState obj)
-    {
-        OnStateEnter?.Invoke(obj);
-    }
-    virtual protected void StateExit(TState obj)
-    {
-        OnStateExit?.Invoke(obj);
-    }
-    public TState PeekNext(TEvent eventVariable)
-    {
-        int index = transitions.FindIndex(TransitionPredicate);
-        return index != -1 ? transitions[index].destination : currentState;
-
-        bool TransitionPredicate(Transition t)
-        {
-            return _stateEq.Equals(t.origin, currentState) && _eventEq.Equals(t.eventVariable, eventVariable);
-        }
-    }
-    public TState GetState(TState state, TEvent eventVariable)
-    {
-        int index = transitions.FindIndex(TransitionPredicate);
-        return index != -1 ? transitions[index].destination : state;
-
-        bool TransitionPredicate(Transition t)
-        {
-            return _stateEq.Equals(t.origin, state) && _eventEq.Equals(t.eventVariable, eventVariable);
-        }
-    }
-    public void MoveNext(TEvent eventVariable)
-    {
-        int index = transitions.FindIndex(TransitionPredicate);
-        if (index != -1) {
-            StateExit(currentState);
-            currentState = transitions[index].destination;
-            StateEnter(currentState);
-        }
-
-        bool TransitionPredicate(Transition t)
-        {
-            return _stateEq.Equals(t.origin, currentState) && _eventEq.Equals(t.eventVariable, eventVariable);
-        }
-    }
-    public IEnumerator<Transition> GetEnumerator() => transitions.GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
     [Serializable]
-    public struct Transition
+    public class StateMachine<TState>
+        where TState : Enum
     {
-        public TState origin;
-        public TEvent eventVariable;
-        public TState destination;
+        EqualityComparer<TState> _stateEqualityComparer = EqualityComparer<TState>.Default;
+        public TState CurrentState { get; private set; }
+
+        Dictionary<TState, List<Destination>> _transitionsMap    = new();
+        HashSet<Destination>                  _anyTransitionsSet = new();
+
+        Dictionary<TState, Action> _onEnter       = new();
+        Dictionary<TState, Action> _onExit        = new();
+        Dictionary<TState, Action> _onUpdate      = new();
+        Dictionary<TState, Action> _onFixedUpdate = new();
+
+        public void AddTransition(TState from, TState to, Func<bool> predicate = null)
+        {
+            if (!_transitionsMap.TryGetValue(from, out var transitions)) {
+                transitions = new List<Destination>();
+                _transitionsMap.Add(from, transitions);
+            }
+            transitions.Add(new Destination { state = to, predicate = predicate ?? (() => true) });
+        }
+        public void AddAnyTransition(TState to, Func<bool> predicate = null)
+        {
+            _anyTransitionsSet.Add(new Destination { state = to, predicate = predicate ?? (() => true) });
+        }
+        public void AddListener(TState state, LifeCycle lifeCycleEvent, Action action)
+        {
+            switch (lifeCycleEvent) {
+            case LifeCycle.Enter:
+                _onEnter[state] += action;
+                break;
+            case LifeCycle.Exit:
+                _onExit[state] += action;
+                break;
+            case LifeCycle.Update:
+                _onUpdate[state] += action;
+                break;
+            case LifeCycle.FixedUpdate:
+                _onFixedUpdate[state] += action;
+                break;
+            }
+        }
+        public void RemoveListener(TState state, LifeCycle lifeCycleEvent, Action action)
+        {
+            switch (lifeCycleEvent) {
+            case LifeCycle.Enter:
+                _onEnter[state] -= action;
+                break;
+            case LifeCycle.Exit:
+                _onExit[state] -= action;
+                break;
+            case LifeCycle.Update:
+                _onUpdate[state] -= action;
+                break;
+            case LifeCycle.FixedUpdate:
+                _onFixedUpdate[state] -= action;
+                break;
+            }
+        }
+        public void ChangeState(TState newState)
+        {
+            if (_stateEqualityComparer.Equals(CurrentState, newState)) return;
+
+            var oldState = CurrentState;
+            CurrentState = newState;
+
+            _onExit[oldState]?.Invoke();
+            _onEnter[CurrentState]?.Invoke();
+        }
+
+        Destination? GetTransition()
+        {
+            foreach (var transition in _anyTransitionsSet) {
+                if (transition.predicate()) return transition;
+            }
+            if (_transitionsMap.TryGetValue(CurrentState, out var transitionState)) {
+                foreach (var transition in transitionState) {
+                    if (transition.predicate()) return transition;
+                }
+            }
+            return default;
+        }
+
+        public void Update()
+        {
+            var transition = GetTransition();
+            if (transition != null) ChangeState(transition.Value.state);
+
+            _onUpdate[CurrentState]?.Invoke();
+        }
+
+        public void FixedUpdate()
+        {
+            _onFixedUpdate[CurrentState]?.Invoke();
+        }
+        public struct Destination
+        {
+            public TState     state;
+            public Func<bool> predicate;
+        }
     }
 }

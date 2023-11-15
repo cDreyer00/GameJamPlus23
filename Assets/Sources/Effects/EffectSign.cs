@@ -94,7 +94,7 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     public void OnGet(GenericPool<EffectSign> pool)
     {
-        this.Pool = pool;
+        Pool = pool;
     }
 
     void SetColor()

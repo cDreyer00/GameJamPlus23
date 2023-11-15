@@ -1,61 +1,45 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sources.Systems.FSM;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
+using static Character;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
-    [SerializeField] NavMeshAgent _agent;
-
-    //[SerializeField] MoveType     _moveType;
-    [SerializeField] Transform _target;
-
-    public NavMeshAgent Agent => _agent;
+    [SerializeField]
+    NavMeshAgent agent;
+    [SerializeField]
+    Transform target;
+    [SerializeField]
+    StateMachine<State> fsm;
+    public NavMeshAgent Agent => agent;
     public Transform Target
     {
-        get => _target;
-        set => _target = value;
+        get => target;
+        set => target = value;
     }
-    // public MoveType MoveType
-    // {
-    //     get => _moveType;
-    //     set => _moveType = value;
-    // }
-
     public void SetTarget(Transform target)
     {
-        _target = target;
+        this.target = target;
     }
-
-    void Update()
+    void Start()
     {
-        // if (_moveType == MoveType.Chase) {
-        //     if (!_target) return;
-        //     SetDestination(_target.position);
-        // }
-        // if (_moveType == MoveType.Idle) {
-        //     SetDestination(transform.position);
-        // }
-        
-        if (Character.stateMachine.currentState == FsmCharState.Chasing) {
-            SetDestination(_target.position);
-        }
-        if (Character.stateMachine.currentState == FsmCharState.Idle) {
-            SetDestination(transform.position);
-        }
+        fsm ??= Character.stateMachine;
+        fsm.AddAnyTransition(State.Idle, () => target == null);
+        fsm.AddTransition(State.Idle, State.Chasing, () => target != null);
+        fsm.AddListener(State.Chasing, LifeCycle.Enter, () => agent.isStopped = false);
+        fsm.AddListener(State.Chasing, LifeCycle.Exit, () => agent.isStopped = true);
+        fsm.AddListener(State.Chasing, LifeCycle.Update, () => SetDestination(target.position));
     }
-
     protected override void Init()
     {
-        if (_agent == null)
-            _agent = GetComponent<NavMeshAgent>();
+        if (agent == null) agent = GetComponent<NavMeshAgent>();
     }
-
-    public void SetDestination(Vector3 position)
-    {
-        _agent.SetDestination(position);
-    }
+    public void SetDestination(Vector3 position) => agent.SetDestination(position);
 }
 
 public enum MoveType
