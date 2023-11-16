@@ -9,13 +9,6 @@ public abstract class CharacterModule : MonoBehaviour
 
     void Awake()
     {
-        // if (!transform.root.TryGetComponent(out _character))
-        // {
-        //     Debug.LogError($"Character not found in root, removing module {GetType().Name} from {transform.root.name}");
-        //     Destroy(this);
-        //     return;
-        // }
-
         var character = transform.GetComponentInParent<Character>();
         if (character == null) {
             Debug.LogError($"Character not found upstream, removing module {GetType().Name} from {transform.root.name}");

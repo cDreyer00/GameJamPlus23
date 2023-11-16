@@ -86,14 +86,15 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     void ApplyEffect()
     {
-        var enemies = SpawnerSrevice.MeleeEnemySpawner.GetAllEnemies();
-        foreach (var e in enemies)
-            effect.ApplyEffect(e);
+        //TODO: apply effect to all enemies in radius
+        // var enemies = SpawnerSrevice.MeleeEnemySpawner.GetAllEnemies();
+        // foreach (var e in enemies)
+        //     effect.ApplyEffect(e);
     }
 
     public void OnGet(GenericPool<EffectSign> pool)
     {
-        this.Pool = pool;
+        Pool = pool;
     }
 
     void SetColor()

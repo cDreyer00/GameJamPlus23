@@ -6,11 +6,4 @@ public static class SpawnerSrevice
         get => _effecSignSpawner;
         set => _effecSignSpawner = value;
     }
-
-    static MeleeEnemySpawner _meleeEnemySpawner;
-    public static MeleeEnemySpawner MeleeEnemySpawner
-    {
-        get => _meleeEnemySpawner;
-        set => _meleeEnemySpawner = value;
-    }
 }
