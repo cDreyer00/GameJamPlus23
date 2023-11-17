@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Sources.Systems.FSM;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
+using Sources.Systems.FSM;
 using static Character;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -28,12 +24,12 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     void Start()
     {
-        fsm ??= Character.stateMachine;
-        fsm.AddAnyTransition(State.Idle, () => target == null);
-        fsm.AddTransition(State.Idle, State.Chasing, () => target != null);
-        fsm.AddListener(State.Chasing, LifeCycle.Enter, () => agent.isStopped = false);
-        fsm.AddListener(State.Chasing, LifeCycle.Exit, () => agent.isStopped = true);
-        fsm.AddListener(State.Chasing, LifeCycle.Update, () => SetDestination(target.position));
+        fsm ??= Character.StateMachine;
+        fsm.Transition(State.Idle, () => target == null);
+        fsm.Transition(State.Idle, State.Chasing, () => target != null);
+        fsm[LifeCycle.Enter, State.Chasing] += () => agent.isStopped = false;
+        fsm[LifeCycle.Exit, State.Chasing] += () => agent.isStopped = true;
+        fsm[LifeCycle.Update, State.Chasing] += () => SetDestination(target.position);
     }
     protected override void Init()
     {

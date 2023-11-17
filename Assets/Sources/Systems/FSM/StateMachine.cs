@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Sources.Systems.FSM
@@ -11,66 +12,44 @@ namespace Sources.Systems.FSM
         Update,
         Exit
     }
+
     [Serializable]
     public class StateMachine<TState>
         where TState : Enum
     {
+        static int LifeCycleEvents => Cached.EnumValues<LifeCycle>().Length;
+        static int StateCount => Cached.EnumValues<TState>().Length;
+        public StateMachine(TState initialState)
+        {
+            CurrentState = initialState;
+        }
         EqualityComparer<TState> _stateEqualityComparer = EqualityComparer<TState>.Default;
+        static int AsInt32(TState state) => UnsafeUtility.As<TState, int>(ref state);
+        static int AsInt32(LifeCycle lifeCycle) => (int)lifeCycle;
+
         public TState CurrentState { get; private set; }
 
         Dictionary<TState, List<Destination>> _transitionsMap    = new();
         HashSet<Destination>                  _anyTransitionsSet = new();
 
-        Dictionary<TState, Action> _onEnter       = new();
-        Dictionary<TState, Action> _onExit        = new();
-        Dictionary<TState, Action> _onUpdate      = new();
-        Dictionary<TState, Action> _onFixedUpdate = new();
+        Action[] _eventTable = new Action[LifeCycleEvents * StateCount];
 
-        public void AddTransition(TState from, TState to, Func<bool> predicate = null)
+        public void Transition(TState src, TState dst, Func<bool> predicate = null)
         {
-            if (!_transitionsMap.TryGetValue(from, out var transitions)) {
+            if (!_transitionsMap.TryGetValue(src, out var transitions)) {
                 transitions = new List<Destination>();
-                _transitionsMap.Add(from, transitions);
+                _transitionsMap.Add(src, transitions);
             }
-            transitions.Add(new Destination { state = to, predicate = predicate ?? (() => true) });
+            transitions.Add(new Destination { state = dst, predicate = predicate ?? (() => true) });
         }
-        public void AddAnyTransition(TState to, Func<bool> predicate = null)
+        public void Transition(TState dst, Func<bool> predicate = null)
         {
-            _anyTransitionsSet.Add(new Destination { state = to, predicate = predicate ?? (() => true) });
+            _anyTransitionsSet.Add(new Destination { state = dst, predicate = predicate ?? (() => true) });
         }
-        public void AddListener(TState state, LifeCycle lifeCycleEvent, Action action)
+        public Action this[LifeCycle lifeCycle, TState state]
         {
-            switch (lifeCycleEvent) {
-            case LifeCycle.Enter:
-                _onEnter[state] += action;
-                break;
-            case LifeCycle.Exit:
-                _onExit[state] += action;
-                break;
-            case LifeCycle.Update:
-                _onUpdate[state] += action;
-                break;
-            case LifeCycle.FixedUpdate:
-                _onFixedUpdate[state] += action;
-                break;
-            }
-        }
-        public void RemoveListener(TState state, LifeCycle lifeCycleEvent, Action action)
-        {
-            switch (lifeCycleEvent) {
-            case LifeCycle.Enter:
-                _onEnter[state] -= action;
-                break;
-            case LifeCycle.Exit:
-                _onExit[state] -= action;
-                break;
-            case LifeCycle.Update:
-                _onUpdate[state] -= action;
-                break;
-            case LifeCycle.FixedUpdate:
-                _onFixedUpdate[state] -= action;
-                break;
-            }
+            get => _eventTable[AsInt32(lifeCycle) * LifeCycleEvents + AsInt32(state)];
+            set => _eventTable[AsInt32(lifeCycle) * LifeCycleEvents + AsInt32(state)] = value;
         }
         public void ChangeState(TState newState)
         {
@@ -79,8 +58,8 @@ namespace Sources.Systems.FSM
             var oldState = CurrentState;
             CurrentState = newState;
 
-            _onExit[oldState]?.Invoke();
-            _onEnter[CurrentState]?.Invoke();
+            _eventTable[AsInt32(LifeCycle.Exit) * LifeCycleEvents + AsInt32(oldState)]?.Invoke();
+            _eventTable[AsInt32(LifeCycle.Enter) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
         }
 
         Destination? GetTransition()
@@ -101,12 +80,12 @@ namespace Sources.Systems.FSM
             var transition = GetTransition();
             if (transition != null) ChangeState(transition.Value.state);
 
-            _onUpdate[CurrentState]?.Invoke();
+            _eventTable[AsInt32(LifeCycle.Update) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
         }
 
         public void FixedUpdate()
         {
-            _onFixedUpdate[CurrentState]?.Invoke();
+            _eventTable[AsInt32(LifeCycle.FixedUpdate) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
         }
         public struct Destination
         {
