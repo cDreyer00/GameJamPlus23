@@ -5,9 +5,7 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
     [SerializeField] Canvas       endGameCanvas;
-    [SerializeField] float gameLoopTimer;
 
-    public float GameLoopTimer => gameLoopTimer;
     public Character Player { get; private set; }
     public static bool IsGameOver { get; private set; }
 
