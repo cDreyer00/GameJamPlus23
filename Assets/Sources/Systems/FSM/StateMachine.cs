@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -19,14 +20,15 @@ namespace Sources.Systems.FSM
     {
         static int LifeCycleEvents => Cached.EnumValues<LifeCycle>().Length;
         static int StateCount => Cached.EnumValues<TState>().Length;
-        public StateMachine(TState initialState)
-        {
-            CurrentState = initialState;
-        }
-        EqualityComparer<TState> _stateEqualityComparer = EqualityComparer<TState>.Default;
+
         static int AsInt32(TState state) => UnsafeUtility.As<TState, int>(ref state);
         static int AsInt32(LifeCycle lifeCycle) => (int)lifeCycle;
-
+        public StateMachine(TState initialState, [CanBeNull] EqualityComparer<TState> stateEqualityComparer = null)
+        {
+            CurrentState = initialState;
+            _stateEqualityComparer = stateEqualityComparer ?? EqualityComparer<TState>.Default;
+        }
+        EqualityComparer<TState> _stateEqualityComparer;
         public TState CurrentState { get; private set; }
 
         Dictionary<TState, List<Destination>> _transitionsMap    = new();
