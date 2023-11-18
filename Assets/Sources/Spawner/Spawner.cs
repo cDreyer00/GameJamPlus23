@@ -6,50 +6,27 @@ using UnityEngine.Rendering;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] Battle battle;
+    [SerializeField] BattleConfig _battleConfig;
     [SerializeField] float elapsedTime;
 
-    Queue<Wave> wavesQueue;
-    Wave curWave;
-    float curWaveDuration;
-    float curwaveElapseTime;
+    Battle _battle;
 
-    public void Init()
+    void Start()
     {
-        wavesQueue = new(battle.Waves);
-        NextWave();
-        elapsedTime = 0;
+        Init(_battleConfig);
     }
 
-    void Update()
+    public void Init(BattleConfig battleConfig)
     {
-        if (wavesQueue == null) return;
-        if (wavesQueue.Count == 0) return;
-
-        elapsedTime += Time.deltaTime;
-        curwaveElapseTime += Time.deltaTime;
-        curWaveDuration -= Time.deltaTime;
-
-
-        if (curWaveDuration <= 0)
-            NextWave();
+        _battleConfig = battleConfig;
+        _battle = new(battleConfig);
+        _battle.onUpdateSpawnCount += SpawnObj;
     }
 
-    void Spawn()
-    {
-        int amount = curWave.GetAmount(elapsedTime);
-    }
+    void Update() { _battle.Tick(Time.deltaTime); elapsedTime = _battle.ElapsedTime; }
 
-    int GetAmountToSpawn()
+    void SpawnObj(MonoBehaviour obj, int amount)
     {
-        if (curWave == null) return 0;
-        return curWave.GetAmount(elapsedTime);
-    }
-
-    void NextWave()
-    {
-        curWave = wavesQueue.Dequeue();
-        curWaveDuration = curWave.Duration;
-        curwaveElapseTime = 0;
+        Debug.Log($"spawning {amount} {obj.name}");
     }
 }

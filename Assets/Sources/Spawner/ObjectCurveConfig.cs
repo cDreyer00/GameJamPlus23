@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class SpawnFrequency : ScriptableObject
+public class ObjectCurveConfig : ScriptableObject
 {
     [SerializeField] SerializableKVP<MonoBehaviour, AnimationCurve> objectCurvePair;
     [SerializeField] float duration;
+    [SerializeField] int amount;
 
     public MonoBehaviour Obj => objectCurvePair.key;
     public AnimationCurve Curve => objectCurvePair.value;
     public float Duration => duration;
 
-    public (MonoBehaviour, int) GetAmount(float elapsedTime)
+    public int GetAmount(float elapsedTime)
     {
-        return (Obj, (int)Curve.Evaluate(elapsedTime));
+        return (int)Curve.Evaluate(elapsedTime);
     }
 
     void OnValidate()
     {
         duration = Curve.keys[^1].time;
+        amount = (int)Curve.keys[^1].value;
     }
 }
 
