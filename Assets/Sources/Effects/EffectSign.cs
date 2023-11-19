@@ -14,7 +14,15 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     public float Radius => radius;
 
-    public GenericPool<EffectSign> Pool { get; set; }
+    GenericPool<EffectSign> _pool;
+    public GenericPool<EffectSign> Pool
+    {
+        get => _pool; set
+        {
+            _pool = value;
+            Debug.Log($"pool setted for sign, is null -> {_pool == null}");
+        }
+    }
     public Effect Effect
     {
         get => effect;
@@ -27,7 +35,7 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.yellow;
     bool CanInteract => _curCameraDir == direction;
-
+    void Start() => Init();
     public void Init()
     {
         _sprite = GetComponentInChildren<SpriteRenderer>();
@@ -59,14 +67,16 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         _curLifeTime -= Time.deltaTime;
         if (_curLifeTime <= 0)
         {
-            Pool.Release(this);
+            // Pool.Release(this);
+            Destroy(gameObject);
             return;
         }
 
         if (CheckInteraction())
         {
             ApplyEffect();
-            Pool.Release(this);
+            // Pool.Release(this);
+            Destroy(gameObject);
         }
     }
 
@@ -92,9 +102,9 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         //     effect.ApplyEffect(e);
     }
 
-    public void OnGet(GenericPool<EffectSign> pool)
+    public void OnGet()
     {
-        Pool = pool;
+
     }
 
     void SetColor()

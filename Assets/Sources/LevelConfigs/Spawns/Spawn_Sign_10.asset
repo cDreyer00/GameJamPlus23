@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb2d4c6d3b77c64a8485bd496b34ba3, type: 3}
+  m_Name: Spawn_Sign_10
+  m_EditorClassIdentifier: 
+  objectCurvePair:
+    key: {fileID: 2395199984281271198, guid: cbb2982c12f901e42bc7a22ac706ca3e, type: 3}
+    value:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: -0.0033972212
+        outSlope: -0.0033972212
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 7.498213
+        value: -0.025473088
+        inSlope: 0.0045305365
+        outSlope: 0.0045305365
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 1
+        outWeight: 0.20906
+      - serializedVersion: 3
+        time: 15.104963
+        value: 4.9820967
+        inSlope: -0.0058635343
+        outSlope: -0.0058635343
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.2206688
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  duration: 15.104963
+  amount: 4

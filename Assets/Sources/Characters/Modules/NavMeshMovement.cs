@@ -6,10 +6,8 @@ using static Character;
 [RequireComponent(typeof(NavMeshAgent))]
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
-    [SerializeField]
-    NavMeshAgent agent;
-    [SerializeField]
-    Transform target;
+    [SerializeField] NavMeshAgent agent;
+    [SerializeField] Transform    target;
     public NavMeshAgent Agent => agent;
     public Transform Target
     {

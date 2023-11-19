@@ -8,23 +8,22 @@ using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour, IPoolable<Projectile>
 {
-    [SerializeField] int            damage;
-    [SerializeField] float          moveSpeed = 1;
-    [SerializeField] float          lifeTime;
+    [SerializeField] int damage;
+    [SerializeField] float moveSpeed = 1;
+    [SerializeField] float lifeTime;
     [SerializeField] AnimationCurve yAxisTrajectory;
 
     public Vector3 target;
 
     Transform _transform;
-    float     _currentLifeTime;
-    Vector3   _anchor;
+    float _currentLifeTime;
+    Vector3 _anchor;
 
 
     public List<string> ignoreList;
     public GenericPool<Projectile> Pool { get; set; }
-    public void OnGet(GenericPool<Projectile> pool)
+    public void OnGet()
     {
-        Pool = pool;
         Init();
     }
     public void OnRelease()
@@ -50,7 +49,8 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
         Move(moveSpeed * Time.deltaTime);
 
         _currentLifeTime -= Time.deltaTime;
-        if (_currentLifeTime <= 0) {
+        if (_currentLifeTime <= 0)
+        {
             if (Pool != null) Pool.Release(this);
             else Destroy(gameObject);
         }
@@ -64,11 +64,11 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
     void Move(float step)
     {
         var position = _transform.position;
-        var forward  = _transform.forward;
+        var forward = _transform.forward;
 
         var maxSqrDistance = Vector3.SqrMagnitude(_anchor - target);
-        var sqrDistance    = Vector3.SqrMagnitude(target - position);
-        var magnitude01    = ClampedPrimitiveExtensions.MapRangeTo01(sqrDistance, 0, maxSqrDistance);
+        var sqrDistance = Vector3.SqrMagnitude(target - position);
+        var magnitude01 = ClampedPrimitiveExtensions.MapRangeTo01(sqrDistance, 0, maxSqrDistance);
 
         //print(magnitude01);
 
@@ -80,10 +80,13 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
     }
     void OnTriggerEnter(Collider col)
     {
-        if (col.TryGetComponent<Character>(out var character)) {
-            if (ignoreList.Contains(character.Team)) {
+        if (col.TryGetComponent<Character>(out var character))
+        {
+            if (ignoreList.Contains(character.team)) {
                 return;
             }
+            if (character.CompareTag("Player")) return;
+            
             character.Events.onTakeDamage?.Invoke(damage);
         }
         if (Pool != null) Pool.Release(this);
