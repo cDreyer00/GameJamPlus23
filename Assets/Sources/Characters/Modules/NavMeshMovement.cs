@@ -1,11 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Sources.Characters.Modules;
 using UnityEngine;
 using UnityEngine.AI;
 using Sources.Systems.FSM;
 using static Character;
 
-[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(StateModule))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
     bool _registered;
@@ -25,15 +27,27 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     void Start()
     {
-        if (!_registered) {
-            var fsm = Character.GetModule<StateModule>().StateMachine;
-            fsm.Transition(State.Idle, () => target == null);
-            fsm.Transition(State.Idle, State.Chasing, () => target != null);
-            fsm[LifeCycle.Enter, State.Chasing] += () => agent.isStopped = false;
-            fsm[LifeCycle.Exit, State.Chasing] += () => agent.isStopped = true;
-            fsm[LifeCycle.Update, State.Chasing] += () => SetDestination(target.position);
+        if (Character.TryGetModule<StateModule>(out var stateModule)) {
+            if (!_registered) {
+                var fsm = stateModule.StateMachine;
+                fsm.Transition(State.Idle, () => target == null);
+                fsm.Transition(State.Idle, State.Chasing, () => target != null);
+                fsm[LifeCycle.Enter, State.Chasing] += () => agent.isStopped = false;
+                fsm[LifeCycle.Exit, State.Chasing] += () => agent.isStopped = true;
+                fsm[LifeCycle.Update, State.Chasing] += () => SetDestination(target.position);
+                Helpers.Delay(startCooldownTime, static self => self.SetTarget(GameManager.Instance.Player.transform), this);
+                _registered = true;
+            }
+        }
+        else {
+            Debug.LogWarning("NavMeshMovement: StateModule not found, using default behavior.");
             Helpers.Delay(startCooldownTime, static self => self.SetTarget(GameManager.Instance.Player.transform), this);
-            _registered = true;
+            Helpers.Repeat(
+                startCooldownTime + Time.fixedDeltaTime,
+                Time.fixedDeltaTime,
+                static self => self.SetDestination(self.target.position),
+                this
+            );
         }
     }
     protected override void Init()
