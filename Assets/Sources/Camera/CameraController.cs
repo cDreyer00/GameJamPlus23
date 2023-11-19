@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Windows.Speech;
 
 public enum Direction
 {
     Down,
-    Left,
-    Up,
     Right,
+    Up,
+    Left,
 }
 public class CameraController : Singleton<CameraController>
 {
@@ -18,31 +19,47 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] RotateMode rotateMode;
     [SerializeField] float rotDuration;
     [SerializeField] Transform wallRaycastAnchor;
+    [SerializeField] Direction dir;
 
     Vector3 curEuler = Vector3.zero;
     HashSet<Transform> walls = new();
     HashSet<Transform> hitWalls = new();
 
-    public Direction Direction => (Direction)(Math.Abs(curEuler.y / 90) % 4);
+    public Direction Direction => (Direction)(CurDirId % 4);
     public Camera Cam => cam;
+    int _curDirId = 0;
+    int CurDirId
+    {
+        get => _curDirId;
+        set
+        {
+            _curDirId = value;
+            _curDirId = _curDirId < 0 ? 3 : _curDirId;
+            _curDirId = _curDirId > 3 ? 0 : _curDirId;
+        }
+    }
 
     public event Action<Direction> camDirectionChanged;
 
     public void RotateLeft()
     {
+        CurDirId--;
         curEuler += Vector3.up * 90;
         Vector3 endValue = new(0, curEuler.y, 0);
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
 
+        dir = Direction;
         camDirectionChanged?.Invoke(Direction);
     }
 
     public void RotateRight()
     {
+        CurDirId++;
         curEuler += Vector3.down * 90;
         Vector3 endValue = new(0, curEuler.y, 0);
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
 
+        dir = Direction;
         camDirectionChanged?.Invoke(Direction);
     }
 

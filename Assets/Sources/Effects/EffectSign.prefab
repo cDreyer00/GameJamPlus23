@@ -32,7 +32,7 @@ Transform:
   - {fileID: 8976412925564630638}
   - {fileID: 6831843809497104444}
   m_Father: {fileID: 0}
-  m_RootOrder: -2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2395199984281271198
 MonoBehaviour:
@@ -50,8 +50,6 @@ MonoBehaviour:
   radius: 2
   effectDuration: 2
   lifeTime: 10
-  _circleSr: {fileID: 0}
-  _arrowSr: {fileID: 0}
 --- !u!1 &5337252237332286137
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,14 +74,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5337252237332286137}
-  m_LocalRotation: {x: 0.5000007, y: -0.49999928, z: 0.49999928, w: 0.5000007}
+  m_LocalRotation: {x: -0.4999979, y: 0.50000215, z: -0.50000215, w: -0.4999979}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5044286541477164782}
   m_RootOrder: -2
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: -270}
 --- !u!212 &4973564360439324724
 SpriteRenderer:
   m_ObjectHideFlags: 0
