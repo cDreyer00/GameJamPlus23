@@ -8,10 +8,6 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     [SerializeField] float effectDuration;
     [SerializeField] float lifeTime;
 
-    [Header("Sprites")]
-    [SerializeField] SpriteRenderer _circleSr;
-    [SerializeField] SpriteRenderer _arrowSr;
-
     public float Radius => radius;
 
     GenericPool<EffectSign> _pool;
@@ -35,11 +31,15 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.yellow;
     bool CanInteract => _curCameraDir == direction;
-    void Start() => Init();
-    public void Init()
+
+    void Start()
     {
         _sprite = GetComponentInChildren<SpriteRenderer>();
+        Init();
+    }
 
+    public void Init()
+    {
         direction = (Direction)Random.Range(0, 4);
         Vector3 lookAt = CameraController.DirectionToVector3(direction) + transform.position;
         transform.LookAt(lookAt);
@@ -53,13 +53,22 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         _sprite.color = ColorByType;
         _curLifeTime = lifeTime;
 
-        CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
         OnCamDirectionChanged(CameraController.Instance.Direction);
     }
 
     void OnValidate()
     {
         transform.localScale = Vector3.one * radius;
+    }
+
+    void OnEnable()
+    {
+        CameraController.Instance.camDirectionChanged += OnCamDirectionChanged;
+    }
+
+    void OnDisable()
+    {
+        CameraController.Instance.camDirectionChanged -= OnCamDirectionChanged;
     }
 
     void Update()
