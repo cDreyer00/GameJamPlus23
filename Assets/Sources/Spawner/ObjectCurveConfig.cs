@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,18 +21,5 @@ public class ObjectCurveConfig : ScriptableObject
     {
         duration = Curve.keys[^1].time;
         amount = (int)Curve.keys[^1].value;
-    }
-}
-
-[Serializable]
-public struct SerializableKVP<TKey, TValue>
-{
-    public TKey key;
-    public TValue value;
-
-    public SerializableKVP(TKey key, TValue value)
-    {
-        this.key = key;
-        this.value = value;
     }
 }
