@@ -1,10 +1,20 @@
-﻿using Sources.Systems.FSM;
+﻿using System;
+using Sources.Systems.FSM;
 
 namespace Sources.Characters.Modules
 {
     public class StateModule : CharacterModule
     {
-        StateMachine<Character.State> _stateMachine = new(Character.State.Idle);
-        protected override void Init() {}
+        readonly StateMachine<Character.State> _stateMachine = new(Character.State.Idle);
+        public StateMachine<Character.State> StateMachine => _stateMachine;
+        protected override void Init()
+        {
+            _stateMachine.SetSubState(Character.State.InControl, Character.State.Idle);
+            _stateMachine.SetSubState(Character.State.InControl, Character.State.Chasing);
+            _stateMachine.SetSubState(Character.State.InControl, Character.State.Attacking);
+            _stateMachine.SetSubState(Character.State.Yielded, Character.State.Controlled);
+            _stateMachine.SetSubState(Character.State.Yielded, Character.State.Dying);
+        }
+        void Update() => _stateMachine.Update();
     }
 }
