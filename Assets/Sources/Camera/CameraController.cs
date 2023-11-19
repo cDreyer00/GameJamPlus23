@@ -13,7 +13,7 @@ public enum Direction
 }
 public class CameraController : Singleton<CameraController>
 {
-    [SerializeField] UnityEngine.Camera cam;
+    [SerializeField] Camera cam;
     [SerializeField] Transform camAnchor;
     [SerializeField] RotateMode rotateMode;
     [SerializeField] float rotDuration;
@@ -24,7 +24,7 @@ public class CameraController : Singleton<CameraController>
     HashSet<Transform> hitWalls = new();
 
     public Direction Direction => (Direction)(Math.Abs(curEuler.y / 90) % 4);
-    public UnityEngine.Camera Cam => cam;
+    public Camera Cam => cam;
 
     public event Action<Direction> camDirectionChanged;
 

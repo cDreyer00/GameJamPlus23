@@ -24,6 +24,7 @@ public class QueuePool<T> : GenericPool<T> where T : MonoBehaviour
 
             if (obj is IPoolable<T> poolable)
             {
+                poolable.Pool = this;
                 poolable.OnCreated();
             }
 
@@ -39,23 +40,21 @@ public class QueuePool<T> : GenericPool<T> where T : MonoBehaviour
             CreateObjects(Original, 1, parent);
         }
 
-        T t = q.Dequeue();
+        T obj = q.Dequeue();
 
-        var transform = t.transform;
+        var transform = obj.transform;
         transform.SetParent(null);
 
         transform.position = position;
         transform.rotation = rotation;
 
-        t.gameObject.SetActive(true);
+        obj.gameObject.SetActive(true);
 
-        if (t is IPoolable<T> poolable)
-        {
-            poolable.OnGet(this);
-        }
+        IPoolable<T> poolable = obj.GetComponent<IPoolable<T>>();
+        poolable?.OnGet();
 
-        InstanceTaken(t);
-        return t;
+        InstanceTaken(obj);
+        return obj;
     }
 
     public override T Get(Transform parent)
@@ -74,11 +73,8 @@ public class QueuePool<T> : GenericPool<T> where T : MonoBehaviour
         transform.localEulerAngles = Vector3.zero;
 
         t.gameObject.SetActive(true);
-
         if (t is IPoolable<T> poolable)
-        {
-            poolable.OnGet(this);
-        }
+            poolable.OnGet();
 
         InstanceTaken(t);
         return t;

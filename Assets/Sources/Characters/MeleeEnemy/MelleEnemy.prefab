@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4864197767820366391}
-  - component: {fileID: 8135059297603922165}
   - component: {fileID: 1516845875696123519}
   - component: {fileID: 6025422007174435882}
   - component: {fileID: 8319797883635615551}
   - component: {fileID: 6223743307461556125}
   - component: {fileID: 2793757733321064199}
+  - component: {fileID: -6668827168535340871}
   m_Layer: 6
   m_Name: MelleEnemy
   m_TagString: Enemy
@@ -29,7 +29,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6089110235842682470}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -38,29 +37,8 @@ Transform:
   - {fileID: 8207677253409384896}
   - {fileID: 3415925118205090171}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8135059297603922165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6089110235842682470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e39aea157127f429b84e80ac51d973, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stateMachine:
-    transitions: []
-    currentState: 0
-  damage: 10
-  attackDelay: 0.5
-  idleTime: 1.1
-  agent: {fileID: 8319797883635615551}
-  damageAudio: {fileID: 0}
-  attackAudio: {fileID: 0}
-  feedback: {fileID: 798822857582975139}
 --- !u!54 &1516845875696123519
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -140,13 +118,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6089110235842682470}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 277ce2849e3145041a73399a48c2909f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _agent: {fileID: 8319797883635615551}
-  _target: {fileID: 0}
+  agent: {fileID: 0}
+  target: {fileID: 0}
 --- !u!114 &2793757733321064199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,6 +138,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atSameDirection: 0
+--- !u!114 &-6668827168535340871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6089110235842682470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac37dc7230714c4c93361a67ee7c5b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6462346100620335737
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,13 +177,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6462346100620335737}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 3.4047413, y: 3.4047413, z: 3.4047413}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4864197767820366391}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9180865843836742033
 SpriteRenderer:
@@ -267,7 +257,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &798822857582975139
 MonoBehaviour:
   m_ObjectHideFlags: 0

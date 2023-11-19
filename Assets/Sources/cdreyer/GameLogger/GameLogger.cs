@@ -62,7 +62,7 @@ public class Log
     {
         this.message = message;
 
-        this.traceMessages = stackTrace.Split(
+        traceMessages = stackTrace.Split(
             new string[] { "\n" },
             StringSplitOptions.RemoveEmptyEntries
         );

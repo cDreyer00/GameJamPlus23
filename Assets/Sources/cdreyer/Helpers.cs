@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Object = UnityEngine.Object;
 
 public static class Helpers
 {
@@ -42,7 +43,7 @@ public static class Helpers
 
     public static void DeleteAllChildren(this Transform t)
     {
-        foreach (Transform child in t) MonoBehaviour.Destroy(child.gameObject);
+        foreach (Transform child in t) Object.Destroy(child.gameObject);
     }
 
     public static List<Transform> GetAllChildren(Transform transform, List<Transform> children = null)
