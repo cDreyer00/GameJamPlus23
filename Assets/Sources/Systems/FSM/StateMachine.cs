@@ -27,6 +27,7 @@ namespace Sources.Systems.FSM
         {
             CurrentState = initialState;
             _stateEqualityComparer = stateEqualityComparer ?? EqualityComparer<TState>.Default;
+            _anyTransitionsSet = new();
         }
         EqualityComparer<TState> _stateEqualityComparer;
         public TState CurrentState { get; private set; }
@@ -37,7 +38,7 @@ namespace Sources.Systems.FSM
         Action[] _eventTable = new Action[LifeCycleEvents * StateCount];
 
         public void Transition(TState src, TState dst, Func<bool> predicate = null)
-        {
+        {            
             if (!_transitionsMap.TryGetValue(src, out var transitions)) {
                 transitions = new List<Destination>();
                 _transitionsMap.Add(src, transitions);
@@ -45,7 +46,7 @@ namespace Sources.Systems.FSM
             transitions.Add(new Destination { state = dst, predicate = predicate ?? (() => true) });
         }
         public void Transition(TState dst, Func<bool> predicate = null)
-        {
+        {            
             _anyTransitionsSet.Add(new Destination { state = dst, predicate = predicate ?? (() => true) });
         }
         public Action this[LifeCycle lifeCycle, TState state]

@@ -27,7 +27,7 @@ public class Spawner : MonoBehaviour
         _battle = new(battleConfig);
         _battle.onUpdateSpawnCount += SpawnObj;
 
-        // initialize pool
+        // initialize pools
         var wavesObjs = battleConfig.GetObjects();
         foreach (var objs in wavesObjs)
             foreach (var obj in objs)

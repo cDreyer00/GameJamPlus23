@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waves:
   - {fileID: 11400000, guid: 6e0ba52085ffc1c44998995b75ee4772, type: 2}
-  duration: 20.427868
+  duration: 20

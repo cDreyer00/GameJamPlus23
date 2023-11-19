@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class Character : MonoBehaviour, ICharacter
 {
-    readonly StateMachine<State>      _stateMachine = new(State.Idle);
+    StateMachine<State>      _stateMachine = new(State.Idle);
     readonly HashSet<CharacterModule> _modules = new();
     public Vector3 Position => transform.position;
     readonly CharacterEvents          _events  = new();
@@ -23,6 +23,11 @@ public class Character : MonoBehaviour, ICharacter
         module = GetModule<T>();
         return module != null;
     }
+
+    void Awake() {
+            
+    }
+
     void Update()
     {
         _stateMachine.Update();
