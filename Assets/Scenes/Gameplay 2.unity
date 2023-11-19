@@ -2657,6 +2657,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _battleConfig: {fileID: 11400000, guid: a5e41fcc1a53d1b46b2d5ee2d5d35f97, type: 2}
   elapsedTime: 0
+  navMeshSurface: {fileID: 4930184713420487662}
 --- !u!1001 &1826503812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3154,6 +3155,17 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 9047831960208752464, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
   m_PrefabInstance: {fileID: 8993667439726160967}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4930184713420487662 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7451326573356042203, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+  m_PrefabInstance: {fileID: 8993667439726160967}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5624645765711225116
 MonoBehaviour:
   m_ObjectHideFlags: 0

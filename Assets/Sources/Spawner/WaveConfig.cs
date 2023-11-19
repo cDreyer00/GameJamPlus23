@@ -17,4 +17,6 @@ public class WaveConfig : ScriptableObject
     {
         duration = objectsList.OrderBy(obj => obj.Duration).ToArray()[^1].Duration;
     }
+
+    public MonoBehaviour[] GetObjects() => objectsList.Select(o => o.Obj).ToArray();
 }

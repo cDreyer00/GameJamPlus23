@@ -19,7 +19,7 @@ public class PlayerController : Character
     float  _baseDrag;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
-    public override string Team => "Player";
+    // public override string Team => "Player";
 
     [SerializeField] FeedbackDamage feed;
     [SerializeField] CameraShake    cameraShake;
@@ -73,7 +73,7 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        proj.IgnoreTeam(Team);
+        // proj.IgnoreTeam(Team);
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)

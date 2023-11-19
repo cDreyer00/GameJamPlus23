@@ -21,4 +21,6 @@ public class BattleConfig : ScriptableObject
 
         duration = totalTimer;
     }
+
+    public MonoBehaviour[][] GetObjects() => waves.Select(w => w.GetObjects()).ToArray();
 }

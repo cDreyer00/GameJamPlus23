@@ -50,9 +50,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
         t.gameObject.SetActive(true);
 
         if (t is IPoolable<T> poolable)
-        {
-            poolable.OnGet(this);
-        }
+            poolable.OnGet();
 
         InstanceTaken(t);
         return t;
@@ -75,9 +73,7 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
         t.gameObject.SetActive(true);
 
         if (t is IPoolable<T> poolable)
-        {
-            poolable.OnGet(this);
-        }
+            poolable.OnGet();
 
         InstanceTaken(t);
         return t;
@@ -88,10 +84,8 @@ public class StackPool<T> : GenericPool<T> where T : MonoBehaviour
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(parent);
 
-        if (obj is IPoolable<T> poolable)
-        {
-            poolable.OnRelease();
-        }
+        IPoolable<T> poolable = obj.GetComponent<IPoolable<T>>();
+        poolable?.OnRelease();
 
         InstanceReleased(obj);
         s.Push(obj);

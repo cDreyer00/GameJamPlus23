@@ -22,9 +22,8 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
 
     public List<string> ignoreList;
     public GenericPool<Projectile> Pool { get; set; }
-    public void OnGet(GenericPool<Projectile> pool)
+    public void OnGet()
     {
-        Pool = pool;
         Init();
     }
     public void OnRelease()
@@ -81,9 +80,9 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
     void OnTriggerEnter(Collider col)
     {
         if (col.TryGetComponent<Character>(out var character)) {
-            if (ignoreList.Contains(character.Team)) {
-                return;
-            }
+            // if (ignoreList.Contains(character.Team)) {
+            //     return;
+            // }
             character.Events.onTakeDamage?.Invoke(damage);
         }
         if (Pool != null) Pool.Release(this);

@@ -6,13 +6,12 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public abstract class Character : MonoBehaviour, ICharacter
+public class Character : MonoBehaviour, ICharacter
 {
     readonly StateMachine<State>      _stateMachine = new(State.Idle);
     readonly HashSet<CharacterModule> _modules = new();
-    readonly CharacterEvents          _events  = new();
-    public abstract string Team { get; }
     public Vector3 Position => transform.position;
+    readonly CharacterEvents          _events  = new();
     public CharacterEvents Events => _events;
     public StateMachine<State> StateMachine => _stateMachine;
     public IReadOnlyCollection<CharacterModule> Modules => _modules;
