@@ -10,8 +10,6 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     NavMeshAgent agent;
     [SerializeField]
     Transform target;
-    [SerializeField]
-    StateMachine<State> fsm;
     public NavMeshAgent Agent => agent;
     public Transform Target
     {
@@ -24,7 +22,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     void Start()
     {
-        fsm ??= Character.StateMachine;
+        var fsm = Character.StateMachine;
         fsm.Transition(State.Idle, () => target == null);
         fsm.Transition(State.Idle, State.Chasing, () => target != null);
         fsm[LifeCycle.Enter, State.Chasing] += () => agent.isStopped = false;
@@ -36,11 +34,4 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         if (agent == null) agent = GetComponent<NavMeshAgent>();
     }
     public void SetDestination(Vector3 position) => agent.SetDestination(position);
-}
-
-public enum MoveType
-{
-    Chase,
-    Idle,
-    Random
 }

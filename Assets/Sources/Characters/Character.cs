@@ -9,8 +9,8 @@ using Random = UnityEngine.Random;
 public abstract class Character : MonoBehaviour, ICharacter
 {
     readonly StateMachine<State>      _stateMachine = new(State.Idle);
-    readonly HashSet<CharacterModule> _modules = new();
-    readonly CharacterEvents          _events  = new();
+    readonly HashSet<CharacterModule> _modules      = new();
+    readonly CharacterEvents          _events       = new();
     public abstract string Team { get; }
     public Vector3 Position => transform.position;
     public CharacterEvents Events => _events;
@@ -24,17 +24,28 @@ public abstract class Character : MonoBehaviour, ICharacter
         module = GetModule<T>();
         return module != null;
     }
+    void Awake()
+    {
+        _stateMachine.SetSubState(State.InControl, State.Idle);
+        _stateMachine.SetSubState(State.InControl, State.Chasing);
+        _stateMachine.SetSubState(State.InControl, State.Attacking);
+        _stateMachine.SetSubState(State.Yielded, State.Controlled);
+        _stateMachine.SetSubState(State.Yielded, State.Dying);
+    }
     void Update()
     {
         _stateMachine.Update();
     }
     public enum State
     {
+        // InControl:
+        InControl,
         Idle,
         Chasing,
         Attacking,
+        // Yielded:
+        Yielded,
         Controlled,
         Dying,
-        Finalized,
     }
 }
