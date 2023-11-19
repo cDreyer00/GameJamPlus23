@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using Sources.Systems.FSM;
@@ -8,6 +9,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform    target;
+    [SerializeField] float        startCooldownTime;
     public NavMeshAgent Agent => agent;
     public Transform Target
     {
@@ -26,6 +28,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         fsm[LifeCycle.Enter, State.Chasing] += () => agent.isStopped = false;
         fsm[LifeCycle.Exit, State.Chasing] += () => agent.isStopped = true;
         fsm[LifeCycle.Update, State.Chasing] += () => SetDestination(target.position);
+        Helpers.Delay(startCooldownTime, static self => self.SetTarget(GameManager.Instance.Player.transform), this);
     }
     protected override void Init()
     {

@@ -118,13 +118,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6089110235842682470}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 277ce2849e3145041a73399a48c2909f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   target: {fileID: 0}
+  startCooldownTime: 1.1
 --- !u!114 &2793757733321064199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac37dc7230714c4c93361a67ee7c5b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: 
 --- !u!1 &6462346100620335737
 GameObject:
   m_ObjectHideFlags: 0

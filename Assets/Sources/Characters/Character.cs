@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class Character : MonoBehaviour, ICharacter
+public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
 {
     readonly StateMachine<State>      _stateMachine = new(State.Idle);
     readonly HashSet<CharacterModule> _modules      = new();
@@ -33,6 +33,11 @@ public class Character : MonoBehaviour, ICharacter
         _stateMachine.SetSubState(State.Yielded, State.Controlled);
         _stateMachine.SetSubState(State.Yielded, State.Dying);
     }
+    void Start()
+    {
+        _events.onDied += OnDied;
+    }
+    void OnDied(ICharacter character) => Pool.Release(this);
     void Update()
     {
         _stateMachine.Update();
@@ -49,4 +54,8 @@ public class Character : MonoBehaviour, ICharacter
         Controlled,
         Dying,
     }
+    public GenericPool<MonoBehaviour> Pool { get; set; }
+    public void OnGet() {}
+    public void OnRelease() {}
+    public void OnCreated() {}
 }

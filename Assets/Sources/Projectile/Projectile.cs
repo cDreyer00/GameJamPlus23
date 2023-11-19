@@ -85,8 +85,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
             if (ignoreList.Contains(character.team)) {
                 return;
             }
-            if (character.CompareTag("Player")) return;
-            
+
             character.Events.onTakeDamage?.Invoke(damage);
         }
         if (Pool != null) Pool.Release(this);

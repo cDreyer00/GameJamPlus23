@@ -7,8 +7,14 @@ using UnityEngine;
 
 namespace Sources.Systems.FSM
 {
+    public abstract class StateMachine
+    {
+        public abstract void Update();
+        public abstract void FixedUpdate();
+    }
+
     [Serializable]
-    public class StateMachine<TState> where TState : Enum
+    public class StateMachine<TState> : StateMachine where TState : Enum
     {
         static int LifeCycleEvents => Cached.EnumValues<LifeCycle>().Length;
         static int StateCount => Cached.EnumValues<TState>().Length;
@@ -91,7 +97,7 @@ namespace Sources.Systems.FSM
             return default;
         }
 
-        public void Update()
+        public override void Update()
         {
             var transition = GetTransition();
             if (transition != null) ChangeState(transition.Value.state);
@@ -99,7 +105,7 @@ namespace Sources.Systems.FSM
             _eventTable[AsInt32(LifeCycle.Update) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
         }
 
-        public void FixedUpdate()
+        public override void FixedUpdate()
         {
             _eventTable[AsInt32(LifeCycle.FixedUpdate) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
         }
