@@ -73,7 +73,7 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        // proj.IgnoreTeam(Team);
+        // proj.IgnoreTeam(Team);        
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)
@@ -85,6 +85,7 @@ public class PlayerController : Character
         rb.velocity = Vector3.zero;
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
+    
     static void Died(ICharacter character)
     {
         GameManager.Instance.ReloadScene();
