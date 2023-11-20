@@ -31,7 +31,7 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         set => effect = value;
     }
 
-    Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.yellow;
+    Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.red;
     bool CanInteract => _curCameraDir == direction;
 
     void Start()
@@ -54,9 +54,11 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         {
             EffectType.Freeze => new FreezeEffect(),
             EffectType.Confusion => new ConfusionEffect(),
+            EffectType.Damage => new DamageEffect(),
             _ => null
         };
         effect.duration = effectDuration;
+        effect.damage = effectDuration;
 
         _sprite.color = ColorByType;
         _curLifeTime = lifeTime;
@@ -141,4 +143,4 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     }
 }
 
-public enum EffectType { Freeze, Confusion }
+public enum EffectType { Freeze, Confusion, Damage }

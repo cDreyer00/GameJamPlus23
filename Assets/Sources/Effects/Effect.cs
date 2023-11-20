@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class Effect
 {
+    public float damage = 0;
     public float duration = 0;
 
     public abstract void ApplyEffect(Character character);
@@ -19,6 +20,14 @@ public class FreezeEffect : Effect
 {
     public override void ApplyEffect(Character character)
     {        
-        character.Events.freeze.Invoke(duration);
+        character.Events.freeze?.Invoke(duration);
+    }
+}
+
+public class DamageEffect : Effect
+{
+    public override void ApplyEffect(Character character)
+    {        
+        character.Events.onTakeDamage?.Invoke(damage);
     }
 }

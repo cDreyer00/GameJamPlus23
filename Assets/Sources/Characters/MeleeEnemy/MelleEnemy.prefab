@@ -273,6 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0, b: 0, a: 1}
   color2: {r: 1, g: 1, b: 1, a: 1}
+  duration: 0.25
 --- !u!114 &7706200541286893419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,11 +297,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: health.max
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: health.value
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2666873333853790762, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: m_Pivot.x

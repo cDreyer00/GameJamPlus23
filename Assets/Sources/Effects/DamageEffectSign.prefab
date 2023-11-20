@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5044286541477164782}
   - component: {fileID: 2395199984281271198}
   m_Layer: 0
-  m_Name: EffectSign
+  m_Name: DamageEffectSign
   m_TagString: EffectSign
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0590064896fc7e4418c79273d9a71105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 0
+  effectType: 2
   radius: 2
-  effectDuration: 2
+  effectDuration: 20
   lifeTime: 10
 --- !u!1 &5337252237332286137
 GameObject:

@@ -4,13 +4,14 @@ using UnityEngine;
 public class FeedbackDamage : CharacterModule
 {
     [SerializeField] Color color, color2;
+    [SerializeField] float duration;
 
     SpriteRenderer _sprite;
 
     protected override void Init()
     {
         _sprite = GetComponent<SpriteRenderer>();
-        Character.Events.onTakeDamage += (amount) => StartCoroutine(DamageColor());
+        Character.Events.onTakeDamage += DamageColor;
         Character.Events.freeze += Freeze;
     }
 
@@ -20,11 +21,10 @@ public class FeedbackDamage : CharacterModule
             _sprite.color = color2;
     }
 
-    public IEnumerator DamageColor()
+    void DamageColor(float dmgAmount)
     {
         _sprite.color = color;
-        yield return new WaitForSeconds(.5f);
-        _sprite.color = color2;
+        Helpers.Delay(duration, () => _sprite.color = color2);
     }
 
 
