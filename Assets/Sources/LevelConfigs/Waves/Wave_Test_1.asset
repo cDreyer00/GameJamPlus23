@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff0248bd53353b40812b03aecb8f422, type: 3}
   m_Name: Wave_Test_1
   m_EditorClassIdentifier: 
-  objectsList:
-  - {fileID: 11400000, guid: 51a350098fe8e7c4ea7edaf085a8e129, type: 2}
-  - {fileID: 11400000, guid: f9420b710261d4a41b92f06a2d1105bd, type: 2}
-  duration: 26.008167
+  objectsList: []
+  duration: 34.9

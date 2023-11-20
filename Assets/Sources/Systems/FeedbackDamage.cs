@@ -7,14 +7,17 @@ public class FeedbackDamage : CharacterModule
 
     SpriteRenderer _sprite;
 
-    void Awake()
-    {
-        _sprite = GetComponent<SpriteRenderer>();
-    }
-
     protected override void Init()
     {
+        _sprite = GetComponent<SpriteRenderer>();
         Character.Events.onTakeDamage += (amount) => StartCoroutine(DamageColor());
+        Character.Events.freeze += Freeze;
+    }
+
+    void OnEnable()
+    {
+        if (_sprite != null)
+            _sprite.color = color2;
     }
 
     public IEnumerator DamageColor()
@@ -24,5 +27,12 @@ public class FeedbackDamage : CharacterModule
         _sprite.color = color2;
     }
 
+
+    void Freeze(float duration)
+    {
+        Debug.Log("freeze feedback");
+        _sprite.color = Color.cyan;
+        Helpers.Delay(duration, () => _sprite.color = color2);
+    }
 
 }

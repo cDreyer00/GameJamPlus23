@@ -15,6 +15,8 @@ public class WaveConfig : ScriptableObject
 
     void OnValidate()
     {
+        if (objectsList.Length == 0) return;
+        
         duration = objectsList.OrderBy(obj => obj.Duration).ToArray()[^1].Duration;
     }
 

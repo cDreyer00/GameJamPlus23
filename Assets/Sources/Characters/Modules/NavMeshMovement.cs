@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Sources.Systems.FSM;
 using Unity.VisualScripting;
+using UnityEditor;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class NavMeshMovement : CharacterModule, IMovementModule
@@ -56,10 +57,22 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     protected override void Init()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
+
+        Debug.Log("enemy freeze subscribed");
+        Character.Events.freeze += Freeze;
     }
     public void SetDestination(Vector3 position)
     {
         if (this.IsDestroyed() || !gameObject.activeInHierarchy) return;
         agent.SetDestination(position);
+    }
+    void Freeze(float duration)
+    {
+        agent.isStopped = true;
+        Helpers.Delay(duration, () =>
+        {
+            if (this.IsDestroyed() || !gameObject.activeInHierarchy) return;
+            agent.isStopped = false;
+        });
     }
 }

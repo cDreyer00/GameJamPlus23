@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 {
-    [SerializeField] Direction direction;
-    Effect effect;
+    [SerializeField] EffectType effectType;
     [SerializeField] float radius = 1f;
     [SerializeField] float effectDuration;
     [SerializeField] float lifeTime;
 
+    Effect effect;
+    Direction direction;
+    GenericPool<EffectSign> _pool;
+    SpriteRenderer _sprite;
+    Direction _curCameraDir;
+    float _curLifeTime;
+
     public float Radius => radius;
 
-    GenericPool<EffectSign> _pool;
     public GenericPool<EffectSign> Pool
     {
         get => _pool;
@@ -19,15 +24,12 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
             _pool = value;
         }
     }
+
     public Effect Effect
     {
         get => effect;
         set => effect = value;
     }
-
-    SpriteRenderer _sprite;
-    Direction _curCameraDir;
-    float _curLifeTime;
 
     Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.yellow;
     bool CanInteract => _curCameraDir == direction;
@@ -48,8 +50,14 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         SetColor();
 
         // set effect
-        int randEffect = Random.Range(0, 2);
-        effect = randEffect switch { 0 => new FreezeEffect(), 1 => new ConfusionEffect(), _ => null };
+        effect = effectType switch
+        {
+            EffectType.Freeze => new FreezeEffect(),
+            EffectType.Confusion => new ConfusionEffect(),
+            _ => null
+        };
+        effect.duration = effectDuration;
+
         _sprite.color = ColorByType;
         _curLifeTime = lifeTime;
 
@@ -132,3 +140,5 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     }
 }
+
+public enum EffectType { Freeze, Confusion }

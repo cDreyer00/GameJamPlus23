@@ -56,15 +56,25 @@ public class Spawner : MonoBehaviour
 
         for (; amount > 0; amount--)
         {
-            pool.Get(GetSpawnPosition(), Quaternion.identity);
-            spawnedInstances.Add(obj);
+            var i = pool.Get(GetSpawnPosition(), Quaternion.identity);
+            spawnedInstances.Add(i);
             pool.onInstanceReleased += OnInstanceRelease;
         }
     }
 
     public T[] GetInstancesByTag<T>(string tag) where T : MonoBehaviour
     {
-        var targets = spawnedInstances.Where(i => i.CompareTag(tag));
+        var targets = spawnedInstances.Where(i =>
+        {
+            if (i.IsDestroyed() || !i.gameObject.activeInHierarchy)
+            {
+                spawnedInstances.Remove(i);
+                return false;
+            }
+
+            return i.CompareTag(tag);
+        }).ToArray();
+
         List<T> values = new();
         foreach (var t in targets)
             if (t.TryGetComponent(out T type))
