@@ -19,7 +19,6 @@ public class PlayerController : Character
     float  _baseDrag;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
-    // public override string Team => "Player";
 
     [SerializeField] FeedbackDamage feed;
     [SerializeField] CameraShake    cameraShake;
@@ -28,6 +27,7 @@ public class PlayerController : Character
 
     void Start()
     {
+        team = "Player";
         _cam = CameraController.Instance.Cam;
         _baseDrag = rb.drag;
 
@@ -73,7 +73,7 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        // proj.IgnoreTeam(Team);        
+        proj.IgnoreTeam(team);        
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)
@@ -85,7 +85,7 @@ public class PlayerController : Character
         rb.velocity = Vector3.zero;
         rb.AddForce(dir * dashForce, ForceMode.Impulse);
     }
-    
+
     static void Died(ICharacter character)
     {
         GameManager.Instance.ReloadScene();

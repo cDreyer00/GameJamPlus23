@@ -6,14 +6,14 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class Character : MonoBehaviour, ICharacter
+public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
 {
-    StateMachine<State>      _stateMachine = new(State.Idle);
     readonly HashSet<CharacterModule> _modules = new();
-    public Vector3 Position => transform.position;
     readonly CharacterEvents          _events  = new();
+
+    public string team = "";
+    public Vector3 Position => transform.position;
     public CharacterEvents Events => _events;
-    public StateMachine<State> StateMachine => _stateMachine;
     public IReadOnlyCollection<CharacterModule> Modules => _modules;
     public bool AddModule(CharacterModule module) => _modules.Add(module);
     public bool RemoveModule(CharacterModule module) => _modules.Remove(module);
@@ -23,22 +23,28 @@ public class Character : MonoBehaviour, ICharacter
         module = GetModule<T>();
         return module != null;
     }
-
-    void Awake() {
-            
-    }
-
-    void Update()
+    void Start()
     {
-        _stateMachine.Update();
+        _events.onDied += OnDied;
     }
+    void OnDied(ICharacter character) => Pool.Release(this);
     public enum State
     {
+        // InControl:
+        InControl,
         Idle,
         Chasing,
         Attacking,
+        // Yielded:
+        Yielded,
         Controlled,
         Dying,
-        Finalized,
     }
+    public GenericPool<MonoBehaviour> Pool { get; set; }
+    public void OnGet()
+    {
+        _events.onInitialized?.Invoke();
+    }
+    public void OnRelease() {}
+    public void OnCreated() {}
 }

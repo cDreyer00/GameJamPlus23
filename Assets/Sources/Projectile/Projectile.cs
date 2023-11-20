@@ -82,11 +82,10 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
     {
         if (col.TryGetComponent<Character>(out var character))
         {
-            // if (ignoreList.Contains(character.Team)) {
-            //     return;
-            // }
-            if (character.CompareTag("Player")) return;
-            
+            if (ignoreList.Contains(character.team)) {
+                return;
+            }
+
             character.Events.onTakeDamage?.Invoke(damage);
         }
         if (Pool != null) Pool.Release(this);

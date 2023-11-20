@@ -134,6 +134,35 @@ public static class Helpers
             action?.Invoke();
         }
     }
+    public static void Delay<TState>(float secs, Action<TState> action, TState state)
+    {
+        if (ayncHolder == null)
+            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+
+        ayncHolder.StartCoroutine(C(secs, action, state));
+
+        static IEnumerator C(float secs, Action<TState> action, TState state)
+        {
+            yield return GetWait(secs);
+            action?.Invoke(state);
+        }
+    }
+    public static void Repeat<TState>(float delay, float period, Action<TState> action, TState state)
+    {
+        if (ayncHolder == null)
+            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+
+        ayncHolder.StartCoroutine(C(delay, period, action, state));
+
+        static IEnumerator C(float delay, float period, Action<TState> action, TState state)
+        {
+            yield return GetWait(delay);
+            while (true) {
+                action?.Invoke(state);
+                yield return GetWait(period);
+            }
+        }
+    }
     public static void WaitUntil(Func<bool> predicate, Action action)
     {
         if (ayncHolder == null)
