@@ -5,7 +5,7 @@ using Sources.Characters.Modules;
 using UnityEngine;
 using UnityEngine.AI;
 using Sources.Systems.FSM;
-using static Character;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class NavMeshMovement : CharacterModule, IMovementModule
@@ -13,8 +13,8 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     bool _registered;
 
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform    target;
-    [SerializeField] float        startCooldownTime;
+    [SerializeField] Transform target;
+    [SerializeField] float startCooldownTime;
     public NavMeshAgent Agent => agent;
     public Transform Target
     {
@@ -27,19 +27,22 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     void Start()
     {
-        if (Character.TryGetModule<StateModule>(out var stateModule)) {
-            if (!_registered) {
+        if (Character.TryGetModule<StateModule>(out var stateModule))
+        {
+            if (!_registered)
+            {
                 var fsm = stateModule.StateMachine;
-                fsm.Transition(State.Idle, () => target == null);
-                fsm.Transition(State.Idle, State.Chasing, () => target != null);
-                fsm[LifeCycle.Enter, State.Chasing] += () => agent.isStopped = false;
-                fsm[LifeCycle.Exit, State.Chasing] += () => agent.isStopped = true;
-                fsm[LifeCycle.Update, State.Chasing] += () => SetDestination(target.position);
+                fsm.Transition(Character.State.Idle, () => target == null);
+                fsm.Transition(Character.State.Idle, Character.State.Chasing, () => target != null);
+                fsm[LifeCycle.Enter, Character.State.Chasing] += () => agent.isStopped = false;
+                fsm[LifeCycle.Exit, Character.State.Chasing] += () => agent.isStopped = true;
+                fsm[LifeCycle.Update, Character.State.Chasing] += () => SetDestination(target.position);
                 Helpers.Delay(startCooldownTime, static self => self.SetTarget(GameManager.Instance.Player.transform), this);
                 _registered = true;
             }
         }
-        else {
+        else
+        {
             Debug.LogWarning("NavMeshMovement: StateModule not found, using default behavior.");
             Helpers.Delay(startCooldownTime, static self => self.SetTarget(GameManager.Instance.Player.transform), this);
             Helpers.Repeat(
@@ -54,5 +57,9 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
     }
-    public void SetDestination(Vector3 position) => agent.SetDestination(position);
+    public void SetDestination(Vector3 position)
+    {
+        if (this.IsDestroyed() || !gameObject.activeInHierarchy) return;
+        agent.SetDestination(position);
+    }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 {
     [SerializeField] Direction direction;
-    [SerializeField] Effect effect;
+    Effect effect;
     [SerializeField] float radius = 1f;
     [SerializeField] float effectDuration;
     [SerializeField] float lifeTime;
@@ -13,10 +13,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     GenericPool<EffectSign> _pool;
     public GenericPool<EffectSign> Pool
     {
-        get => _pool; set
+        get => _pool;
+        set
         {
             _pool = value;
-            Debug.Log($"pool setted for sign, is null -> {_pool == null}");
         }
     }
     public Effect Effect
@@ -105,10 +105,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     void ApplyEffect()
     {
-        //TODO: apply effect to all enemies in radius
-        // var enemies = SpawnerSrevice.MeleeEnemySpawner.GetAllEnemies();
-        // foreach (var e in enemies)
-        //     effect.ApplyEffect(e);
+        var spawner = GameManager.Instance.Spawner;
+        var enemies = spawner.GetInstancesByTag<Character>("Enemy");
+        foreach (var e in enemies)
+            effect.ApplyEffect(e);
     }
 
     public void OnGet()

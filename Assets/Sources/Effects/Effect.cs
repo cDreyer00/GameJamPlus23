@@ -9,7 +9,7 @@ public class ConfusionEffect : Effect
 {
     public override void ApplyEffect(ICharacter character)
     {
-        // character.Movement.SetDirection(Vector3.one);
+        Debug.Log("confusion effect applied");
     }
 }
 
@@ -17,6 +17,6 @@ public class FreezeEffect : Effect
 {
     public override void ApplyEffect(ICharacter character)
     {
-
+        Debug.Log("Freeze effect applied");
     }
 }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.AI.Navigation;
 using Mono.Cecil.Cil;
+using System.Linq;
+using Unity.VisualScripting;
 
 public class Spawner : MonoBehaviour
 {
@@ -13,7 +15,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] NavMeshSurface navMeshSurface;
 
     Dictionary<GameObject, QueuePool<MonoBehaviour>> poolsDict = new();
-
+    List<MonoBehaviour> spawnedInstances = new();
     Battle _battle;
 
     void Start()
@@ -45,7 +47,7 @@ public class Spawner : MonoBehaviour
     public virtual Vector3 GetSpawnPosition() => NavMeshRandom.InsideBounds(navMeshSurface.navMeshData.sourceBounds);
 
     void SpawnObj(MonoBehaviour obj, int amount)
-    {        
+    {
         if (!poolsDict.TryGetValue(obj.gameObject, out var pool))
         {
             Debug.LogError("pool not found");
@@ -55,6 +57,25 @@ public class Spawner : MonoBehaviour
         for (; amount > 0; amount--)
         {
             pool.Get(GetSpawnPosition(), Quaternion.identity);
+            spawnedInstances.Add(obj);
+            pool.onInstanceReleased += OnInstanceRelease;
         }
+    }
+
+    public T[] GetInstancesByTag<T>(string tag) where T : MonoBehaviour
+    {
+        var targets = spawnedInstances.Where(i => i.CompareTag(tag));
+        List<T> values = new();
+        foreach (var t in targets)
+            if (t.TryGetComponent(out T type))
+                values.Add(type);
+
+        return values.ToArray();
+    }
+
+    void OnInstanceRelease(MonoBehaviour instance)
+    {
+        if (!spawnedInstances.Contains(instance)) return;
+        spawnedInstances.Remove(instance);
     }
 }
