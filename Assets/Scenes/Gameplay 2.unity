@@ -3073,6 +3073,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
+      propertyPath: spawner
+      value: 
+      objectReference: {fileID: 1784658821}
+    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: groundMr
       value: 
       objectReference: {fileID: 4930184713420487661}

@@ -2,34 +2,36 @@ using UnityEngine;
 
 public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 {
-    [SerializeField] Direction direction;
-    [SerializeField] Effect effect;
+    [SerializeField] EffectType effectType;
     [SerializeField] float radius = 1f;
     [SerializeField] float effectDuration;
     [SerializeField] float lifeTime;
 
+    Effect effect;
+    Direction direction;
+    GenericPool<EffectSign> _pool;
+    SpriteRenderer _sprite;
+    Direction _curCameraDir;
+    float _curLifeTime;
+
     public float Radius => radius;
 
-    GenericPool<EffectSign> _pool;
     public GenericPool<EffectSign> Pool
     {
-        get => _pool; set
+        get => _pool;
+        set
         {
             _pool = value;
-            Debug.Log($"pool setted for sign, is null -> {_pool == null}");
         }
     }
+
     public Effect Effect
     {
         get => effect;
         set => effect = value;
     }
 
-    SpriteRenderer _sprite;
-    Direction _curCameraDir;
-    float _curLifeTime;
-
-    Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.yellow;
+    Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.red;
     bool CanInteract => _curCameraDir == direction;
 
     void Start()
@@ -48,8 +50,16 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         SetColor();
 
         // set effect
-        int randEffect = Random.Range(0, 2);
-        effect = randEffect switch { 0 => new FreezeEffect(), 1 => new ConfusionEffect(), _ => null };
+        effect = effectType switch
+        {
+            EffectType.Freeze => new FreezeEffect(),
+            EffectType.Confusion => new ConfusionEffect(),
+            EffectType.Damage => new DamageEffect(),
+            _ => null
+        };
+        effect.duration = effectDuration;
+        effect.damage = effectDuration;
+
         _sprite.color = ColorByType;
         _curLifeTime = lifeTime;
 
@@ -105,10 +115,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     void ApplyEffect()
     {
-        //TODO: apply effect to all enemies in radius
-        // var enemies = SpawnerSrevice.MeleeEnemySpawner.GetAllEnemies();
-        // foreach (var e in enemies)
-        //     effect.ApplyEffect(e);
+        var spawner = GameManager.Instance.Spawner;
+        var enemies = spawner.GetInstancesByTag<Character>("Enemy");
+        foreach (var e in enemies)
+            effect.ApplyEffect(e);
     }
 
     public void OnGet()
@@ -132,3 +142,5 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     }
 }
+
+public enum EffectType { Freeze, Confusion, Damage }

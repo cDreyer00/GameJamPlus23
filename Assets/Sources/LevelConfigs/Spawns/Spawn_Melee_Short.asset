@@ -10,33 +10,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cb2d4c6d3b77c64a8485bd496b34ba3, type: 3}
-  m_Name: Spawn_Sign_10
+  m_Name: Spawn_Melee_Short
   m_EditorClassIdentifier: 
   objectCurvePair:
-    key: {fileID: 2395199984281271198, guid: cbb2982c12f901e42bc7a22ac706ca3e, type: 3}
+    key: {fileID: -6668827168535340871, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
     value:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 0.7848003
-        outSlope: 0.7848003
-        tangentMode: 34
+        value: -0.026733398
+        inSlope: 0.07993393
+        outSlope: 0.07993393
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.33333334
+        outWeight: 0.12080537
       - serializedVersion: 3
-        time: 26.008167
-        value: 20.411217
-        inSlope: 0.7848003
-        outSlope: 0.7848003
-        tangentMode: 34
+        time: 2.0794215
+        value: 0.94923675
+        inSlope: 0.1047333
+        outSlope: 0.1047333
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
+        outWeight: 0.12652683
+      - serializedVersion: 3
+        time: 10.044743
+        value: 3.0247002
+        inSlope: 0.52251524
+        outSlope: 0.52251524
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.0850112
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  duration: 26.008167
-  amount: 20
+  duration: 10.044743
+  amount: 3

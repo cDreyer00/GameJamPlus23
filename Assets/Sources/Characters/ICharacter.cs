@@ -12,4 +12,5 @@ public class CharacterEvents
     public Action             onInitialized;
     public Action<float>      onTakeDamage;
     public Action<ICharacter> onDied;
+    public Action<float> freeze;
 }

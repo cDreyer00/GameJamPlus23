@@ -71,20 +71,6 @@ public static class Helpers
         }
     }
 
-    public static async void ActionCallback(Action action, float timer)
-    {
-        bool playing = Application.isPlaying;
-
-        await Task.Delay(TimeSpan.FromSeconds(timer));
-
-        if (playing != Application.isPlaying) {
-            Debug.LogWarning("ActionCallback cancelled bacause playmode changed");
-            return;
-        }
-
-        action?.Invoke();
-    }
-
     #region Delay
 
     class AsyncHolder : MonoBehaviour {}
