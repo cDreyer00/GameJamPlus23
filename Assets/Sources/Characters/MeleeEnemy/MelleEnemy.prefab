@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -6668827168535340871}
   - component: {fileID: 6223743307461556125}
   - component: {fileID: 2793757733321064199}
+  - component: {fileID: 3978397051715090874}
   m_Layer: 6
   m_Name: MelleEnemy
   m_TagString: Enemy
@@ -152,6 +153,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atSameDirection: 0
+--- !u!114 &3978397051715090874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6089110235842682470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7164ae3aeccfa284d90ee38c2da266c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 3
+  _range: 3
+  _delay: 0.3
+  _coolDown: 0
 --- !u!1 &6462346100620335737
 GameObject:
   m_ObjectHideFlags: 0

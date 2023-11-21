@@ -21,8 +21,6 @@ public class GameManager : Singleton<GameManager>
     public Character Player { get; private set; }
     public static bool IsGameOver { get; private set; }
 
-
-
     void Start()
     {
         _currentScene = SceneManager.GetActiveScene();

@@ -49,7 +49,7 @@ MonoBehaviour:
   effectType: 2
   radius: 2
   effectDuration: 20
-  lifeTime: 10
+  lifeTime: 1000
 --- !u!1 &5337252237332286137
 GameObject:
   m_ObjectHideFlags: 0
