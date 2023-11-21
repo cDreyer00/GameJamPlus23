@@ -20,7 +20,7 @@ public abstract class CharacterModule : MonoBehaviour
         Init();
     }
     abstract protected void Init();
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
         if (Character == null) return;
 

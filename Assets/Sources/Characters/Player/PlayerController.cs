@@ -20,7 +20,6 @@ public class PlayerController : Character
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
 
-    [SerializeField] FeedbackDamage feed;
     [SerializeField] CameraShake    cameraShake;
     public CameraShake Came => cameraShake;
     public int Health => 1;

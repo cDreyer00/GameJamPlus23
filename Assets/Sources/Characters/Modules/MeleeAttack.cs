@@ -15,7 +15,11 @@ public class MeleeAttack : CharacterModule
 
     protected override void Init()
     {
-        _target = GameManager.Instance.Player;
+        Helpers.DelayFrames(2, () =>
+        {
+            _target = GameManager.Instance.Player;
+            Debug.Log("player set as enemy");
+        });
     }
 
     void OnEnable()
