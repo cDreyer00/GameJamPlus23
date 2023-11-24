@@ -4,7 +4,7 @@ namespace Sources.Systems.FSM
 {
     public static class StateExtension
     {
-        public static void Register<TEnum>(this IState<TEnum> state, StateMachine<TEnum> stateMachine) where TEnum : Enum
+        public static void AddStateListeners<TEnum>(this IState<TEnum> state, StateMachine<TEnum> stateMachine) where TEnum : Enum
         {
             var stateEnum = state.StateEnum;
             stateMachine[LifeCycle.Enter, stateEnum] += state.Enter;

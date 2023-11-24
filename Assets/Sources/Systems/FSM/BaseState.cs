@@ -8,7 +8,7 @@ namespace Sources.Systems.FSM
         protected BaseState(TEnum stateEnum, StateMachine<TEnum> stateMachine)
         {
             StateEnum = stateEnum;
-            this.Register(stateMachine);
+            this.AddStateListeners(stateMachine);
         }
         public virtual void Enter() {}
         public virtual void FixedUpdate() {}

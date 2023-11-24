@@ -28,7 +28,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     void Start()
     {
-        if (Character.TryGetModule<StateModule>(out var stateModule))
+        if (Character.TryGetModule<StateMachineModule>(out var stateModule))
         {
             if (!_registered)
             {

@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-
 public class FeedbackDamage : CharacterModule
 {
     [SerializeField] Color color, color2;
