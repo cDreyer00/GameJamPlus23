@@ -31,7 +31,7 @@ public class CharacterEvents
     {
         Died?.Invoke(character);
         if (character is Character c && c.TryGetModule<CharacterStateModule>(out var stateModule)) {
-            stateModule.StateMachine.Update();
+            stateModule.StateMachine.ChangeState(Character.State.Dying);
             c.Pool.Release(c);
         }
     }
