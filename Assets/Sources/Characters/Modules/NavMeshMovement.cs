@@ -8,71 +8,47 @@ using Sources.Systems.FSM;
 using Unity.VisualScripting;
 using UnityEditor;
 
-[RequireComponent(typeof(NavMeshAgent))]
-public class NavMeshMovement : CharacterModule, IMovementModule
+[RequireComponent(typeof(NavMeshAgent)), Serializable]
+public class NavMeshMovement : CharacterStateModule, IMovementModule
 {
-    bool _registered;
-
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform target;
-    [SerializeField] float startCooldownTime;
+    [SerializeField] Transform    target;
+    [SerializeField] float        startCooldownTime;
     public NavMeshAgent Agent => agent;
     public Transform Target
     {
         get => target;
         set => target = value;
     }
-    public void SetTarget(Transform target)
+    public override Character.State StateEnum => Character.State.Chasing;
+    public override void Enter()
     {
-        this.target = target;
+        agent.isStopped = false;
+        InvokeRepeating(nameof(Chase), startCooldownTime, 0.1f);
     }
-    void Start()
+    public override void Exit()
     {
-        if (Character.TryGetModule<StateMachineModule>(out var stateModule))
-        {
-            if (!_registered)
-            {
-                var fsm = stateModule.StateMachine;
-                fsm.Transition(Character.State.Idle, () => target == null);
-                fsm.Transition(Character.State.Idle, Character.State.Chasing, () => target != null);
-                fsm[LifeCycle.Enter, Character.State.Chasing] += () => agent.isStopped = false;
-                fsm[LifeCycle.Exit, Character.State.Chasing] += () => agent.isStopped = true;
-                fsm[LifeCycle.Update, Character.State.Chasing] += () => SetDestination(target.position);
-                Helpers.Delay(startCooldownTime, static self => self.SetTarget(GameManager.Instance.Player.transform), this);
-                _registered = true;
-            }
-        }
-        else
-        {
-            Debug.LogWarning("NavMeshMovement: StateModule not found, using default behavior.");
-            Helpers.Delay(startCooldownTime, static self => self.SetTarget(GameManager.Instance.Player.transform), this);
-            Helpers.Repeat(
-                startCooldownTime + Time.fixedDeltaTime,
-                Time.fixedDeltaTime,
-                static self => self.SetDestination(self.target.position),
-                this
-            );
-        }
+        CancelInvoke(nameof(Chase));
+        agent.isStopped = true;
     }
     protected override void Init()
     {
-        if (agent == null) agent = GetComponent<NavMeshAgent>();
+        if (!agent) agent = GetComponent<NavMeshAgent>();
 
         Debug.Log("enemy freeze subscribed");
-        Character.Events.freeze += Freeze;
+        Character.Events.Freeze += OnFreeze;
     }
-    public void SetDestination(Vector3 position)
+    void Chase()
     {
-        if (this.IsDestroyed() || !gameObject.activeInHierarchy) return;
-        agent.SetDestination(position);
+        if (!agent.isOnNavMesh) return;
+        agent.SetDestination(target.position);
     }
-    void Freeze(float duration)
+    void OnFreeze(float duration)
     {
         agent.isStopped = true;
-        Helpers.Delay(duration, () =>
-        {
-            if (this.IsDestroyed() || !gameObject.activeInHierarchy) return;
-            agent.isStopped = false;
-        });
+        Helpers.Delay(duration, static c => {
+            if (c.IsDestroyed() || !c.gameObject.activeInHierarchy) return;
+            c.agent.isStopped = false;
+        }, this);
     }
 }

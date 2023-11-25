@@ -31,7 +31,7 @@ public class PlayerController : Character
         _baseDrag = rb.drag;
 
         GameManager.Instance.RegisterPlayer(this);
-        Events.onDied += Died;
+        Events.Died += Died;
     }
     void Update()
     {

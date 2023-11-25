@@ -86,7 +86,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
                 return;
             }
 
-            character.Events.onTakeDamage?.Invoke(damage);
+            character.Events.OnTakeDamage(damage);
         }
         if (Pool != null) Pool.Release(this);
         else Destroy(gameObject);

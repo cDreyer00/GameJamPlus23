@@ -11,31 +11,29 @@ public class MeleeAttack : CharacterModule
     [SerializeField] float _coolDown;
 
     Character _target;
-    bool isAttacking = false;
+    bool      _isAttacking;
 
     protected override void Init()
     {
-        Helpers.DelayFrames(2, () =>
-        {
-            _target = GameManager.Instance.Player;
+        Helpers.DelayFrames(2, static c => {
+            c._target = GameManager.Instance.Player;
             Debug.Log("player set as enemy");
-        });
+        }, this);
     }
 
     void OnEnable()
     {
-        isAttacking = false;
+        _isAttacking = false;
     }
 
     void Update()
     {
         if (_target == null) return;
-        if (isAttacking) return;
+        if (_isAttacking) return;
 
         float dist = Vector3.Distance(Character.Position, _target.Position);
-        if (dist <= _range)
-        {
-            isAttacking = true;
+        if (dist <= _range) {
+            _isAttacking = true;
             Helpers.Delay(_delay, Attack);
         }
     }
@@ -46,8 +44,8 @@ public class MeleeAttack : CharacterModule
 
         float dist = Vector3.Distance(Character.Position, _target.Position);
         if (dist <= _range)
-            _target.Events.onTakeDamage?.Invoke(_damage);
+            _target.Events.OnTakeDamage(_damage);
 
-        Helpers.Delay(_coolDown, () => isAttacking = false);
+        Helpers.Delay(_coolDown, static c => c._isAttacking = false, this);
     }
 }

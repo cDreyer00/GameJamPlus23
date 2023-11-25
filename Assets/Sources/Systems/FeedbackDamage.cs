@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+
 public class FeedbackDamage : CharacterModule
 {
     [SerializeField] Color color, color2;
@@ -10,8 +11,8 @@ public class FeedbackDamage : CharacterModule
     protected override void Init()
     {
         _sprite = GetComponent<SpriteRenderer>();
-        Character.Events.onTakeDamage += DamageColor;
-        Character.Events.freeze += Freeze;
+        Character.Events.TakeDamage += DamageColor;
+        Character.Events.Freeze += Freeze;
     }
 
     void OnEnable()
@@ -23,7 +24,7 @@ public class FeedbackDamage : CharacterModule
     void DamageColor(float dmgAmount)
     {
         _sprite.color = color;
-        Helpers.Delay(duration, () => _sprite.color = color2);
+        Helpers.Delay(duration, static c => c._sprite.color = c.color2, this);
     }
 
 
@@ -31,7 +32,6 @@ public class FeedbackDamage : CharacterModule
     {
         Debug.Log("freeze feedback");
         _sprite.color = Color.cyan;
-        Helpers.Delay(duration, () => _sprite.color = color2);
+        Helpers.Delay(duration, static c => c._sprite.color = c.color2, this);
     }
-
 }
