@@ -5,6 +5,7 @@ public class FeedbackDamage : CharacterModule
 {
     [SerializeField] Color color, color2;
     [SerializeField] float duration;
+    [SerializeField] bool is3D;
 
     SpriteRenderer _sprite;
 
@@ -23,7 +24,13 @@ public class FeedbackDamage : CharacterModule
 
     void DamageColor(float dmgAmount)
     {
-        _sprite.color = color;
+        if (!is3D)
+        {
+            _sprite.color = color;
+        }
+        else
+            print("Hit Damage");
+
         Helpers.Delay(duration, () => _sprite.color = color2);
     }
 
