@@ -1,15 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sources.Systems.FSM;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
 {
     readonly HashSet<CharacterModule> _modules = new();
-    readonly CharacterEvents _events = new();
+    readonly CharacterEvents          _events  = new();
 
     public string team = "";
     public Vector3 Position => transform.position;
@@ -23,18 +19,10 @@ public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
         module = GetModule<T>();
         return module != null;
     }
-    void Start()
-    {
-        _events.onDied += OnDied;
-    }
-    void OnDied(ICharacter character) => Pool.Release(this);
     public GenericPool<MonoBehaviour> Pool { get; set; }
-    public void OnGet()
-    {
-        _events.onInitialized?.Invoke();
-    }
-    public void OnRelease() { }
-    public void OnCreated() { }
+    public void OnGet() => _events.OnInitialized();
+    public void OnRelease() {}
+    public void OnCreated() {}
     public enum State
     {
         // InControl:

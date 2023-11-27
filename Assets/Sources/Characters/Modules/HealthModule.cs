@@ -10,16 +10,17 @@ public class HealthModule : CharacterModule
     [SerializeField] Slider                  healthSlider;
     [SerializeField] ClampedPrimitive<float> health;
 
+    public float Health => health.Value;
     void OnEnable()
     {
-        Character.Events.onTakeDamage += OnTakeDamage;
-        Character.Events.onInitialized += Init;
+        Character.Events.TakeDamage += OnTakeDamage;
+        Character.Events.Initialized += Init;
     }
 
     void OnDisable()
     {
-        Character.Events.onTakeDamage -= OnTakeDamage;
-        Character.Events.onInitialized -= Init;
+        Character.Events.TakeDamage -= OnTakeDamage;
+        Character.Events.Initialized -= Init;
     }
 
     protected override void Init()
@@ -35,8 +36,7 @@ public class HealthModule : CharacterModule
     {
         health.Value -= amount;
 
-        if (health <= 0)
-            Character.Events.onDied?.Invoke(Character);
+        if (health <= 0) Character.Events.OnDied(Character);
 
         UpdateSlider();
     }

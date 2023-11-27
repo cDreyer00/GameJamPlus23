@@ -28,9 +28,9 @@ namespace Sources.Systems.FSM
         EqualityComparer<TState> _stateEqualityComparer;
         public TState CurrentState { get; private set; }
 
-        SortedList<TState, List<Destination>> _transitionsMap    = new();
-        SortedList<TState, TState>            _parentState       = new();
-        HashSet<Destination>                  _anyTransitionsSet = new();
+        SortedList<TState, List<TransitionData>> _transitionsMap    = new();
+        SortedList<TState, TState>               _parentState       = new();
+        HashSet<TransitionData>                  _anyTransitionsSet = new();
 
         Action[] _eventTable = new Action[LifeCycleEvents * StateCount];
 
@@ -45,30 +45,27 @@ namespace Sources.Systems.FSM
                 state = parent;
             }
         }
-        public bool TryGetParent(TState state, out TState parent)
-        {
-            return _parentState.TryGetValue(state, out parent);
-        }
+        public bool TryGetParent(TState state, out TState parent) => _parentState.TryGetValue(state, out parent);
         public void Transition(TState src, TState dst, Func<bool> predicate = null)
         {
             if (!_transitionsMap.TryGetValue(src, out var transitions)) {
-                transitions = new List<Destination>();
+                transitions = new List<TransitionData>();
                 _transitionsMap.Add(src, transitions);
             }
-            transitions.Add(new Destination { state = dst, predicate = predicate ?? (() => true) });
+            transitions.Add(new TransitionData { state = dst, predicate = predicate ?? (static () => true) });
         }
         public void Transition(TState dst, Func<bool> predicate = null)
         {
-            _anyTransitionsSet.Add(new Destination { state = dst, predicate = predicate ?? (() => true) });
+            _anyTransitionsSet.Add(new TransitionData { state = dst, predicate = predicate ?? (static () => true) });
         }
         public void RemoveTransition(TState src, TState dst)
         {
             if (!_transitionsMap.TryGetValue(src, out var transitions)) return;
-            transitions.RemoveAll(t => t.state.Equals(dst));
+            transitions.RemoveAll(src => _stateEqualityComparer.Equals(src.state, dst));
         }
         public void RemoveTransition(TState dst)
         {
-            _anyTransitionsSet.RemoveWhere(t => t.state.Equals(dst));
+            _anyTransitionsSet.RemoveWhere(src => _stateEqualityComparer.Equals(src.state, dst));
         }
         public Action this[LifeCycle lifeCycle, TState state]
         {
@@ -93,7 +90,7 @@ namespace Sources.Systems.FSM
             }
         }
 
-        Destination? GetTransition()
+        TransitionData? GetTransition()
         {
             foreach (var transition in _anyTransitionsSet) {
                 if (transition.predicate()) return transition;
@@ -118,7 +115,7 @@ namespace Sources.Systems.FSM
         {
             _eventTable[AsInt32(LifeCycle.FixedUpdate) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
         }
-        public struct Destination
+        public struct TransitionData
         {
             public TState     state;
             public Func<bool> predicate;

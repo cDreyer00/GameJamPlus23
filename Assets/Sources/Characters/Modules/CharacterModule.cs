@@ -7,7 +7,7 @@ public abstract class CharacterModule : MonoBehaviour
     Character _character;
     public Character Character => _character;
 
-    void Awake()
+    virtual protected void  Awake()
     {
         var character = transform.GetComponentInParent<Character>();
         if (character == null) {
@@ -20,10 +20,9 @@ public abstract class CharacterModule : MonoBehaviour
         Init();
     }
     abstract protected void Init();
-    protected virtual void OnDestroy()
+    virtual protected void OnDestroy()
     {
         if (Character == null) return;
-
         Character.RemoveModule(this);
     }
     public void Enable() => enabled = true;

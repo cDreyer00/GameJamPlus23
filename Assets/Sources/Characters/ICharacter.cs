@@ -1,4 +1,5 @@
 using System;
+using Sources.Characters.Modules;
 using UnityEngine;
 
 public interface ICharacter
@@ -9,8 +10,29 @@ public interface ICharacter
 
 public class CharacterEvents
 {
-    public Action             onInitialized;
-    public Action<float>      onTakeDamage;
-    public Action<ICharacter> onDied;
-    public Action<float> freeze;
+    public event Action<ICharacter> Died;
+    public event Action Initialized;
+    public event Action<float> TakeDamage;
+    public event Action<float> Freeze;
+
+    public void OnInitialized()
+    {
+        Initialized?.Invoke();
+    }
+    public void OnTakeDamage(float amount)
+    {
+        TakeDamage?.Invoke(amount);
+    }
+    public void OnFreeze(float duration)
+    {
+        Freeze?.Invoke(duration);
+    }
+    public void OnDied(ICharacter character)
+    {
+        Died?.Invoke(character);
+        if (character is Character c && c.TryGetModule<CharacterStateModule>(out var stateModule)) {
+            stateModule.StateMachine.Update();
+            c.Pool.Release(c);
+        }
+    }
 }
