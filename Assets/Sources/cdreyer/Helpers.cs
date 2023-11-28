@@ -13,7 +13,8 @@ public static class Helpers
     {
         get
         {
-            if (cam == null) {
+            if (cam == null)
+            {
                 cam = Camera.main;
             }
             return cam;
@@ -28,8 +29,8 @@ public static class Helpers
         return waitDictionary[time];
     }
 
-    private static PointerEventData    eventDataCurrentPosition;
-    static         List<RaycastResult> results;
+    private static PointerEventData eventDataCurrentPosition;
+    static List<RaycastResult> results;
     public static bool IsOverUI
     {
         get
@@ -51,7 +52,8 @@ public static class Helpers
         if (children == null) children = new();
         if (transform.childCount < 1) return children;
 
-        foreach (Transform child in transform) {
+        foreach (Transform child in transform)
+        {
             children.Add(child);
 
             GetAllChildren(child, children);
@@ -64,7 +66,8 @@ public static class Helpers
     public static void Shuffle<T>(this IList<T> list)
     {
         int n = list.Count;
-        while (n > 1) {
+        while (n > 1)
+        {
             n--;
             int k = rng.Next(n + 1);
             (list[n], list[k]) = (list[k], list[n]);
@@ -73,7 +76,7 @@ public static class Helpers
 
     #region Delay
 
-    class AsyncHolder : MonoBehaviour {}
+    class AsyncHolder : MonoBehaviour { }
     static AsyncHolder ayncHolder;
 
     public static void DelayFrames(int frames, Action action)
@@ -143,7 +146,8 @@ public static class Helpers
         static IEnumerator C(float delay, float period, Action<TState> action, TState state)
         {
             yield return GetWait(delay);
-            while (true) {
+            while (true)
+            {
                 action?.Invoke(state);
                 yield return GetWait(period);
             }
@@ -171,6 +175,12 @@ public static class Helpers
         Transform[] childrens = tr.GetComponentsInChildren<Transform>();
         foreach (var child in childrens) child.gameObject.layer = layer;
     }
+
+    public static bool TryFindObjectOfType<T>(out T type) where T : MonoBehaviour
+    {
+        type = GameObject.FindObjectOfType<T>();
+        return type != null;
+    }
 }
 
 public static class JsonHelper
@@ -187,7 +197,7 @@ public static class JsonHelper
     /// <returns></returns>
     public static T[] FromJsonArray<T>(string json)
     {
-        string     newJson = "{\"array\":" + json + "}";
+        string newJson = "{\"array\":" + json + "}";
         Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
         return wrapper.array;
     }

@@ -8,4 +8,10 @@ namespace Sources.cdreyer.SaveSystem
         T Load();
         T GetBase();
     }
+
+    public interface ISavable
+    {
+        void Save();
+        void Load();
+    }
 }
