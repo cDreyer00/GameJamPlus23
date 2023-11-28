@@ -6,8 +6,7 @@ public abstract class CharacterModule : MonoBehaviour
 {
     Character _character;
     public Character Character => _character;
-
-    virtual protected void  Awake()
+    virtual protected void Awake()
     {
         var character = transform.GetComponentInParent<Character>();
         if (character == null) {
@@ -20,6 +19,8 @@ public abstract class CharacterModule : MonoBehaviour
         Init();
     }
     abstract protected void Init();
+    public virtual void StartModule() {}
+    public virtual void StopModule() {}
     virtual protected void OnDestroy()
     {
         if (Character == null) return;

@@ -15,7 +15,7 @@ public class FeedbackDamage : CharacterModule
         Character.Events.Freeze += Freeze;
     }
 
-    void OnEnable()
+    public override void StartModule()
     {
         if (_sprite != null)
             _sprite.color = color2;

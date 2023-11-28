@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 
 [RequireComponent(typeof(NavMeshAgent)), Serializable]
-public class NavMeshMovement : CharacterStateModule, IMovementModule
+public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform    target;
@@ -20,13 +20,12 @@ public class NavMeshMovement : CharacterStateModule, IMovementModule
         get => target;
         set => target = value;
     }
-    public override Character.State StateEnum => Character.State.Chasing;
-    public override void Enter()
+    public override void StartModule()
     {
         agent.isStopped = false;
         InvokeRepeating(nameof(Chase), startCooldownTime, 0.1f);
     }
-    public override void Exit()
+    public override void StopModule()
     {
         CancelInvoke(nameof(Chase));
         agent.isStopped = true;

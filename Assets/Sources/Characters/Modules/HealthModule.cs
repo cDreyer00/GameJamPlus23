@@ -11,13 +11,13 @@ public class HealthModule : CharacterModule
     [SerializeField] ClampedPrimitive<float> health;
 
     public float Health => health.Value;
-    void OnEnable()
+    public override void StartModule()
     {
         Character.Events.TakeDamage += OnTakeDamage;
         Character.Events.Initialized += Init;
     }
 
-    void OnDisable()
+    public override void StopModule()
     {
         Character.Events.TakeDamage -= OnTakeDamage;
         Character.Events.Initialized -= Init;

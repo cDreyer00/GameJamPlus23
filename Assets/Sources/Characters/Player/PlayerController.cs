@@ -23,7 +23,6 @@ public class PlayerController : Character
     [SerializeField] CameraShake    cameraShake;
     public CameraShake Came => cameraShake;
     public int Health => 1;
-
     void Start()
     {
         team = "Player";
