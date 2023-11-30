@@ -47,4 +47,4 @@ MonoBehaviour:
   dontDestroyOnLoad: 0
   groundMr: {fileID: 0}
   endGameCanvas: {fileID: 0}
-  gameLoopTimer: 1
+  spawner: {fileID: 0}

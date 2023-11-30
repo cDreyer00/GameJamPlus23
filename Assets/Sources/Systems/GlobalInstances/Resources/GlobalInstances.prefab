@@ -45,9 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyObjects:
-  - key: Spawn_DMGSign_low
-    value: {fileID: 11400000, guid: 7c7d2a93d7630854e995a3e3f5052373, type: 2}
-  - key: AngularProjectile
-    value: {fileID: 8508661783752061636, guid: 44b178d1a07e72a4080778ca2517f7ad, type: 3}
   - key: Progress
     value: {fileID: 11400000, guid: efdc9aaaec2eed446b064edaaa87b260, type: 2}

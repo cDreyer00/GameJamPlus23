@@ -4,6 +4,7 @@ using UnityEngine;
 using Sources.cdreyer;
 using Sources.cdreyer.SaveSystem;
 using System;
+using Unity.VisualScripting;
 
 [CreateAssetMenu(menuName = "Progress")]
 public class Progress : SingletonSO<Progress>, ISavable
@@ -13,17 +14,42 @@ public class Progress : SingletonSO<Progress>, ISavable
     [Serializable]
     public class Upgrades
     {
-        public int healthLevel;
-        public int damageLevel;
-        public int recoilLevel;
-        public int brakingLevel;
-        public int attackSpeedLevel;
+        public enum Type { Health, Damage, Recoil, Barking, AttackSpeed }
+        public ClampedPrimitive<int> healthLevel;
+        public ClampedPrimitive<int> damageLevel;
+        public ClampedPrimitive<int> recoilLevel;
+        public ClampedPrimitive<int> brakingLevel;
+        public ClampedPrimitive<int> attackSpeedLevel;
+
+        public void Upgrade(Type upgradeType)
+        {
+            switch (upgradeType)
+            {
+                case Type.Health:
+                    healthLevel.Value++;
+                    break;
+                case Type.Damage:
+                    damageLevel.Value++;
+                    break;
+                case Type.Recoil:
+                    recoilLevel.Value++;
+                    break;
+                case Type.Barking:
+                    brakingLevel.Value++;
+                    break;
+                case Type.AttackSpeed:
+                    attackSpeedLevel.Value++;
+                    break;
+            }
+        }
     }
 
     [Serializable]
     public class Currency
     {
         public int money;
+
+        public static implicit operator int(Currency currency) { return currency.money; }
     }
 
     public Upgrades upgrades;

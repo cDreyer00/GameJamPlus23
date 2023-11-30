@@ -13,10 +13,25 @@ MonoBehaviour:
   m_Name: Progress
   m_EditorClassIdentifier: 
   upgrades:
-    healthLevel: 0
-    damageLevel: 0
-    recoilLevel: 0
-    brakingLevel: 0
-    attackSpeedLevel: 0
+    healthLevel:
+      value: 0
+      min: 0
+      max: 10
+    damageLevel:
+      value: 0
+      min: 0
+      max: 10
+    recoilLevel:
+      value: 0
+      min: 0
+      max: 0
+    brakingLevel:
+      value: 0
+      min: 0
+      max: 10
+    attackSpeedLevel:
+      value: 0
+      min: 0
+      max: 10
   currency:
-    money: 0
+    money: 136
