@@ -21,6 +21,10 @@ public class Progress : SingletonSO<Progress>, ISavable
         public ClampedPrimitive<int> brakingLevel;
         public ClampedPrimitive<int> attackSpeedLevel;
 
+        public static string FileName => "upgrades.save";
+
+        float mod => 0.2f;
+
         public void Upgrade(Type upgradeType)
         {
             switch (upgradeType)
@@ -42,12 +46,33 @@ public class Progress : SingletonSO<Progress>, ISavable
                     break;
             }
         }
+
+        public int GetUpgradeLevel(Type upgradeType)
+        {
+            return upgradeType switch
+            {
+                Type.Health => healthLevel,
+                Type.Damage => damageLevel,
+                Type.Recoil => recoilLevel,
+                Type.Barking => brakingLevel,
+                Type.AttackSpeed => attackSpeedLevel,
+                _ => 0
+            };
+        }
+
+        public float GetModValue(float baseValue, Type upgradeType, float mod = 0)
+        {
+            mod = mod == 0 ? this.mod : mod;
+            return baseValue + mod * GetUpgradeLevel(upgradeType);
+        }
     }
 
     [Serializable]
     public class Currency
     {
         public int money;
+
+        public static string FileName => "currency.save";
 
         public static implicit operator int(Currency currency) { return currency.money; }
     }
@@ -57,14 +82,20 @@ public class Progress : SingletonSO<Progress>, ISavable
 
     public void Save()
     {
-        SaveSystem.Save(upgrades, "upgrades.save");
-        SaveSystem.Save(currency, "currency.save");
+        SaveSystem.Save(upgrades, Upgrades.FileName);
+        SaveSystem.Save(currency, Currency.FileName);
     }
 
     public void Load()
     {
-        upgrades = SaveSystem.Load<Upgrades>("upgrades.save");
-        currency = SaveSystem.Load<Currency>("currency.save");
+        upgrades = SaveSystem.Load<Upgrades>(Upgrades.FileName);
+        currency = SaveSystem.Load<Currency>(Currency.FileName);
+    }
+
+    public void Clear()
+    {
+        SaveSystem.DeleteData(Upgrades.FileName);
+        SaveSystem.DeleteData(Currency.FileName);
     }
 
 #if UNITY_EDITOR
@@ -84,6 +115,12 @@ public class Progress : SingletonSO<Progress>, ISavable
     public static void LoadProgress()
     {
         Instance.Load();
+    }
+
+    [UnityEditor.MenuItem("[PROGRESS]/Clear")]
+    public static void ClearProgress()
+    {
+        Instance.Clear();
     }
 #endif
 }

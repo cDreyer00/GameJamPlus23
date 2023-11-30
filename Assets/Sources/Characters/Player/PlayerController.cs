@@ -3,26 +3,26 @@ using UnityEngine;
 
 public class PlayerController : Character
 {
-    [SerializeField]        GameObject  model;
-    [SerializeField]        Projectile  projPrefab;
-    [SerializeField]        Transform   anchor;
-    [SerializeField]        Rigidbody   rb;
-    [SerializeField]        PlayerAim   aim;
-    [SerializeField]        float       dashForce  = 3;
-    [SerializeField]        float       shootDelay = 1.3f;
-    [SerializeField]        float       breakDrag  = 5f;
+    [SerializeField] GameObject model;
+    [SerializeField] Projectile projPrefab;
+    [SerializeField] Transform anchor;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] PlayerAim aim;
+    [SerializeField] float recoilForce = 3;
+    [SerializeField] float shootDelay = 1.3f;
+    [SerializeField] float braking = 5f;
     [Space, SerializeField] AudioClip[] shootAudios;
-    [SerializeField]        AudioClip   damageAudio;
+    [SerializeField] AudioClip damageAudio;
 
     Camera _cam;
-    float  _curDelay;
-    float  _baseDrag;
+    float _curDelay;
+    float _baseDrag;
     public float CurDelay => _curDelay;
-    public float ShootDelay => shootDelay;
+    public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.01f);
 
-    [SerializeField] CameraShake    cameraShake;
-    public CameraShake Came => cameraShake;
-    public int Health => 1;
+    [SerializeField] CameraShake cameraShake;
+
+    Progress.Upgrades Upgrades => Progress.Instance.upgrades;
 
     void Start()
     {
@@ -38,8 +38,10 @@ public class PlayerController : Character
         if (GameManager.IsGameOver) return;
 
         _curDelay += Time.deltaTime;
-        if (Input.GetMouseButton(0)) {
-            if (_curDelay >= shootDelay) {
+        if (Input.GetMouseButton(0))
+        {
+            if (_curDelay >= ShootDelay)
+            {
                 Shoot();
                 _curDelay = 0;
             }
@@ -47,13 +49,17 @@ public class PlayerController : Character
 
         Rotate();
 
-        if (transform.position.y <= -1) {
+        if (transform.position.y <= -1)
+        {
             GameManager.Instance.ReloadScene();
         }
-        if (Input.GetKey(KeyCode.Space)) {
-            rb.drag = _baseDrag * breakDrag;
+        if (Input.GetKey(KeyCode.Space))
+        {
+            // rb.drag = _baseDrag * braking;
+            rb.drag = _baseDrag * Upgrades.GetModValue(braking, Progress.Upgrades.Type.Barking);
         }
-        else {
+        else
+        {
             rb.drag = _baseDrag;
         }
     }
@@ -61,7 +67,8 @@ public class PlayerController : Character
     void Rotate()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100)) {
+        if (Physics.Raycast(ray, out RaycastHit hit, 100))
+        {
             Vector3 lookAtPos = hit.point;
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
@@ -72,7 +79,8 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        proj.IgnoreTeam(team);        
+        proj.damage = (int)Upgrades.GetModValue(proj.damage, Progress.Upgrades.Type.Damage, 1);
+        proj.IgnoreTeam(team);
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)
@@ -82,7 +90,7 @@ public class PlayerController : Character
     void Dash(Vector3 dir)
     {
         rb.velocity = Vector3.zero;
-        rb.AddForce(dir * dashForce, ForceMode.Impulse);
+        rb.AddForce(dir * Upgrades.GetModValue(recoilForce, Progress.Upgrades.Type.Recoil), ForceMode.Impulse);
     }
 
     static void Died(ICharacter character)

@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour, IPoolable<Projectile>
 {
-    [SerializeField] int damage;
+    [SerializeField] public int damage;
     [SerializeField] float moveSpeed = 1;
     [SerializeField] float lifeTime;
     [SerializeField] AnimationCurve yAxisTrajectory;

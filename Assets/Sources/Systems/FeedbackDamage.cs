@@ -23,8 +23,8 @@ public class FeedbackDamage : CharacterModule
 
     void DamageColor(float dmgAmount)
     {
-        _sprite.color = color;
-        Helpers.Delay(duration, static c => c._sprite.color = c.color2, this);
+        // _sprite.color = color;
+        // Helpers.Delay(duration, static c => c._sprite.color = c.color2, this);
     }
 
 
