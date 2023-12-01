@@ -12,7 +12,7 @@ public class QueuePool<T> : GenericPool<T> where T : MonoBehaviour
     {
 
     }
-
+    
     protected override void CreateObjects(T original, int amount, Transform parent = null, bool active = false)
     {
         q ??= new();

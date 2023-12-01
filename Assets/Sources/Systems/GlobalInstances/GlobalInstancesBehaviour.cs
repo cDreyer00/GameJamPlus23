@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 public class GlobalInstancesBehaviour : MonoBehaviour
@@ -25,7 +26,10 @@ public class GlobalInstancesBehaviour : MonoBehaviour
                     return null;
                 }
 
-                ilb.SetGlobalInstances();
+                _globalInstances = new();
+                foreach (var ko in ilb.keyObjects)
+                    _globalInstances.AddInstance(ko.key, ko.value);
+
                 Debug.Log("Global instances applied");
             }
 
@@ -41,14 +45,5 @@ public class GlobalInstancesBehaviour : MonoBehaviour
             obj.key = obj.value.name;
             keyObjects[i] = obj;
         }
-    }
-
-    [ContextMenu("Set Global Instances")]
-    public void SetGlobalInstances()
-    {
-        _globalInstances = new();
-
-        foreach (var ko in keyObjects)
-            GlobalInstances.AddInstance(ko.key, ko.value);
-    }
+    }    
 }

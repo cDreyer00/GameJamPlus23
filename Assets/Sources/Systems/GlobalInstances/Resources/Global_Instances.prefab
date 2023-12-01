@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6486859380034496186}
   - component: {fileID: 4137660045706961133}
   m_Layer: 0
-  m_Name: GlobalInstances
+  m_Name: Global_Instances
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
