@@ -1,6 +1,7 @@
 using System;
 using Sources.Characters.Modules;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public interface ICharacter
 {
@@ -31,7 +32,12 @@ public class CharacterEvents
     {
         Died?.Invoke(character);
         if (character is Character c) {
-            c.Pool.Release(c);
+            if (c.Pool == null) {
+                Object.Destroy(c);
+            }
+            else {
+                c.Pool.Release(c);
+            }
         }
     }
 }
