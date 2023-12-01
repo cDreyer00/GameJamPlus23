@@ -21,6 +21,4 @@ public class FeedbacksFeel : MonoBehaviour
     {
         freeze?.PlayFeedbacks();
     }
-
-
 }
