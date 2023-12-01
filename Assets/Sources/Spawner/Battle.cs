@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,7 +10,7 @@ public class Battle
     public Wave CurWave { get; private set; }
 
     BattleConfig _config;
-    Queue<Wave> _wavesQueue = new();
+    Queue<Wave>  _wavesQueue = new();
 
     public event Action onBattleEnd;
 
@@ -42,8 +41,7 @@ public class Battle
         if (CurWave != null)
             CurWave.onWaveComplete -= CompleteWave;
 
-        if (_wavesQueue.Count == 0)
-        {
+        if (_wavesQueue.Count == 0) {
             IsCompleted = true;
             onBattleEnd?.Invoke();
             return;
@@ -69,10 +67,10 @@ public class Wave
     public float ElapsedTime { get; private set; }
     public readonly float duration;
 
-    Battle _battle;
+    Battle     _battle;
     WaveConfig _config;
-    int[] _objsCounter;
-    bool _isCompleted;
+    int[]      _objsCounter;
+    bool       _isCompleted;
 
     public event Action onWaveComplete;
 
@@ -91,8 +89,7 @@ public class Wave
 
         ElapsedTime += deltaTime;
 
-        if (ElapsedTime >= duration)
-        {
+        if (ElapsedTime >= duration) {
             _isCompleted = true;
             onWaveComplete?.Invoke();
         }
@@ -103,13 +100,12 @@ public class Wave
     void UpdateSpawns()
     {
         var objs = _config.ObjectsList;
-        for (int i = 0; i < objs.Length; i++)
-        {
-            int amount = objs[i].GetAmount(ElapsedTime);
+        for (int i = 0; i < objs.Length; i++) {
+            int amount  = objs[i].GetAmount(ElapsedTime);
             var counter = _objsCounter[i];
             if (counter >= amount) continue;
 
-            int diff = amount - counter;
+            int               diff      = amount - counter;
             ObjectCurveConfig objConfig = objs[i];
             _battle.SpawnObjs(objConfig.Obj, diff);
             _objsCounter[i] = amount;

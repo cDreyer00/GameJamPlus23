@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class DamageCollider : MonoBehaviour
+public class ImpactDamage : MonoBehaviour
 {
     public float        damage;
     public List<string> ignoreList;

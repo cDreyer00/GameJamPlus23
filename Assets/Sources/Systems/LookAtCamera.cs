@@ -10,7 +10,12 @@ namespace Sources.Systems
 
         private void Start()
         {
-            cam = GameObject.Find("Main Camera").transform;
+            if (CompareTag("Enemy"))
+            {
+                cam = GameObject.Find("Player").transform;
+            }
+            else
+                cam = GameObject.Find("Main Camera").transform;
         }
         void Update()
         {

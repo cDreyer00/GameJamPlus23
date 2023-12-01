@@ -2,21 +2,20 @@
 using Sources.Systems.FSM;
 using UnityEngine;
 using static Character.State;
+using static Character;
 
 namespace Sources.Characters.Modules
 {
-    public class StateMachineModule : CharacterModule
+    public abstract class StateMachineModule<TContext, TEnum> : CharacterModule where TEnum : Enum
     {
-        readonly StateMachine<Character.State> _stateMachine = new(Idle);
-        public StateMachine<Character.State> StateMachine => _stateMachine;
+        protected StateMachine<TContext, TEnum> stateMachine;
+        abstract protected TEnum InitialState { get; }
+        abstract protected TContext Context { get; }
         protected override void Init()
         {
-            _stateMachine.SetSubState(InControl, Idle);
-            _stateMachine.SetSubState(InControl, Chasing);
-            _stateMachine.SetSubState(InControl, Attacking);
-            _stateMachine.SetSubState(Yielded, Controlled);
-            _stateMachine.SetSubState(Yielded, Dying);
+            stateMachine = new StateMachine<TContext, TEnum>(InitialState, Context);
         }
-        void Update() => _stateMachine.Update();
+        void Update() => stateMachine.Update();
+        void FixedUpdate() => stateMachine.FixedUpdate();
     }
 }

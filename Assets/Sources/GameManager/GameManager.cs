@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
-    [CanBeNull] Character _player;
+    [CanBeNull] Character _player; 
     public Character Player => _player ??= FindObjectOfType<PlayerController>();
     public static bool IsGameOver { get; private set; }
 
