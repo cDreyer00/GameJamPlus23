@@ -45,9 +45,9 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     void OnFreeze(float duration)
     {
         agent.isStopped = true;
-        Helpers.Delay(duration, static c => {
+        this.Delay(duration, static c => {
             if (c.IsDestroyed() || !c.gameObject.activeInHierarchy) return;
             c.agent.isStopped = false;
-        }, this);
+        });
     }
 }

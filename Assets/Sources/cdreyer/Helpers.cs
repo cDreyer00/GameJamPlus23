@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using MoreMountains.FeedbacksForThirdParty;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
@@ -91,22 +93,6 @@ public static class Helpers
             e?.Invoke();
         }
     }
-    public static void DelayFrames<TState>(int frames, Action<TState> action, TState state)
-    {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
-
-        ayncHolder.StartCoroutine(C(frames, action, state));
-
-        static IEnumerator C(int frames, Action<TState> e, TState state)
-        {
-            for (; frames > 0; frames--)
-                yield return null; // wait a frame loop
-
-            e?.Invoke(state);
-        }
-    }
-
     public static void Delay(float secs, Action action)
     {
         if (ayncHolder == null)
@@ -120,35 +106,6 @@ public static class Helpers
             action?.Invoke();
         }
     }
-    public static void Delay<TState>(float secs, Action<TState> action, TState state)
-    {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
-
-        ayncHolder.StartCoroutine(C(secs, action, state));
-
-        static IEnumerator C(float secs, Action<TState> action, TState state)
-        {
-            yield return GetWait(secs);
-            action?.Invoke(state);
-        }
-    }
-    public static void Repeat<TState>(float delay, float period, Action<TState> action, TState state)
-    {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
-
-        ayncHolder.StartCoroutine(C(delay, period, action, state));
-
-        static IEnumerator C(float delay, float period, Action<TState> action, TState state)
-        {
-            yield return GetWait(delay);
-            while (true) {
-                action?.Invoke(state);
-                yield return GetWait(period);
-            }
-        }
-    }
     public static void WaitUntil(Func<bool> predicate, Action action)
     {
         if (ayncHolder == null)
@@ -160,6 +117,44 @@ public static class Helpers
         {
             yield return new WaitUntil(predicate);
             action?.Invoke();
+        }
+    }
+    public static void Delay<TState>(this TState m, float secs, Action<TState> action)
+        where TState : MonoBehaviour
+    {
+        m.StartCoroutine(C(secs, action, m));
+
+        static IEnumerator C(float secs, Action<TState> action, TState state)
+        {
+            yield return GetWait(secs);
+            action?.Invoke(state);
+        }
+    }
+    public static void Repeat<TState>(this TState m, float delay, float period, Action<TState> action)
+        where TState : MonoBehaviour
+    {
+        m.StartCoroutine(C(delay, period, action, m));
+
+        static IEnumerator C(float delay, float period, Action<TState> action, TState state)
+        {
+            yield return GetWait(delay);
+            while (true) {
+                action?.Invoke(state);
+                yield return GetWait(period);
+            }
+        }
+    }
+    public static void DelayFrames<TState>(this TState m, int frames, Action<TState> action)
+        where TState : MonoBehaviour
+    {
+        m.StartCoroutine(C(frames, action, m));
+
+        static IEnumerator C(int frames, Action<TState> e, TState state)
+        {
+            for (; frames > 0; frames--)
+                yield return null; // wait a frame loop
+
+            e?.Invoke(state);
         }
     }
 
