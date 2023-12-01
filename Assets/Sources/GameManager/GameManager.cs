@@ -1,15 +1,17 @@
+using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
-    [SerializeField] Canvas endGameCanvas;
-    [SerializeField] Spawner spawner;
+    [SerializeField] Canvas       endGameCanvas;
+    [SerializeField] Spawner      spawner;
 
     Scene _currentScene;
     float _initTime;
-    bool fading;
+    bool  fading;
 
     public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
     public float GameElapsedTime => Time.time - _initTime;
@@ -18,7 +20,8 @@ public class GameManager : Singleton<GameManager>
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
-    public Character Player { get; private set; }
+    [CanBeNull] Character _player;
+    public Character Player => _player ??= FindObjectOfType<PlayerController>();
     public static bool IsGameOver { get; private set; }
 
     void Start()
@@ -37,15 +40,14 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
 
-    public void RegisterPlayer(Character player) => Player = player;
+    //public void RegisterPlayer(Character player) => Player = player;
 
     public void ReloadScene()
     {
         if (fading) return;
 
         fading = true;
-        LoadingManager.Instance.FadeIn(() =>
-        {
+        LoadingManager.Instance.FadeIn(() => {
             LoadingManager.Instance.SetLoading(true)
                 .LoadScene( /*TODO: Fix Hacky Solution(criminal)*/(SceneType)_currentScene.buildIndex);
             IsGameOver = false;
@@ -66,7 +68,7 @@ public class GameManager : Singleton<GameManager>
 
     int GetCamId()
     {
-        Vector3 magnitudeVector = Player.Position;
+        Vector3 magnitudeVector  = Player.Position;
         Vector3 normalizedVector = magnitudeVector.normalized;
 
         float maxAbsValue = Mathf.Max(Mathf.Abs(normalizedVector.x), Mathf.Abs(normalizedVector.y),
@@ -74,16 +76,13 @@ public class GameManager : Singleton<GameManager>
 
         Vector3 closestDirectionVector;
 
-        if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.x)))
-        {
+        if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.x))) {
             closestDirectionVector = new Vector3(Mathf.Sign(normalizedVector.x), 0, 0);
         }
-        else if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.y)))
-        {
+        else if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.y))) {
             closestDirectionVector = new Vector3(0, Mathf.Sign(normalizedVector.y), 0);
         }
-        else
-        {
+        else {
             closestDirectionVector = new Vector3(0, 0, Mathf.Sign(normalizedVector.z));
         }
 

@@ -19,18 +19,18 @@ public class PlayerController : Character
     float  _baseDrag;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay;
-
-    [SerializeField] CameraShake    cameraShake;
-    public CameraShake Came => cameraShake;
     public int Health => 1;
     void Start()
     {
         team = "Player";
         _cam = CameraController.Instance.Cam;
         _baseDrag = rb.drag;
-
-        GameManager.Instance.RegisterPlayer(this);
+        
         Events.Died += Died;
+    }
+    void Awake()
+    {
+        //GameManager.Instance.RegisterPlayer(this);
     }
     void Update()
     {
@@ -56,7 +56,7 @@ public class PlayerController : Character
             rb.drag = _baseDrag;
         }
     }
-
+    
     void Rotate()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
@@ -71,7 +71,7 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        proj.IgnoreTeam(team);        
+        proj.IgnoreTeam(team);
         Dash(-proj.transform.forward);
 
         if (shootAudios.Length > 0)
