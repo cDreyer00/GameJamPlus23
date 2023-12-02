@@ -2303,14 +2303,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plane_3x3
       objectReference: {fileID: 0}
-    - target: {fileID: 7451326573356042203, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
-      propertyPath: m_NavMeshData
-      value: 
-      objectReference: {fileID: 23800000, guid: 6efdb982f7e073449bb4695cca668a39, type: 2}
-    - target: {fileID: 7451326573356042203, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
-      propertyPath: m_GenerateLinks
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

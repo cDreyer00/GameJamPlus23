@@ -56,7 +56,6 @@ public class UIAttribute : MonoBehaviour
         costTxt.text = $"${cost}";
         levelTxt.text = $"lv{level}";
 
-        Debug.Log($"info for {upgradeType}, lv{level}_cost{cost}_currency{playerCurrency.money}");
         upgradeBtn.interactable = playerCurrency.money >= cost;
     }
 }

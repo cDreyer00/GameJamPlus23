@@ -29,9 +29,12 @@ public class Battle
 
     public void StartWave()
     {
-        if (CurWave == null || CurWave.IsCompleted)
-            GetNextWave();
+        if (CurWave != null && !CurWave.IsCompleted)
+            return;
 
+        GetNextWave();
+
+        Debug.Log("new wave started");
         IsPaused = false;
     }
 

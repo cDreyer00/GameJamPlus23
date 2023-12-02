@@ -35,7 +35,6 @@ public class NavMeshMovement : CharacterStateModule, IMovementModule
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
-        Debug.Log("enemy freeze subscribed");
         Character.Events.Freeze += OnFreeze;
     }
     void Chase()

@@ -52,11 +52,7 @@ public class Spawner : MonoBehaviour
 
     public Vector3 GetSpawnPosition() => NavMeshRandom.InsideBounds(navMeshSurface.navMeshData.sourceBounds);
 
-    public void StartWave()
-    {
-        _battle.StartWave();
-        Debug.Log("new wave started");
-    }
+    public void StartWave() => _battle?.StartWave();
 
     public T[] GetInstancesByTag<T>(string tag) where T : MonoBehaviour
     {
