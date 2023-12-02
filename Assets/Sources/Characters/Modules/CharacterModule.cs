@@ -7,10 +7,11 @@ public abstract class CharacterModule : MonoBehaviour
     Character _character;
     public Character Character => _character;
 
-    virtual protected void  Awake()
+    virtual protected void Awake()
     {
         var character = transform.GetComponentInParent<Character>();
-        if (character == null) {
+        if (character == null)
+        {
             Debug.LogError($"Character not found upstream, removing module {GetType().Name} from {transform.root.name}");
             Destroy(this);
             return;
@@ -29,6 +30,6 @@ public abstract class CharacterModule : MonoBehaviour
     public void Disable() => enabled = true;
 }
 
-public interface IModule {}
-public interface IMovementModule : IModule {}
-public interface IAttackModule : IModule {}
+public interface IModule { }
+public interface IMovementModule : IModule { }
+public interface IAttackModule : IModule { }

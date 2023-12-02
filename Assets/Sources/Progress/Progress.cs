@@ -23,26 +23,31 @@ public class Progress : SingletonSO<Progress>, ISavable
 
         float mod => 0.2f;
 
+        public event Action<Type, int> OnUpgrade;
+
         public void Upgrade(Type upgradeType)
         {
+            int newLevel = 0;
             switch (upgradeType)
             {
                 case Type.Health:
-                    healthLevel.Value++;
+                    newLevel = ++healthLevel.Value;
                     break;
                 case Type.Damage:
-                    damageLevel.Value++;
+                    newLevel = ++damageLevel.Value;
                     break;
                 case Type.Recoil:
-                    recoilLevel.Value++;
+                    newLevel = ++recoilLevel.Value;
                     break;
                 case Type.Barking:
-                    brakingLevel.Value++;
+                    newLevel = ++brakingLevel.Value;
                     break;
                 case Type.AttackSpeed:
-                    attackSpeedLevel.Value++;
+                    newLevel = ++attackSpeedLevel.Value;
                     break;
             }
+
+            OnUpgrade?.Invoke(upgradeType, newLevel);
         }
 
         public int GetLevel(Type upgradeType)

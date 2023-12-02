@@ -17,7 +17,7 @@ public class MeleeAttack : CharacterModule
     {
         Helpers.DelayFrames(2, static c => {
             c._target = GameManager.Instance.Player;
-            Debug.Log("player set as enemy");
+            Debug.Log("player set as target");
         }, this);
     }
 

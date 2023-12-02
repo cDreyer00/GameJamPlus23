@@ -100,7 +100,10 @@ public class Spawner : MonoBehaviour
         if (!spawnedInstances.Contains(instance)) return;
         spawnedInstances.Remove(instance);
 
-        bool containsEnemy = spawnedInstances.Any(i => i.CompareTag("Enemy"));
+        bool containsEnemy = spawnedInstances.Any(i =>
+        {
+            return !i.IsDestroyed() && i.CompareTag("Enemy");
+        });
         if (_battle.CurWave.IsCompleted && !containsEnemy)
         {
             onAllEnemiesDead?.Invoke();

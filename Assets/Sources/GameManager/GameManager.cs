@@ -21,14 +21,18 @@ public class GameManager : Singleton<GameManager>
     public Character Player { get; private set; }
     public static bool IsGameOver { get; private set; }
 
+    public Timer Timer { get; private set; }
+
     void Start()
     {
         _currentScene = SceneManager.GetActiveScene();
-        _initTime = Time.time;
+        Timer = new();
     }
 
     void Update()
     {
+        Timer.Tick(Time.deltaTime);
+        
         if (RotateLeft)
             CameraController.Instance.RotateLeft();
         if (RotateRight)
