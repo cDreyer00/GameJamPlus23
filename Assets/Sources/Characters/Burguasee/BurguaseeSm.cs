@@ -3,111 +3,124 @@ using Sources.Characters.Modules;
 using Sources.Systems.FSM;
 using UnityEngine;
 using UnityEngine.Serialization;
-using static HammerBotState;
+using static BorguaseState;
 
-public class BurguaseeSm : StateMachineModule<BurguaseeSm, HammerBotState>
+public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
 {
     [SerializeField] float slamRange;
     [SerializeField] float dashCooldown;
     [SerializeField] float slamCooldown;
-    [SerializeField] bool  dashEnabled;
+
+    [SerializeField, Range(0f, 1f)] float dashChance;
 
     NavMeshMovement _movementModule;
     HammerAttack    _hammerAttack;
     Transform       _target;
     float           _dashCooldownTimer;
     float           _slamCooldownTimer;
-    protected override HammerBotState InitialState => Idle;
+    protected override BorguaseState InitialState => Idle;
     protected override BurguaseeSm Context => this;
+
+    [SerializeField] BorguaseState state;
     protected override void Init()
     {
         base.Init();
-
         _movementModule = Character.GetModule<NavMeshMovement>();
         _hammerAttack = Character.GetModule<HammerAttack>();
+        _hammerAttack.ImpactPoint.SetLocalPosition(z: slamRange);
         _target = GameManager.Instance.Player.transform;
         _movementModule.Target = _target;
-        _hammerAttack.Target = _target;
 
         IdleState();
-        SlamState();
+        HammerSlamState();
         DashState();
         ChasingState();
+    }
+    protected override void Update()
+    {
+        state = stateMachine.CurrentState;
+        base.Update();
+        _dashCooldownTimer = Math.Max(_dashCooldownTimer - Time.deltaTime, 0);
+        _slamCooldownTimer = Math.Max(_slamCooldownTimer - Time.deltaTime, 0);
     }
 
     void IdleState()
     {
-        stateMachine.Transition(Idle, Dash, DashPredicate);
-        stateMachine.Transition(Idle, Chasing, static sm => sm._movementModule.Target);
-        stateMachine.Transition(Idle, Slam, SlamPredicate);
+        stateMachine.From(Idle)
+            .Transition(Dash, DashPredicate)
+            .Transition(Chasing, sm => sm._movementModule.Target)
+            .Transition(HammerSlam, HammerSlamRangePredicate);
     }
     void DashState()
     {
-        stateMachine.Transition(Dash, Idle, static sm => !sm._movementModule.Target);
-        stateMachine.Transition(Dash, Chasing, static sm => sm._movementModule.Agent.velocity.sqrMagnitude <= 0.1f);
-
-        stateMachine[LifeCycle.Enter, Dash] = static sm => {
-            sm._movementModule.StartModule();
-            sm._movementModule.Agent.speed *= 2;
-            sm._movementModule.Agent.angularSpeed *= 2;
-            sm._movementModule.Agent.acceleration *= 2;
-        };
-        stateMachine[LifeCycle.Exit, Dash] = static sm => {
-            sm._movementModule.StopModule();
-            sm._movementModule.Agent.speed /= 2;
-            sm._movementModule.Agent.angularSpeed /= 2;
-            sm._movementModule.Agent.acceleration /= 2;
-            sm._dashCooldownTimer = sm.dashCooldown;
-        };
+        stateMachine.From(Dash)
+            .Transition(Idle, sm => !sm._movementModule.Target)
+            .SetCallback(LifeCycle.Enter, sm => sm._movementModule.StartDash())
+            .SetCallback(LifeCycle.Exit, sm => {
+                sm._movementModule.StopMovement();
+                sm._dashCooldownTimer = sm.dashCooldown;
+            });
     }
-    void SlamState()
+    void HammerSlamState()
     {
-        stateMachine.Transition(Slam, Idle, static sm => !sm._movementModule.Target);
-        stateMachine.Transition(Slam, Chasing, static sm => {
-            float distSqr     = (sm._movementModule.Target.position - sm.Character.transform.position).sqrMagnitude;
-            float slamDistSqr = sm.slamRange * sm.slamRange;
-            bool  inRange     = distSqr <= slamDistSqr;
-            bool  inCooldown  = sm._slamCooldownTimer > 0;
-            return !inRange || inCooldown;
-        });
-
-        stateMachine[LifeCycle.Enter, Slam] = static sm => {
-            sm._hammerAttack.MoveAttackPoint(sm._target.position);
-            sm._hammerAttack.StartModule();
-        };
-        stateMachine[LifeCycle.Exit, Slam] = static sm => {
-            sm._hammerAttack.StopModule();
-            sm._slamCooldownTimer = sm.slamCooldown;
-        };
+        stateMachine.From(HammerSlam)
+            .Transition(Idle, sm => !sm._movementModule.Target)
+            .Transition(Chasing, sm => !HammerSlamRangePredicate(sm))
+            .SetCallback(LifeCycle.Enter, sm => {
+                sm.transform.LookAt(sm._target);
+                sm._hammerAttack.StartAttack();
+            })
+            .SetCallback(LifeCycle.Exit, sm => {
+                sm._hammerAttack.StopAttack();
+                sm._slamCooldownTimer = sm.slamCooldown;
+            });
     }
     void ChasingState()
     {
-        stateMachine.Transition(Chasing, Idle, static sm => !sm._movementModule.Target);
-        stateMachine.Transition(Chasing, Dash, DashPredicate);
-        stateMachine.Transition(Chasing, Slam, SlamPredicate);
-        stateMachine[LifeCycle.Enter, Chasing] = static sm => sm._movementModule.StartModule();
-        stateMachine[LifeCycle.Exit, Chasing] = static sm => sm._movementModule.StopModule();
+        stateMachine.From(Chasing)
+            .Transition(Idle, sm => !sm._movementModule.Target)
+            .Transition(Dash, DashPredicate)
+            .Transition(HammerSlam, HammerSlamRangePredicate)
+            .SetCallback(LifeCycle.Enter, sm => sm._movementModule.StartChase())
+            .SetCallback(LifeCycle.Exit, sm => sm._movementModule.StopMovement());
     }
-    static bool SlamPredicate(BurguaseeSm sm)
+    static bool HammerSlamRangePredicate(BurguaseeSm sm)
     {
-        bool  couldSlam   = sm._hammerAttack.Target;
-        float slamDistSqr = sm.slamRange * sm.slamRange;
-        float distSqr     = (sm._hammerAttack.Target.position - sm.Character.transform.position).sqrMagnitude;
-        return couldSlam && distSqr <= slamDistSqr;
+        var   targetPos = sm._target.position;
+        var   position  = sm.transform.position;
+        bool  canSlam   = sm._slamCooldownTimer <= 0;
+        float distSqr   = Vector3Ext.SqrDistance(position, targetPos);
+        return canSlam && distSqr < sm.slamRange * sm.slamRange;
     }
     static bool DashPredicate(BurguaseeSm sm)
     {
-        bool couldDash  = sm.dashEnabled && sm._movementModule.Target;
-        bool shouldDash = UnityEngine.Random.Range(0, 100) <= 33;
-        bool onCooldown = sm._dashCooldownTimer > 0;
-        return couldDash && shouldDash && !onCooldown;
+        bool canDash    = sm._dashCooldownTimer <= 0;
+        bool shouldDash = UnityEngine.Random.Range(0f, 1f) < sm.dashChance;
+        return canDash && shouldDash && sm._movementModule.Target && !HammerSlamRangePredicate(sm);
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        bool hitPlayer = collision.gameObject.CompareTag("Player");
+
+        if (stateMachine.CurrentState == Dash) {
+            if (hitPlayer) {
+                slamCooldown = 0;
+                stateMachine.ChangeState(HammerSlam);
+            }
+            stateMachine.ChangeState(Chasing);
+        }
+    }
+    void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.TryGetComponent(out Rigidbody rb)) {
+            rb.velocity *= 0.1f;
+        }
     }
 }
-
-public enum HammerBotState
+public enum BorguaseState
 {
     Idle,
     Dash,
-    Slam,
+    HammerSlam,
     Chasing,
 }

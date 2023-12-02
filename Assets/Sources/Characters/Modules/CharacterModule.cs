@@ -19,8 +19,6 @@ public abstract class CharacterModule : MonoBehaviour
         Init();
     }
     abstract protected void Init();
-    public virtual void StartModule() {}
-    public virtual void StopModule() {}
     virtual protected void OnDestroy()
     {
         if (Character == null) return;

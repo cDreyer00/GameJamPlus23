@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -20,6 +21,9 @@ namespace Sources.Systems.FSM
             TContext context = default,
             [CanBeNull] EqualityComparer<TState> stateEqualityComparer = null)
         {
+            _transitionsMap = new SortedList<TState, List<TransitionData>>(StateCount);
+            _parentState = new SortedList<TState, TState>(StateCount);
+            _anyTransitionsSet = new HashSet<TransitionData>();
             Context = context;
             CurrentState = initialState;
             _stateEqualityComparer = stateEqualityComparer ?? EqualityComparer<TState>.Default;
@@ -27,9 +31,9 @@ namespace Sources.Systems.FSM
         EqualityComparer<TState> _stateEqualityComparer;
         public TState CurrentState { get; private set; }
 
-        SortedList<TState, List<TransitionData>> _transitionsMap    = new();
-        SortedList<TState, TState>               _parentState       = new();
-        HashSet<TransitionData>                  _anyTransitionsSet = new();
+        SortedList<TState, List<TransitionData>> _transitionsMap;
+        SortedList<TState, TState>               _parentState;
+        HashSet<TransitionData>                  _anyTransitionsSet;
 
         Action<TContext>[] _eventTable = new Action<TContext>[LifeCycleEvents * StateCount];
 
@@ -87,14 +91,19 @@ namespace Sources.Systems.FSM
 
             var oldState = CurrentState;
             CurrentState = newState;
+            var oldStateParents = GetParents(oldState).ToArray();
+            var newStateParents = GetParents(newState).ToArray();
 
             _eventTable[AsInt32(LifeCycle.Exit) * LifeCycleEvents + AsInt32(oldState)]?.Invoke(Context);
             _eventTable[AsInt32(LifeCycle.Enter) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke(Context);
 
-            foreach (var parent in GetParents(oldState)) {
+            foreach (var parent in oldStateParents) {
+                if (newStateParents.Contains(parent)) continue;
                 _eventTable[AsInt32(LifeCycle.Exit) * LifeCycleEvents + AsInt32(parent)]?.Invoke(Context);
             }
-            foreach (var parent in GetParents(CurrentState)) {
+
+            foreach (var parent in newStateParents) {
+                if (oldStateParents.Contains(parent)) continue;
                 _eventTable[AsInt32(LifeCycle.Enter) * LifeCycleEvents + AsInt32(parent)]?.Invoke(Context);
             }
         }
@@ -126,6 +135,10 @@ namespace Sources.Systems.FSM
         {
             public TState               state;
             public Func<TContext, bool> predicate;
+        }
+        public StateConfigurator<TContext, TState> From(TState state)
+        {
+            return new StateConfigurator<TContext, TState>(state, this);
         }
     }
     public enum LifeCycle

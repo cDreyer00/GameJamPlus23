@@ -106,19 +106,6 @@ public static class Helpers
             action?.Invoke();
         }
     }
-    public static void WaitUntil(Func<bool> predicate, Action action)
-    {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
-
-        ayncHolder.StartCoroutine(C(action, predicate));
-
-        static IEnumerator C(Action action, Func<bool> predicate)
-        {
-            yield return new WaitUntil(predicate);
-            action?.Invoke();
-        }
-    }
     public static void Delay<TState>(this TState m, float secs, Action<TState> action)
         where TState : MonoBehaviour
     {
@@ -128,20 +115,6 @@ public static class Helpers
         {
             yield return GetWait(secs);
             action?.Invoke(state);
-        }
-    }
-    public static void Repeat<TState>(this TState m, float delay, float period, Action<TState> action)
-        where TState : MonoBehaviour
-    {
-        m.StartCoroutine(C(delay, period, action, m));
-
-        static IEnumerator C(float delay, float period, Action<TState> action, TState state)
-        {
-            yield return GetWait(delay);
-            while (true) {
-                action?.Invoke(state);
-                yield return GetWait(period);
-            }
         }
     }
     public static void DelayFrames<TState>(this TState m, int frames, Action<TState> action)

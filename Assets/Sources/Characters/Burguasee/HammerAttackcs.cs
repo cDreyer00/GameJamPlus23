@@ -11,42 +11,37 @@ using UnityEngine.Serialization;
 
 public class HammerAttack : CharacterModule
 {
-    [SerializeField] float        lifeTime;
-    [SerializeField] float        delay;
-    [SerializeField] ImpactDamage attackPointPrefab;
+    public float        lifeTime;
+    public float        delay;
+    public ImpactDamage impactDamage;
+    public Transform ImpactPoint => impactDamage.transform;
 
-    GameObject _attackPoint;
-    Transform  _target;
-    public Transform Target
+    IEnumerator _attackCoroutine;
+    void Start()
     {
-        get => _target;
-        set => _target = value;
+        _attackCoroutine = AttackCoroutine();
     }
-    public override void StartModule()
+    public virtual void StartAttack()
     {
-        InvokeRepeating(nameof(Attack), 0, lifeTime);
+        impactDamage.gameObject.SetActive(false);
+        StartCoroutine(_attackCoroutine);
     }
-    public override void StopModule()
+    public virtual void StopAttack()
     {
-        CancelInvoke(nameof(Attack));
-        _attackPoint.SetActive(false);
+        StopCoroutine(_attackCoroutine);
+        impactDamage.gameObject.SetActive(false);
     }
-    public void MoveAttackPoint(Vector3 position)
+    IEnumerator AttackCoroutine()
     {
-        if (!_attackPoint) {
-            _attackPoint = Instantiate(attackPointPrefab.gameObject, transform.position, Quaternion.identity);
+        impactDamage.IgnoreTeam(Character.team);
+        impactDamage.gameObject.SetActive(false);
+
+        while (true) {
+            yield return Helpers.GetWait(delay);
+            impactDamage.gameObject.SetActive(true);
+            yield return Helpers.GetWait(lifeTime);
+            impactDamage.gameObject.SetActive(false);
         }
-        _attackPoint.transform.position = position;
-    }
-    void Attack()
-    {
-        _attackPoint = _attackPoint.OrNull() ?? Instantiate(attackPointPrefab.gameObject, transform.position, Quaternion.identity);
-        var dc = _attackPoint.GetComponent<ImpactDamage>();
-        dc.IgnoreTeam(Character.team);
-        _attackPoint.SetActive(false);
-
-        this.Delay(delay, static s => s._attackPoint.SetActive(true));
-        this.Delay(0.1f, static s => s._attackPoint.SetActive(false));
     }
     protected override void Init() {}
 }

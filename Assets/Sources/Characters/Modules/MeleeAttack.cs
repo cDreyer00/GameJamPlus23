@@ -21,7 +21,7 @@ public class MeleeAttack : CharacterModule
         });
     }
 
-    public override void StartModule()
+    public virtual void StartModule()
     {
         _isAttacking = false;
     }

@@ -20,11 +20,11 @@ public class ProjectileLauncher : CharacterModule
     {
         _projectilePool = new QueuePool<Projectile>(projectile, 10);
     }
-    public override void StartModule()
+    public virtual void StartModule()
     {
         InvokeRepeating(nameof(Shoot), delay, coolDown);
     }
-    public override void StopModule()
+    public virtual void StopModule()
     {
         CancelInvoke(nameof(Shoot));
     }

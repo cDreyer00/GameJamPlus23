@@ -24,8 +24,8 @@ namespace Sources.Characters.MeleeEnemy
         void ChasingState()
         {
             stateMachine.Transition(Chasing, Idle, static sm => !sm._movementModule.Target);
-            stateMachine[LifeCycle.Enter, Chasing] = static sm => sm._movementModule.StartModule();
-            stateMachine[LifeCycle.Exit, Chasing] = static sm => sm._movementModule.StopModule();
+            stateMachine[LifeCycle.Enter, Chasing] = static sm => sm._movementModule.StartChase();
+            stateMachine[LifeCycle.Exit, Chasing] = static sm => sm._movementModule.StopMovement();
         }
     }
 }
