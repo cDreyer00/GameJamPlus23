@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GlobalInstances<TObject> where TObject : Object
@@ -29,7 +30,7 @@ public class GlobalInstances<TObject> where TObject : Object
     public TTarget AddInstance<TTarget>(string key, TTarget instance) where TTarget : TObject
     {
         var i = GetInstance<TTarget>(key);
-        if (i != null)
+        if (i != null && !i.IsDestroyed())
             return i;
 
         instancesDict[key] = instance;

@@ -17,19 +17,27 @@ public class Battle
 
     public event Action<MonoBehaviour, int> onUpdateSpawnCount;
 
+    public bool IsPaused { get; set; }
+
     public Battle(BattleConfig config)
     {
         _config = config;
 
         foreach (var wc in _config.Waves)
             _wavesQueue.Enqueue(new(this, wc));
+    }
 
-        GetNextWave();
+    public void StartWave()
+    {
+        if (CurWave == null || CurWave.IsCompleted)
+            GetNextWave();
+
+        IsPaused = false;
     }
 
     public void Tick(float deltaTime)
     {
-        if (IsCompleted) return;
+        if (IsCompleted || IsPaused) return;
 
         ElapsedTime += deltaTime;
         CurWave.Tick(deltaTime);
@@ -38,6 +46,7 @@ public class Battle
     void CompleteWave()
     {
         if (IsCompleted || CurWave == null) return;
+        IsPaused = true;
 
         if (CurWave != null)
             CurWave.onWaveComplete -= CompleteWave;
@@ -48,8 +57,6 @@ public class Battle
             onBattleEnd?.Invoke();
             return;
         }
-
-        GetNextWave();
     }
 
     void GetNextWave()
@@ -72,7 +79,7 @@ public class Wave
     Battle _battle;
     WaveConfig _config;
     int[] _objsCounter;
-    bool _isCompleted;
+    public bool IsCompleted { get; private set; }
 
     public event Action onWaveComplete;
 
@@ -86,14 +93,14 @@ public class Wave
 
     public void Tick(float deltaTime)
     {
-        if (_isCompleted)
+        if (IsCompleted)
             return;
 
         ElapsedTime += deltaTime;
 
         if (ElapsedTime >= duration)
         {
-            _isCompleted = true;
+            IsCompleted = true;
             onWaveComplete?.Invoke();
         }
 

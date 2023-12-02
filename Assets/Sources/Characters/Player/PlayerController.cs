@@ -18,7 +18,7 @@ public class PlayerController : Character
     float _curDelay;
     float _baseDrag;
     public float CurDelay => _curDelay;
-    public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.01f);
+    public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.02f);
 
     [SerializeField] CameraShake cameraShake;
 
@@ -90,7 +90,7 @@ public class PlayerController : Character
     void Dash(Vector3 dir)
     {
         rb.velocity = Vector3.zero;
-        rb.AddForce(dir * Upgrades.GetModValue(recoilForce, Progress.Upgrades.Type.Recoil), ForceMode.Impulse);
+        rb.AddForce(dir * Upgrades.GetModValue(recoilForce, Progress.Upgrades.Type.Recoil, 0.5f), ForceMode.Impulse);
     }
 
     static void Died(ICharacter character)

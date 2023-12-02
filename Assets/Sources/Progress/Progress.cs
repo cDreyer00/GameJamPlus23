@@ -9,17 +9,15 @@ using Unity.VisualScripting;
 [CreateAssetMenu(menuName = "Progress")]
 public class Progress : SingletonSO<Progress>, ISavable
 {
-    public override string IdStr => "Progress";
-
     [Serializable]
     public class Upgrades
     {
         public enum Type { Health, Damage, Recoil, Barking, AttackSpeed }
-        public ClampedPrimitive<int> healthLevel;
-        public ClampedPrimitive<int> damageLevel;
-        public ClampedPrimitive<int> recoilLevel;
-        public ClampedPrimitive<int> brakingLevel;
-        public ClampedPrimitive<int> attackSpeedLevel;
+        public ClampedPrimitive<int> healthLevel = new(0, 0, 10);
+        public ClampedPrimitive<int> damageLevel = new(0, 0, 10);
+        public ClampedPrimitive<int> recoilLevel = new(0, 0, 10);
+        public ClampedPrimitive<int> brakingLevel = new(0, 0, 10);
+        public ClampedPrimitive<int> attackSpeedLevel = new(0, 0, 10);
 
         public static string FileName => "upgrades.save";
 
@@ -47,7 +45,7 @@ public class Progress : SingletonSO<Progress>, ISavable
             }
         }
 
-        public int GetUpgradeLevel(Type upgradeType)
+        public int GetLevel(Type upgradeType)
         {
             return upgradeType switch
             {
@@ -63,7 +61,7 @@ public class Progress : SingletonSO<Progress>, ISavable
         public float GetModValue(float baseValue, Type upgradeType, float mod = 0)
         {
             mod = mod == 0 ? this.mod : mod;
-            return baseValue + mod * GetUpgradeLevel(upgradeType);
+            return baseValue + mod * GetLevel(upgradeType);
         }
     }
 
@@ -77,8 +75,15 @@ public class Progress : SingletonSO<Progress>, ISavable
         public static implicit operator int(Currency currency) { return currency.money; }
     }
 
-    public Upgrades upgrades;
-    public Currency currency;
+    public override string IdStr => "Progress";
+
+    public Upgrades upgrades = new();
+    public Currency currency = new();
+
+    void OnEnable()
+    {
+        Load();
+    }
 
     public void Save()
     {
@@ -88,8 +93,8 @@ public class Progress : SingletonSO<Progress>, ISavable
 
     public void Load()
     {
-        upgrades = SaveSystem.Load<Upgrades>(Upgrades.FileName);
-        currency = SaveSystem.Load<Currency>(Currency.FileName);
+        upgrades = SaveSystem.Load<Upgrades>(Upgrades.FileName) ?? new();
+        currency = SaveSystem.Load<Currency>(Currency.FileName) ?? new();
     }
 
     public void Clear()

@@ -98,4 +98,9 @@ public class GameManager : Singleton<GameManager>
 
         return 0;
     }
+
+    public static T GetGlobalInstance<T>(string key) where T : Object
+    {
+        return GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);
+    }
 }

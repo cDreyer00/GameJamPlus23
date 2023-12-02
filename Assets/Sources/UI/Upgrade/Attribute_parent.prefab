@@ -720,3 +720,27 @@ MonoBehaviour:
   levelTxt: {fileID: 8121267100646728619}
   costTxt: {fileID: 266303436563484457}
   upgradeBtn: {fileID: 3190445105500897865}
+  costCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 9
+      value: 500
+      inSlope: 131.78056
+      outSlope: 131.78056
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.044742774
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

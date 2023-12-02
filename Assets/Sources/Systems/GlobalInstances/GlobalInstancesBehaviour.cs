@@ -17,7 +17,7 @@ public class GlobalInstancesBehaviour : MonoBehaviour
             {
                 // try get from scene
                 if (!Helpers.TryFindObjectOfType<GlobalInstancesBehaviour>(out var ilb))
-                    // try get from Resources (changes made on this will affect pefab)
+                    // try get from Resources
                     ilb = Resources.Load<GlobalInstancesBehaviour>("Global_Instances");
 
                 if (ilb == null)
