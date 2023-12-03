@@ -20,7 +20,11 @@ public class GameManager : Singleton<GameManager>
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
     [CanBeNull] Character _player; 
+<<<<<<< HEAD
     public Character Player => _player ??= FindObjectOfType<PlayerController>();
+=======
+    public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
+>>>>>>> 61378061eb64197ba54f6181d33dfd2fe3422a01
     public static bool IsGameOver { get; private set; }
 
     public Timer Timer { get; private set; }
@@ -43,8 +47,11 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
 
+<<<<<<< HEAD
     //public void RegisterPlayer(Character player) => Player = player;
 
+=======
+>>>>>>> 61378061eb64197ba54f6181d33dfd2fe3422a01
     public void ReloadScene()
     {
         if (fading) return;
@@ -69,6 +76,7 @@ public class GameManager : Singleton<GameManager>
         fading = false;
     }
 
+<<<<<<< HEAD
     int GetCamId()
     {
         Vector3 magnitudeVector  = Player.Position;
@@ -101,6 +109,8 @@ public class GameManager : Singleton<GameManager>
         return 0;
     }
 
+=======
+>>>>>>> 61378061eb64197ba54f6181d33dfd2fe3422a01
     public static T GetGlobalInstance<T>(string key) where T : Object
     {
         return GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);

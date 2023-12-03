@@ -17,6 +17,7 @@ public class Spawner : MonoBehaviour
     List<MonoBehaviour> spawnedInstances = new();
     Battle _battle;
 
+    public bool IsPaused => _battle?.IsPaused ?? false;
     public event Action onAllEnemiesDead;
 
     void Awake()
@@ -52,7 +53,11 @@ public class Spawner : MonoBehaviour
 
     public Vector3 GetSpawnPosition() => NavMeshRandom.InsideBounds(navMeshSurface.navMeshData.sourceBounds);
 
-    public void StartWave() => _battle?.StartWave();
+    public void StartWave()
+    {
+        _battle?.StartWave();
+        _battle.Continue();
+    }
 
     public T[] GetInstancesByTag<T>(string tag) where T : MonoBehaviour
     {
@@ -103,6 +108,7 @@ public class Spawner : MonoBehaviour
         if (_battle.CurWave.IsCompleted && !containsEnemy)
         {
             onAllEnemiesDead?.Invoke();
+            _battle.Pause();
         }
     }
 }
