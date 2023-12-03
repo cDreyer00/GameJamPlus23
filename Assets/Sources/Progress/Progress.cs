@@ -12,7 +12,7 @@ public class Progress : SingletonSO<Progress>, ISavable
     [Serializable]
     public class Upgrades
     {
-        public enum Type { Health, Damage, Recoil, Barking, AttackSpeed }
+        public enum Type { Health, Damage, Recoil, Braking, AttackSpeed }
         public ClampedPrimitive<int> healthLevel = new(0, 0, 10);
         public ClampedPrimitive<int> damageLevel = new(0, 0, 10);
         public ClampedPrimitive<int> recoilLevel = new(0, 0, 10);
@@ -39,7 +39,7 @@ public class Progress : SingletonSO<Progress>, ISavable
                 case Type.Recoil:
                     newLevel = ++recoilLevel.Value;
                     break;
-                case Type.Barking:
+                case Type.Braking:
                     newLevel = ++brakingLevel.Value;
                     break;
                 case Type.AttackSpeed:
@@ -57,7 +57,7 @@ public class Progress : SingletonSO<Progress>, ISavable
                 Type.Health => healthLevel,
                 Type.Damage => damageLevel,
                 Type.Recoil => recoilLevel,
-                Type.Barking => brakingLevel,
+                Type.Braking => brakingLevel,
                 Type.AttackSpeed => attackSpeedLevel,
                 _ => 0
             };

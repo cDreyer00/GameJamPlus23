@@ -90,7 +90,7 @@ public class PlayerController : Character
             if (Input.GetKey(KeyCode.Space))
             {
                 // rb.drag = _baseDrag * braking;
-                rb.drag = _baseDrag * Upgrades.GetModValue(braking, Progress.Upgrades.Type.Barking);
+                rb.drag = _baseDrag * Upgrades.GetModValue(braking, Progress.Upgrades.Type.Braking);
             }
             else
             {
