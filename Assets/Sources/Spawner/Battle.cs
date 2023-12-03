@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -10,11 +11,13 @@ public class Battle
     public Wave CurWave { get; private set; }
 
     BattleConfig _config;
-    Queue<Wave>  _wavesQueue = new();
+    Queue<Wave> _wavesQueue = new();
 
     public event Action onBattleEnd;
 
     public event Action<MonoBehaviour, int> onUpdateSpawnCount;
+
+    public bool IsPaused { get; set; }
 
     public Battle(BattleConfig config)
     {
@@ -22,13 +25,22 @@ public class Battle
 
         foreach (var wc in _config.Waves)
             _wavesQueue.Enqueue(new(this, wc));
+    }
+
+    public void StartWave()
+    {
+        if (CurWave != null && !CurWave.IsCompleted)
+            return;
 
         GetNextWave();
+
+        Debug.Log("new wave started");
+        IsPaused = false;
     }
 
     public void Tick(float deltaTime)
     {
-        if (IsCompleted) return;
+        if (IsCompleted || IsPaused) return;
 
         ElapsedTime += deltaTime;
         CurWave.Tick(deltaTime);
@@ -37,17 +49,17 @@ public class Battle
     void CompleteWave()
     {
         if (IsCompleted || CurWave == null) return;
+        IsPaused = true;
 
         if (CurWave != null)
             CurWave.onWaveComplete -= CompleteWave;
 
-        if (_wavesQueue.Count == 0) {
+        if (_wavesQueue.Count == 0)
+        {
             IsCompleted = true;
             onBattleEnd?.Invoke();
             return;
         }
-
-        GetNextWave();
     }
 
     void GetNextWave()
@@ -67,10 +79,10 @@ public class Wave
     public float ElapsedTime { get; private set; }
     public readonly float duration;
 
-    Battle     _battle;
+    Battle _battle;
     WaveConfig _config;
-    int[]      _objsCounter;
-    bool       _isCompleted;
+    int[] _objsCounter;
+    public bool IsCompleted { get; private set; }
 
     public event Action onWaveComplete;
 
@@ -84,13 +96,14 @@ public class Wave
 
     public void Tick(float deltaTime)
     {
-        if (_isCompleted)
+        if (IsCompleted)
             return;
 
         ElapsedTime += deltaTime;
 
-        if (ElapsedTime >= duration) {
-            _isCompleted = true;
+        if (ElapsedTime >= duration)
+        {
+            IsCompleted = true;
             onWaveComplete?.Invoke();
         }
 
@@ -100,12 +113,13 @@ public class Wave
     void UpdateSpawns()
     {
         var objs = _config.ObjectsList;
-        for (int i = 0; i < objs.Length; i++) {
-            int amount  = objs[i].GetAmount(ElapsedTime);
+        for (int i = 0; i < objs.Length; i++)
+        {
+            int amount = objs[i].GetAmount(ElapsedTime);
             var counter = _objsCounter[i];
             if (counter >= amount) continue;
 
-            int               diff      = amount - counter;
+            int diff = amount - counter;
             ObjectCurveConfig objConfig = objs[i];
             _battle.SpawnObjs(objConfig.Obj, diff);
             _objsCounter[i] = amount;

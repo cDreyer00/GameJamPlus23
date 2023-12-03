@@ -17,10 +17,20 @@ public class Spawner : MonoBehaviour
     List<MonoBehaviour> spawnedInstances = new();
     Battle _battle;
 
+    public event Action onAllEnemiesDead;
+
+    void Awake()
+    {
+        GlobalInstancesBehaviour.GlobalInstances.AddInstance("spawner", this);
+    }
+
     void Start()
     {
         Init(_battleConfig);
+        StartWave();
     }
+
+    void Update() { _battle.Tick(Time.deltaTime); }
 
     public void Init(BattleConfig battleConfig)
     {
@@ -40,26 +50,9 @@ public class Spawner : MonoBehaviour
             }
     }
 
-    //                                                      to debug
-    void Update() { _battle.Tick(Time.deltaTime); elapsedTime = _battle.ElapsedTime; }
+    public Vector3 GetSpawnPosition() => NavMeshRandom.InsideBounds(navMeshSurface.navMeshData.sourceBounds);
 
-    public virtual Vector3 GetSpawnPosition() => NavMeshRandom.InsideBounds(navMeshSurface.navMeshData.sourceBounds);
-
-    void SpawnObj(MonoBehaviour obj, int amount)
-    {
-        if (!poolsDict.TryGetValue(obj.gameObject, out var pool))
-        {
-            Debug.LogError("pool not found");
-            return;
-        }
-
-        for (; amount > 0; amount--)
-        {
-            var i = pool.Get(GetSpawnPosition(), Quaternion.identity);
-            spawnedInstances.Add(i);
-            pool.onInstanceReleased += OnInstanceRelease;
-        }
-    }
+    public void StartWave() => _battle?.StartWave();
 
     public T[] GetInstancesByTag<T>(string tag) where T : MonoBehaviour
     {
@@ -82,9 +75,34 @@ public class Spawner : MonoBehaviour
         return values.ToArray();
     }
 
+    void SpawnObj(MonoBehaviour obj, int amount)
+    {
+        if (!poolsDict.TryGetValue(obj.gameObject, out var pool))
+        {
+            Debug.LogError("pool not found");
+            return;
+        }
+
+        for (; amount > 0; amount--)
+        {
+            var i = pool.Get(GetSpawnPosition(), Quaternion.identity);
+            spawnedInstances.Add(i);
+            pool.onInstanceReleased += OnInstanceRelease;
+        }
+    }
+
     void OnInstanceRelease(MonoBehaviour instance)
     {
         if (!spawnedInstances.Contains(instance)) return;
         spawnedInstances.Remove(instance);
+
+        bool containsEnemy = spawnedInstances.Any(i =>
+        {
+            return !i.IsDestroyed() && i.CompareTag("Enemy");
+        });
+        if (_battle.CurWave.IsCompleted && !containsEnemy)
+        {
+            onAllEnemiesDead?.Invoke();
+        }
     }
 }

@@ -1,20 +1,17 @@
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Sources.cdreyer
 {
-    public abstract class SingletonAddressableSO<T> : ScriptableObject where T : SingletonAddressableSO<T>
+    public abstract class SingletonSO<T> : ScriptableObject where T : SingletonSO<T>
     {
         private static T _instance;
-        protected static T Instance
+        public static T Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    AsyncOperationHandle<T> op = Addressables.LoadAssetAsync<T>(typeof(T).Name);
-                    _instance = op.WaitForCompletion(); // Forces synchronous load
+                    _instance = GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(CreateInstance<T>().IdStr); // Forces synchronous load
 
                     if (_instance == null)
                     {
@@ -28,6 +25,8 @@ namespace Sources.cdreyer
         }
 
         protected virtual T Standard { get; }
+
+        public abstract string IdStr { get; }
 
 #if UNITY_EDITOR
         public static void FindObject()

@@ -115,7 +115,7 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     void ApplyEffect()
     {
-        var spawner = GameManager.Instance.Spawner;
+        var spawner = GlobalInstancesBehaviour.GlobalInstances.GetInstance<Spawner>("spawner");/* GameManager.Instance.Spawner */;
         var enemies = spawner.GetInstancesByTag<Character>("Enemy");
         foreach (var e in enemies)
             effect.ApplyEffect(e);

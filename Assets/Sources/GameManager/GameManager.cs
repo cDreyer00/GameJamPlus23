@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,14 +23,18 @@ public class GameManager : Singleton<GameManager>
     public Character Player => _player ??= FindObjectOfType<PlayerController>();
     public static bool IsGameOver { get; private set; }
 
+    public Timer Timer { get; private set; }
+
     void Start()
     {
         _currentScene = SceneManager.GetActiveScene();
-        _initTime = Time.time;
+        Timer = new();
     }
 
     void Update()
     {
+        Timer.Tick(Time.deltaTime);
+        
         if (RotateLeft)
             CameraController.Instance.RotateLeft();
         if (RotateRight)
@@ -96,5 +99,10 @@ public class GameManager : Singleton<GameManager>
             return 0;
 
         return 0;
+    }
+
+    public static T GetGlobalInstance<T>(string key) where T : Object
+    {
+        return GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);
     }
 }

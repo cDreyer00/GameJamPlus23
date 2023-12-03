@@ -14,9 +14,9 @@ using UnityEditor;
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform    target;
-    [SerializeField] float        startCooldownTime;
-    [SerializeField] float        dashForce;
+    [SerializeField] Transform target;
+    [SerializeField] float startCooldownTime;
+    [SerializeField] float dashForce;
 
     Rigidbody _rigidbody;
     public NavMeshAgent Agent => agent;
@@ -41,7 +41,8 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         agent.isStopped = false;
 
         agent.transform.LookAt(target);
-        if (_rigidbody) {
+        if (_rigidbody)
+        {
             _rigidbody.velocity = Vector3.zero;
             //_rigidbody.angularVelocity = Vector3.zero;
             _rigidbody.AddForce(transform.forward * dashForce, ForceMode.Impulse);
@@ -52,7 +53,8 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         agent.isStopped = true;
         StopCoroutine(_chaseCoroutine);
 
-        if (_rigidbody) {
+        if (_rigidbody)
+        {
             _rigidbody.velocity = Vector3.zero;
             //_rigidbody.angularVelocity = Vector3.zero;
         }
@@ -61,12 +63,12 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
-        Debug.Log("enemy freeze subscribed");
         Character.Events.Freeze += OnFreeze;
     }
     IEnumerator ChaseCoroutine()
     {
-        while (!agent.isStopped) {
+        while (!agent.isStopped)
+        {
             agent.SetDestination(target.position);
             yield return null;
         }
@@ -74,9 +76,10 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     void OnFreeze(float duration)
     {
         agent.isStopped = true;
-        this.Delay(duration, static c => {
-            if (c.IsDestroyed() || !c.gameObject.activeInHierarchy) return;
-            c.agent.isStopped = false;
+        Helpers.Delay(duration, () =>
+        {
+            if (this.IsDestroyed() || !this.gameObject.activeInHierarchy) return;
+            this.agent.isStopped = false;
         });
     }
 }

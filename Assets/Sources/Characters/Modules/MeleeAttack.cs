@@ -15,13 +15,12 @@ public class MeleeAttack : CharacterModule
 
     protected override void Init()
     {
-        this.DelayFrames(2, static c => {
+        Helpers.DelayFrames(2, static c => {
             c._target = GameManager.Instance.Player;
-            Debug.Log("player set as enemy");
-        });
+        }, this);
     }
 
-    public virtual void StartModule()
+    void OnEnable()
     {
         _isAttacking = false;
     }
@@ -34,18 +33,18 @@ public class MeleeAttack : CharacterModule
         float dist = Vector3.Distance(Character.Position, _target.Position);
         if (dist <= _range) {
             _isAttacking = true;
-            this.Delay(_delay, Attack);
+            Helpers.Delay(_delay, Attack);
         }
     }
 
-    static void Attack(MeleeAttack c)
+    void Attack()
     {
-        if (c._target == null) return;
+        if (_target == null) return;
 
-        float dist = Vector3.Distance(c.Character.Position, c._target.Position);
-        if (dist <= c._range)
-            c._target.Events.OnTakeDamage(c._damage);
+        float dist = Vector3.Distance(Character.Position, _target.Position);
+        if (dist <= _range)
+            _target.Events.OnTakeDamage(_damage);
 
-        c.Delay(c._coolDown, static c => c._isAttacking = false);
+        Helpers.Delay(_coolDown, static c => c._isAttacking = false, this);
     }
 }
