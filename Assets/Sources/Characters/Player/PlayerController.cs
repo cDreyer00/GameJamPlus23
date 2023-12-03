@@ -30,7 +30,6 @@ public class PlayerController : Character
         _cam = CameraController.Instance.Cam;
         _baseDrag = rb.drag;
 
-        GameManager.Instance.RegisterPlayer(this);
         Events.Died += Died;
     }
     void Update()
