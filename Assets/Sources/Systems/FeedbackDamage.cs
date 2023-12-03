@@ -12,7 +12,7 @@ public class FeedbackDamage : CharacterModule
     {
        /* _sprite = GetComponent<SpriteRenderer>();
         Character.Events.TakeDamage += DamageColor;*/
-        Character.Events.Freeze += Freeze;
+        Character.Events.OnFreeze += Freeze;
     }
 
    /* void OnEnable()

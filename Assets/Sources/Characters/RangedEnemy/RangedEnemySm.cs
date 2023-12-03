@@ -6,16 +6,29 @@ using static Character.State;
 
 namespace Sources.Characters.RangedEnemy
 {
-    public class RangedEnemySm : StateMachineModule
+    public class RangedEnemySm : StateMachineModule<RangedEnemySm, Character.State>
     {
-        [SerializeField] HealthModule       healthModule;
-        [SerializeField] ProjectileLauncher attackModule;
+        ProjectileLauncher _attackModule;
+        protected override Character.State InitialState => Idle;
+        protected override RangedEnemySm Context => this;
         protected override void Init()
         {
             base.Init();
-            attackModule.Target = GameManager.Instance.Player.transform;
-            StateMachine.Transition(Idle, Attacking, () => attackModule.Target);
-            StateMachine.Transition(Attacking, Idle, () => !attackModule.Target);
+            _attackModule = Character.GetModule<ProjectileLauncher>();
+            _attackModule.Target = GameManager.Instance.Player.transform;
+            IdleState();
+            AttackingState();
+        }
+
+        void IdleState()
+        {
+            stateMachine.Transition(Idle, Attacking, static sm => sm._attackModule.Target);
+        }
+        void AttackingState()
+        {
+            stateMachine.Transition(Attacking, Idle, static sm => !sm._attackModule.Target);
+            stateMachine[LifeCycle.Enter, Attacking] = static sm => sm._attackModule.StartModule();
+            stateMachine[LifeCycle.Exit, Attacking] = static sm => sm._attackModule.StopModule();
         }
     }
 }

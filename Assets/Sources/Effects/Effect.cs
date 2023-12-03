@@ -20,7 +20,7 @@ public class FreezeEffect : Effect
 {
     public override void ApplyEffect(Character character)
     {
-        character.Events.OnFreeze(duration);
+        character.Events.Freeze(duration);
     }
 }
 
@@ -28,6 +28,6 @@ public class DamageEffect : Effect
 {
     public override void ApplyEffect(Character character)
     {
-        character.Events.OnTakeDamage(damage);
+        character.Events.TakeDamage(damage);
     }
 }

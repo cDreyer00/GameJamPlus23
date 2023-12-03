@@ -1,22 +1,31 @@
-﻿using System;
-using Sources.Characters.Modules;
+﻿using Sources.Characters.Modules;
 using Sources.Systems.FSM;
-using UnityEngine;
-using UnityEngine.AI;
 using static Character.State;
 
 namespace Sources.Characters.MeleeEnemy
 {
-    public class MeleeEnemySm : StateMachineModule
+    public class MeleeEnemySm : StateMachineModule<MeleeEnemySm, Character.State>
     {
-        [SerializeField] HealthModule    healthModule;
-        [SerializeField] NavMeshMovement movementModule;
+        NavMeshMovement _movementModule;
+        protected override Character.State InitialState => Idle;
+        protected override MeleeEnemySm Context => this;
         protected override void Init()
         {
             base.Init();
-            movementModule.Target = GameManager.Instance.Player.transform;
-            StateMachine.Transition(Idle, Chasing, () => movementModule.Target);
-            StateMachine.Transition(Chasing, Idle, () => !movementModule.Target);
+            _movementModule = Character.GetModule<NavMeshMovement>();
+            _movementModule.Target = GameManager.Instance.Player.transform;
+            IdleState();
+            ChasingState();
+        }
+        void IdleState()
+        {
+            stateMachine.Transition(Idle, Chasing, static sm => sm._movementModule.Target);
+        }
+        void ChasingState()
+        {
+            stateMachine.Transition(Chasing, Idle, static sm => !sm._movementModule.Target);
+            stateMachine[LifeCycle.Enter, Chasing] = static sm => sm._movementModule.StartChase();
+            stateMachine[LifeCycle.Exit, Chasing] = static sm => sm._movementModule.StopMovement();
         }
     }
 }

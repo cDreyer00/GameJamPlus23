@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,9 +20,18 @@ public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
         module = GetModule<T>();
         return module != null;
     }
+    void Awake()
+    {
+        _modules.UnionWith(GetComponentsInChildren<CharacterModule>());
+    }
     public GenericPool<MonoBehaviour> Pool { get; set; }
-    public void OnGet() => _events.OnInitialized();
-    public void OnRelease() {}
+    public void OnGet() => _events.Initialized();
+    public void OnRelease()
+    {
+        foreach (var characterModule in _modules) {
+            characterModule.CancelInvoke();
+        }
+    }
     public void OnCreated() {}
     public enum State
     {

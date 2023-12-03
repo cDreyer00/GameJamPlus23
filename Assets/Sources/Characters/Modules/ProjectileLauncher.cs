@@ -3,7 +3,7 @@ using Sources.Characters.Modules;
 using UnityEngine;
 using static Character.State;
 
-public class ProjectileLauncher : CharacterStateModule
+public class ProjectileLauncher : CharacterModule
 {
     QueuePool<Projectile> _projectilePool;
 
@@ -20,12 +20,11 @@ public class ProjectileLauncher : CharacterStateModule
     {
         _projectilePool = new QueuePool<Projectile>(projectile, 10);
     }
-    public override Character.State StateEnum => Attacking;
-    public override void Enter()
+    public virtual void StartModule()
     {
         InvokeRepeating(nameof(Shoot), delay, coolDown);
     }
-    public override void Exit()
+    public virtual void StopModule()
     {
         CancelInvoke(nameof(Shoot));
     }

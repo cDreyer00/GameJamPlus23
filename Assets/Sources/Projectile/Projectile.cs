@@ -9,12 +9,12 @@ using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour, IPoolable<Projectile>
 {
-    [SerializeField] float          moveSpeed = 1;
-    [SerializeField] float          lifeTime;
-    [SerializeField] AnimationCurve yAxisTrajectory;
+    [SerializeField] public int            damage;
+    [SerializeField]        float          moveSpeed = 1;
+    [SerializeField]        float          lifeTime;
+    [SerializeField]        AnimationCurve yAxisTrajectory;
 
-    public int      damage;
-    public Vector3  target;
+    public Vector3 target;
 
     Transform _transform;
     float     _currentLifeTime;
@@ -68,14 +68,14 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
 
         var maxSqrDistance = Vector3.SqrMagnitude(_anchor - target);
         var sqrDistance    = Vector3.SqrMagnitude(target - position);
-        // var magnitude01    = Ranges.Map01(sqrDistance, 0, maxSqrDistance);
+        var magnitude01    = Ranges.Map01(sqrDistance, 0, maxSqrDistance);
 
         //print(magnitude01);
 
-        // float eval = yAxisTrajectory.Evaluate(magnitude01);
+        float eval = yAxisTrajectory.Evaluate(magnitude01);
         position.x += step * forward.x;
         position.z += step * forward.z;
-        // position.y = _anchor.y * (1 + eval);
+        position.y = _anchor.y * (1 + eval);
         _transform.position = position;
     }
     void OnTriggerEnter(Collider col)
@@ -85,7 +85,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
                 return;
             }
 
-            character.Events.OnTakeDamage(damage);
+            character.Events.TakeDamage(damage);
         }
         if (Pool != null) Pool.Release(this);
         else Destroy(gameObject);

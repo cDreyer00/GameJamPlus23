@@ -1,38 +1,41 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Sources.Systems.FSM
 {
-    public abstract class StateMachine
-    {
-        public abstract void Update();
-        public abstract void FixedUpdate();
-    }
-
     [Serializable]
-    public class StateMachine<TState> : StateMachine where TState : Enum
+    public class StateMachine<TContext, TState> where TState : Enum
     {
+        public TContext Context { get; set; }
         static int LifeCycleEvents => Cached.EnumValues<LifeCycle>().Length;
         static int StateCount => Cached.EnumValues<TState>().Length;
         static int AsInt32(TState state) => UnsafeUtility.As<TState, int>(ref state);
         static int AsInt32(LifeCycle lifeCycle) => (int)lifeCycle;
-        public StateMachine(TState initialState, [CanBeNull] EqualityComparer<TState> stateEqualityComparer = null)
+        public StateMachine(
+            TState initialState,
+            TContext context = default,
+            [CanBeNull] EqualityComparer<TState> stateEqualityComparer = null)
         {
+            _transitionsMap = new SortedList<TState, List<TransitionData>>(StateCount);
+            _parentState = new SortedList<TState, TState>(StateCount);
+            _anyTransitionsSet = new HashSet<TransitionData>();
+            Context = context;
             CurrentState = initialState;
             _stateEqualityComparer = stateEqualityComparer ?? EqualityComparer<TState>.Default;
         }
         EqualityComparer<TState> _stateEqualityComparer;
         public TState CurrentState { get; private set; }
 
-        SortedList<TState, List<TransitionData>> _transitionsMap    = new();
-        SortedList<TState, TState>               _parentState       = new();
-        HashSet<TransitionData>                  _anyTransitionsSet = new();
+        SortedList<TState, List<TransitionData>> _transitionsMap;
+        SortedList<TState, TState>               _parentState;
+        HashSet<TransitionData>                  _anyTransitionsSet;
 
-        Action[] _eventTable = new Action[LifeCycleEvents * StateCount];
+        Action<TContext>[] _eventTable = new Action<TContext>[LifeCycleEvents * StateCount];
 
         public void SetSubState(TState parent, TState child)
         {
@@ -46,28 +49,38 @@ namespace Sources.Systems.FSM
             }
         }
         public bool TryGetParent(TState state, out TState parent) => _parentState.TryGetValue(state, out parent);
-        public void Transition(TState src, TState dst, Func<bool> predicate = null)
+        public void Transition(TState src, TState dst, Func<TContext, bool> predicate = null)
         {
             if (!_transitionsMap.TryGetValue(src, out var transitions)) {
                 transitions = new List<TransitionData>();
                 _transitionsMap.Add(src, transitions);
             }
-            transitions.Add(new TransitionData { state = dst, predicate = predicate ?? (static () => true) });
+            transitions.Add(new TransitionData { state = dst, predicate = predicate ?? (static _ => true) });
         }
-        public void Transition(TState dst, Func<bool> predicate = null)
+        public void Transition(TState dst, Func<TContext, bool> predicate = null)
         {
-            _anyTransitionsSet.Add(new TransitionData { state = dst, predicate = predicate ?? (static () => true) });
+            _anyTransitionsSet.Add(new TransitionData { state = dst, predicate = predicate ?? (static _ => true) });
         }
         public void RemoveTransition(TState src, TState dst)
         {
             if (!_transitionsMap.TryGetValue(src, out var transitions)) return;
-            transitions.RemoveAll(src => _stateEqualityComparer.Equals(src.state, dst));
+            foreach (var transitionData in transitions) {
+                if (_stateEqualityComparer.Equals(transitionData.state, dst)) {
+                    transitions.Remove(transitionData);
+                    break;
+                }
+            }
         }
         public void RemoveTransition(TState dst)
         {
-            _anyTransitionsSet.RemoveWhere(src => _stateEqualityComparer.Equals(src.state, dst));
+            foreach (var transitionData in _anyTransitionsSet) {
+                if (_stateEqualityComparer.Equals(transitionData.state, dst)) {
+                    _anyTransitionsSet.Remove(transitionData);
+                    break;
+                }
+            }
         }
-        public Action this[LifeCycle lifeCycle, TState state]
+        public Action<TContext> this[LifeCycle lifeCycle, TState state]
         {
             get => _eventTable[AsInt32(lifeCycle) * LifeCycleEvents + AsInt32(state)];
             set => _eventTable[AsInt32(lifeCycle) * LifeCycleEvents + AsInt32(state)] = value;
@@ -78,47 +91,54 @@ namespace Sources.Systems.FSM
 
             var oldState = CurrentState;
             CurrentState = newState;
+            var oldStateParents = GetParents(oldState).ToArray();
+            var newStateParents = GetParents(newState).ToArray();
 
-            _eventTable[AsInt32(LifeCycle.Exit) * LifeCycleEvents + AsInt32(oldState)]?.Invoke();
-            _eventTable[AsInt32(LifeCycle.Enter) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
+            _eventTable[AsInt32(LifeCycle.Exit) * LifeCycleEvents + AsInt32(oldState)]?.Invoke(Context);
+            _eventTable[AsInt32(LifeCycle.Enter) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke(Context);
 
-            foreach (var parent in GetParents(oldState)) {
-                _eventTable[AsInt32(LifeCycle.Exit) * LifeCycleEvents + AsInt32(parent)]?.Invoke();
+            foreach (var parent in oldStateParents) {
+                if (newStateParents.Contains(parent)) continue;
+                _eventTable[AsInt32(LifeCycle.Exit) * LifeCycleEvents + AsInt32(parent)]?.Invoke(Context);
             }
-            foreach (var parent in GetParents(CurrentState)) {
-                _eventTable[AsInt32(LifeCycle.Enter) * LifeCycleEvents + AsInt32(parent)]?.Invoke();
+
+            foreach (var parent in newStateParents) {
+                if (oldStateParents.Contains(parent)) continue;
+                _eventTable[AsInt32(LifeCycle.Enter) * LifeCycleEvents + AsInt32(parent)]?.Invoke(Context);
             }
         }
 
         TransitionData? GetTransition()
         {
             foreach (var transition in _anyTransitionsSet) {
-                if (transition.predicate()) return transition;
+                if (transition.predicate(Context)) return transition;
             }
             if (_transitionsMap.TryGetValue(CurrentState, out var transitionState)) {
                 foreach (var transition in transitionState) {
-                    if (transition.predicate()) return transition;
+                    if (transition.predicate(Context)) return transition;
                 }
             }
             return default;
         }
-
-        public override void Update()
+        public void Update()
         {
             var transition = GetTransition();
             if (transition != null) ChangeState(transition.Value.state);
 
-            _eventTable[AsInt32(LifeCycle.Update) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
+            _eventTable[AsInt32(LifeCycle.Update) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke(Context);
         }
-
-        public override void FixedUpdate()
+        public void FixedUpdate()
         {
-            _eventTable[AsInt32(LifeCycle.FixedUpdate) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke();
+            _eventTable[AsInt32(LifeCycle.FixedUpdate) * LifeCycleEvents + AsInt32(CurrentState)]?.Invoke(Context);
         }
         public struct TransitionData
         {
-            public TState     state;
-            public Func<bool> predicate;
+            public TState               state;
+            public Func<TContext, bool> predicate;
+        }
+        public StateConfigurator<TContext, TState> From(TState state)
+        {
+            return new StateConfigurator<TContext, TState>(state, this);
         }
     }
     public enum LifeCycle

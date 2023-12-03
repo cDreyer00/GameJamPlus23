@@ -1,6 +1,7 @@
 using System;
 using Sources.Characters.Modules;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public interface ICharacter
 {
@@ -10,29 +11,33 @@ public interface ICharacter
 
 public class CharacterEvents
 {
-    public event Action<ICharacter> Died;
-    public event Action Initialized;
-    public event Action<float> TakeDamage;
-    public event Action<float> Freeze;
+    public event Action<ICharacter> OnDied;
+    public event Action OnInitialized;
+    public event Action<float> OnTakeDamage;
+    public event Action<float> OnFreeze;
 
-    public void OnInitialized()
+    public void Initialized()
     {
-        Initialized?.Invoke();
+        OnInitialized?.Invoke();
     }
-    public void OnTakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
-        TakeDamage?.Invoke(amount);
+        OnTakeDamage?.Invoke(amount);
     }
-    public void OnFreeze(float duration)
+    public void Freeze(float duration)
     {
-        Freeze?.Invoke(duration);
+        OnFreeze?.Invoke(duration);
     }
-    public void OnDied(ICharacter character)
+    public void Died(ICharacter character)
     {
-        Died?.Invoke(character);
-        if (character is Character c && c.TryGetModule<CharacterStateModule>(out var stateModule)) {
-            stateModule.StateMachine.Update();
-            c.Pool.Release(c);
+        OnDied?.Invoke(character);
+        if (character is Character c) {
+            if (c.Pool == null) {
+                Object.Destroy(c);
+            }
+            else {
+                c.Pool.Release(c);
+            }
         }
     }
 }

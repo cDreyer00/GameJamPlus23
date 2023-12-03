@@ -6,6 +6,6 @@ public class CurrencyModule : CharacterModule
 
     protected override void Init()
     {
-        Character.Events.Died += (_) => Progress.Instance.currency.money += currencyOnDie;
+        Character.Events.OnDied += (_) => Progress.Instance.currency.money += currencyOnDie;
     }
 }

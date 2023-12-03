@@ -53,8 +53,7 @@ public abstract class GenericPool<T> where T : MonoBehaviour
     protected void InstanceCreated(T i) => onInstanceCreated?.Invoke(i);
     protected void InstanceTaken(T i) => onInstanceTaken?.Invoke(i);
     protected void InstanceReleased(T i) => onInstanceReleased?.Invoke(i);
-
-    protected abstract void CreateObjects(T original, int amount, Transform parent = null, bool active = false);
+    abstract protected void CreateObjects(T original, int amount, Transform parent = null, bool active = false);
     public abstract T Get(Vector3 position, Quaternion rotation);
     public abstract T Get(Transform parent);
     public abstract void Release(T obj);

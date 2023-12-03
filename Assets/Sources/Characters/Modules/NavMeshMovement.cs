@@ -1,53 +1,78 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using DG.Tweening;
 using Sources.Characters.Modules;
 using UnityEngine;
 using UnityEngine.AI;
 using Sources.Systems.FSM;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(NavMeshAgent)), Serializable]
-public class NavMeshMovement : CharacterStateModule, IMovementModule
+public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform    target;
-    [SerializeField] float        startCooldownTime;
+    [SerializeField] float        dashDistance;
+    [SerializeField] float        dashDuration;
+    [SerializeField] Ease         dashEase;
     public NavMeshAgent Agent => agent;
+    public Tween dashTween;
     public Transform Target
     {
         get => target;
         set => target = value;
     }
-    public override Character.State StateEnum => Character.State.Chasing;
-    public override void Enter()
+    IEnumerator _chaseCoroutine;
+    void Start()
+    {
+        _chaseCoroutine = ChaseCoroutine();
+    }
+    public void StartChase()
     {
         agent.isStopped = false;
-        InvokeRepeating(nameof(Chase), startCooldownTime, 0.1f);
+        StartCoroutine(_chaseCoroutine);
     }
-    public override void Exit()
+    public void StartDash()
     {
-        CancelInvoke(nameof(Chase));
+        agent.isStopped = false;
+
+        agent.transform.LookAt(target);
+        var direction = Vector3Ext.Direction(transform.position, target.position);
+        dashTween = agent.transform.DOMove(direction * dashDistance, dashDuration).SetEase(dashEase);
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        bool hitWall = collision.gameObject.CompareTag("Wall");
+        if (hitWall) dashTween?.Kill();
+    }
+    public void StopMovement()
+    {
         agent.isStopped = true;
+        StopCoroutine(_chaseCoroutine);
     }
     protected override void Init()
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
-        Character.Events.Freeze += OnFreeze;
+        Character.Events.OnFreeze += OnFreeze;
     }
-    void Chase()
+    IEnumerator ChaseCoroutine()
     {
-        if (!agent.isOnNavMesh) return;
-        agent.SetDestination(target.position);
+        while (!agent.isStopped) {
+            agent.SetDestination(target.position);
+            yield return null;
+        }
     }
     void OnFreeze(float duration)
     {
         agent.isStopped = true;
-        Helpers.Delay(duration, static c => {
+        this.Delay(duration, static c => {
             if (c.IsDestroyed() || !c.gameObject.activeInHierarchy) return;
             c.agent.isStopped = false;
-        }, this);
+        });
     }
 }
