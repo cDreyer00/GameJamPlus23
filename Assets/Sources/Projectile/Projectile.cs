@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
@@ -61,7 +62,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
             ignoreList.Add(team);
     }
     void Move(float step)
-    {
+    {        
         var position = _transform.position;
         var forward  = _transform.forward;
 

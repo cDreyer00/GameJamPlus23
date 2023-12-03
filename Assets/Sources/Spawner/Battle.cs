@@ -63,6 +63,8 @@ public class Battle
 
     void GetNextWave()
     {
+        if (IsCompleted) return;
+
         CurWave = _wavesQueue.Dequeue();
         CurWave.onWaveComplete += CompleteWave;
     }
