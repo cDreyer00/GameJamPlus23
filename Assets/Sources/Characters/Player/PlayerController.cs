@@ -30,7 +30,7 @@ public class PlayerController : Character
         _cam = CameraController.Instance.Cam;
         _baseDrag = rb.drag;
 
-        Events.Died += Died;
+        Events.OnDied += OnDied;
     }
     void Update()
     {
@@ -92,7 +92,7 @@ public class PlayerController : Character
         rb.AddForce(dir * Upgrades.GetModValue(recoilForce, Progress.Upgrades.Type.Recoil, 0.5f), ForceMode.Impulse);
     }
 
-    static void Died(ICharacter character)
+    static void OnDied(ICharacter character)
     {
         GameManager.Instance.ReloadScene();
     }

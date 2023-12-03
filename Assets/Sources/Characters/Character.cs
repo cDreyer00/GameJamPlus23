@@ -25,7 +25,7 @@ public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
         _modules.UnionWith(GetComponentsInChildren<CharacterModule>());
     }
     public GenericPool<MonoBehaviour> Pool { get; set; }
-    public void OnGet() => _events.OnInitialized();
+    public void OnGet() => _events.Initialized();
     public void OnRelease()
     {
         foreach (var characterModule in _modules) {

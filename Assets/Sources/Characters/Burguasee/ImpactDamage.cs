@@ -7,20 +7,26 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class ImpactDamage : MonoBehaviour
 {
-    public float        damage;
-    public List<string> ignoreList;
-
-    public void IgnoreTeam(string team)
-    {
-        ignoreList ??= new List<string>();
-        ignoreList.Add(team);
-    }
+    event Action<Collider> OnImpact;
+    void OnValidate() {}
     void OnTriggerEnter(Collider other)
     {
-        var character = other.GetComponent<Character>();
-        if (character) {
-            if (ignoreList?.Contains(character.team) is true) return;
-            character.Events.OnTakeDamage(damage);
+        OnImpact?.Invoke(other);
+    }
+    public void SetListener(Action<Collider> action)
+    {
+        if (OnImpact != null) {
+            Debug.LogWarning("ImpactDamage already has a listener, Use AddListener instead.");
+            return;
         }
+        OnImpact = action;
+    }
+    public void AddListener(Action<Collider> action)
+    {
+        OnImpact += action;
+    }
+    public void RemoveListener(Action<Collider> action)
+    {
+        OnImpact -= action;
     }
 }

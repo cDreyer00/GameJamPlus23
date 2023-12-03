@@ -10,5 +10,11 @@ public static class Vector3Ext
         transform.position = transform.position.With(x, y, z);
     public static void SetLocalPosition(this Transform transform, float? x = null, float? y = null, float? z = null) =>
         transform.localPosition = transform.localPosition.With(x, y, z);
+    public static void SetRotationEulerAngles(this Transform transform, float? x = null, float? y = null, float? z = null)
+    {
+        var rotation = transform.rotation;
+        rotation = Quaternion.Euler(x ?? rotation.x, y ?? rotation.y, z ?? rotation.z);
+        transform.rotation = rotation;
+    }
     public static Vector3 Direction(Vector3 source, Vector3 destination) => (destination - source).normalized;
 }

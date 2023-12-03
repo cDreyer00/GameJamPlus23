@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using Sources.Characters.Modules;
 using Sources.Systems.FSM;
 using UnityEngine;
@@ -7,11 +8,14 @@ using static BorguaseState;
 
 public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
 {
-    [SerializeField] float slamRange;
-    [SerializeField] float dashCooldown;
-    [SerializeField] float slamCooldown;
+    [SerializeField] float    slamRange;
+    [SerializeField] float    slamCooldown;
+    [SerializeField] Vector2  dashCooldown;
+    [SerializeField] bool     performDash;
+    [SerializeField] Animator animator;
 
-    [SerializeField, Range(0f, 1f)] float dashChance;
+    readonly int _hAttackTrigger = Animator.StringToHash("attack");
+    readonly int _walkBool       = Animator.StringToHash("isWalk");
 
     NavMeshMovement _movementModule;
     HammerAttack    _hammerAttack;
@@ -22,12 +26,18 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     protected override BurguaseeSm Context => this;
 
     [SerializeField] BorguaseState state;
+
+    void OnValidate()
+    {
+        if (!animator) animator = GetComponentInChildren<Animator>();
+    }
+
     protected override void Init()
     {
         base.Init();
         _movementModule = Character.GetModule<NavMeshMovement>();
         _hammerAttack = Character.GetModule<HammerAttack>();
-        _hammerAttack.ImpactPoint.SetLocalPosition(z: slamRange);
+        _hammerAttack.SetListener(_ => animator.SetTrigger(_hAttackTrigger));
         _target = GameManager.Instance.Player.transform;
         _movementModule.Target = _target;
 
@@ -55,10 +65,10 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     {
         stateMachine.From(Dash)
             .Transition(Idle, sm => !sm._movementModule.Target)
+            .Transition(Chasing, sm => sm._movementModule.dashTween.IsActive())
             .SetCallback(LifeCycle.Enter, sm => sm._movementModule.StartDash())
             .SetCallback(LifeCycle.Exit, sm => {
-                sm._movementModule.StopMovement();
-                sm._dashCooldownTimer = sm.dashCooldown;
+                sm._dashCooldownTimer = UnityEngine.Random.Range(sm.dashCooldown.x, sm.dashCooldown.y);
             });
     }
     void HammerSlamState()
@@ -67,12 +77,21 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
             .Transition(Idle, sm => !sm._movementModule.Target)
             .Transition(Chasing, sm => !HammerSlamRangePredicate(sm))
             .SetCallback(LifeCycle.Enter, sm => {
-                sm.transform.LookAt(sm._target);
+                sm.animator.SetTrigger(sm._hAttackTrigger);
                 sm._hammerAttack.StartAttack();
             })
             .SetCallback(LifeCycle.Exit, sm => {
                 sm._hammerAttack.StopAttack();
                 sm._slamCooldownTimer = sm.slamCooldown;
+            })
+            .SetCallback(LifeCycle.Update, sm => {
+                var smTransform = sm.transform;
+                var targetPos   = sm._target.position;
+                var position    = smTransform.position;
+                var direction   = Vector3Ext.Direction(position, targetPos);
+                var rotation    = Quaternion.LookRotation(direction);
+                rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+                smTransform.rotation = rotation;
             });
     }
     void ChasingState()
@@ -81,8 +100,14 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
             .Transition(Idle, sm => !sm._movementModule.Target)
             .Transition(Dash, DashPredicate)
             .Transition(HammerSlam, HammerSlamRangePredicate)
-            .SetCallback(LifeCycle.Enter, sm => sm._movementModule.StartChase())
-            .SetCallback(LifeCycle.Exit, sm => sm._movementModule.StopMovement());
+            .SetCallback(LifeCycle.Enter, sm => {
+                sm.animator.SetBool(sm._walkBool, true);
+                sm._movementModule.StartChase();
+            })
+            .SetCallback(LifeCycle.Exit, sm => {
+                sm.animator.SetBool(sm._walkBool, false);
+                sm._movementModule.StopMovement();
+            });
     }
     static bool HammerSlamRangePredicate(BurguaseeSm sm)
     {
@@ -90,13 +115,15 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         var   position  = sm.transform.position;
         bool  canSlam   = sm._slamCooldownTimer <= 0;
         float distSqr   = Vector3Ext.SqrDistance(position, targetPos);
-        return canSlam && distSqr < sm.slamRange * sm.slamRange;
+        float rangeTip  = sm.slamRange;
+        return canSlam & distSqr < Mathf.Pow(rangeTip, 2);
     }
     static bool DashPredicate(BurguaseeSm sm)
     {
-        bool canDash    = sm._dashCooldownTimer <= 0;
-        bool shouldDash = UnityEngine.Random.Range(0f, 1f) < sm.dashChance;
-        return canDash && shouldDash && sm._movementModule.Target && !HammerSlamRangePredicate(sm);
+        bool canDash    = sm._dashCooldownTimer <= 0 && sm.performDash;
+        bool outOfRange = !HammerSlamRangePredicate(sm);
+        bool hasTarget  = sm._movementModule.Target;
+        return canDash & hasTarget & outOfRange;
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -115,6 +142,10 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         if (other.gameObject.TryGetComponent(out Rigidbody rb)) {
             rb.velocity *= 0.1f;
         }
+    }
+    static bool Always(BurguaseeSm _)
+    {
+        return true;
     }
 }
 public enum BorguaseState

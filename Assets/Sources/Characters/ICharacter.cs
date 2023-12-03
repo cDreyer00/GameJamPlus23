@@ -11,26 +11,26 @@ public interface ICharacter
 
 public class CharacterEvents
 {
-    public event Action<ICharacter> Died;
-    public event Action Initialized;
-    public event Action<float> TakeDamage;
-    public event Action<float> Freeze;
+    public event Action<ICharacter> OnDied;
+    public event Action OnInitialized;
+    public event Action<float> OnTakeDamage;
+    public event Action<float> OnFreeze;
 
-    public void OnInitialized()
+    public void Initialized()
     {
-        Initialized?.Invoke();
+        OnInitialized?.Invoke();
     }
-    public void OnTakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
-        TakeDamage?.Invoke(amount);
+        OnTakeDamage?.Invoke(amount);
     }
-    public void OnFreeze(float duration)
+    public void Freeze(float duration)
     {
-        Freeze?.Invoke(duration);
+        OnFreeze?.Invoke(duration);
     }
-    public void OnDied(ICharacter character)
+    public void Died(ICharacter character)
     {
-        Died?.Invoke(character);
+        OnDied?.Invoke(character);
         if (character is Character c) {
             if (c.Pool == null) {
                 Object.Destroy(c);

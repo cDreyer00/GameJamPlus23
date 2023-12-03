@@ -9,17 +9,18 @@ using UnityEngine.AI;
 using Sources.Systems.FSM;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(NavMeshAgent)), Serializable]
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform target;
-    [SerializeField] float startCooldownTime;
-    [SerializeField] float dashForce;
-
-    Rigidbody _rigidbody;
+    [SerializeField] Transform    target;
+    [SerializeField] float        dashDistance;
+    [SerializeField] float        dashDuration;
+    [SerializeField] Ease         dashEase;
     public NavMeshAgent Agent => agent;
+    public Tween dashTween;
     public Transform Target
     {
         get => target;
@@ -28,7 +29,6 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     IEnumerator _chaseCoroutine;
     void Start()
     {
-        _rigidbody = GetComponent<Rigidbody>();
         _chaseCoroutine = ChaseCoroutine();
     }
     public void StartChase()
@@ -41,34 +41,28 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         agent.isStopped = false;
 
         agent.transform.LookAt(target);
-        if (_rigidbody)
-        {
-            _rigidbody.velocity = Vector3.zero;
-            //_rigidbody.angularVelocity = Vector3.zero;
-            _rigidbody.AddForce(transform.forward * dashForce, ForceMode.Impulse);
-        }
+        var direction = Vector3Ext.Direction(transform.position, target.position);
+        dashTween = agent.transform.DOMove(direction * dashDistance, dashDuration).SetEase(dashEase);
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        bool hitWall = collision.gameObject.CompareTag("Wall");
+        if (hitWall) dashTween?.Kill();
     }
     public void StopMovement()
     {
         agent.isStopped = true;
         StopCoroutine(_chaseCoroutine);
-
-        if (_rigidbody)
-        {
-            _rigidbody.velocity = Vector3.zero;
-            //_rigidbody.angularVelocity = Vector3.zero;
-        }
     }
     protected override void Init()
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
-        Character.Events.Freeze += OnFreeze;
+        Character.Events.OnFreeze += OnFreeze;
     }
     IEnumerator ChaseCoroutine()
     {
-        while (!agent.isStopped)
-        {
+        while (!agent.isStopped) {
             agent.SetDestination(target.position);
             yield return null;
         }
@@ -76,10 +70,9 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     void OnFreeze(float duration)
     {
         agent.isStopped = true;
-        Helpers.Delay(duration, () =>
-        {
-            if (this.IsDestroyed() || !this.gameObject.activeInHierarchy) return;
-            this.agent.isStopped = false;
+        this.Delay(duration, static c => {
+            if (c.IsDestroyed() || !c.gameObject.activeInHierarchy) return;
+            c.agent.isStopped = false;
         });
     }
 }

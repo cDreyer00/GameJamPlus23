@@ -43,8 +43,8 @@ public class MeleeAttack : CharacterModule
 
         float dist = Vector3.Distance(Character.Position, _target.Position);
         if (dist <= _range)
-            _target.Events.OnTakeDamage(_damage);
+            _target.Events.TakeDamage(_damage);
 
-        Helpers.Delay(_coolDown, static c => c._isAttacking = false, this);
+        this.Delay(_coolDown, static c => c._isAttacking = false);
     }
 }
