@@ -41,6 +41,17 @@ public class PlayerController : Character
 
         inputs.Gameplay.Aim.performed += (ctx) => inputRot = ctx.ReadValue<Vector2>();
         inputs.Gameplay.Aim.canceled += (ctx) => inputRot = Vector2.zero;
+
+        // 1d negative/positive value, negative rotate left and positive rotate right
+        // CameraController.Instance.RotateLeft();
+        // CameraController.Instance.RotateRight();
+        inputs.Gameplay.RotateCamera.performed += (ctx) =>
+        {
+            if (ctx.ReadValue<float>() < 0)
+                CameraController.Instance.RotateLeft();
+            else
+                CameraController.Instance.RotateRight();
+        };
     }
 
     void Start()
@@ -58,9 +69,16 @@ public class PlayerController : Character
 
         _curDelay += Time.deltaTime;
 
-        if (useController)
+        if (GameManager.Instance.useController)
         {
-            Vector3 lookAtPos = transform.position + new Vector3(inputRot.x, 0, inputRot.y);
+            // Get the camera's rotation
+            Quaternion cameraRotation = CameraController.Instance.Cam.transform.rotation;
+
+            // Transform the input by the camera's rotation
+            Vector3 transformedInput = cameraRotation * new Vector3(inputRot.x, 0, inputRot.y);
+
+            // Apply the transformed input to the player's rotation
+            Vector3 lookAtPos = transform.position + transformedInput;
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
             aim.SetAim(anchor.forward);
@@ -105,10 +123,17 @@ public class PlayerController : Character
         }
     }
 
-    void Aim()
+    Vector3 GetPosBasedOnCameraView(Vector3 pos)
     {
-
+        var cam = CameraController.Instance.Cam;
+        var camPos = cam.transform.position;
+        var camDir = cam.transform.forward;
+        var dir = pos - camPos;
+        var dot = Vector3.Dot(dir, camDir);
+        var proj = camPos + camDir * dot;
+        return proj;
     }
+
 
     void Rotate()
     {
