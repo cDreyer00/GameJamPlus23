@@ -35,6 +35,7 @@ public class PlayerController : Character
     void Update()
     {
         if (GameManager.IsGameOver) return;
+        if (GameManager.GetGlobalInstance<Spawner>("spawner").IsPaused) return;
 
         _curDelay += Time.deltaTime;
         if (Input.GetMouseButton(0))

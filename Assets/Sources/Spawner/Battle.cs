@@ -8,6 +8,7 @@ public class Battle
 {
     public float ElapsedTime { get; private set; }
     public bool IsCompleted { get; private set; }
+    public bool IsPaused { get; set; }
     public Wave CurWave { get; private set; }
 
     BattleConfig _config;
@@ -17,7 +18,6 @@ public class Battle
 
     public event Action<MonoBehaviour, int> onUpdateSpawnCount;
 
-    public bool IsPaused { get; set; }
 
     public Battle(BattleConfig config)
     {
@@ -33,9 +33,6 @@ public class Battle
             return;
 
         GetNextWave();
-
-        Debug.Log("new wave started");
-        IsPaused = false;
     }
 
     public void Tick(float deltaTime)
@@ -46,10 +43,12 @@ public class Battle
         CurWave.Tick(deltaTime);
     }
 
+    public void Pause() => IsPaused = true;
+    public void Continue() => IsPaused = false;
+
     void CompleteWave()
     {
         if (IsCompleted || CurWave == null) return;
-        IsPaused = true;
 
         if (CurWave != null)
             CurWave.onWaveComplete -= CompleteWave;

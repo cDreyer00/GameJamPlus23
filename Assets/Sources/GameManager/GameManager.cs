@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
     [CanBeNull] Character _player; 
-    public Character Player => _player ??= FindObjectOfType<PlayerController>();
+    public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
     public static bool IsGameOver { get; private set; }
 
     public Timer Timer { get; private set; }
@@ -42,8 +42,6 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
-
-    //public void RegisterPlayer(Character player) => Player = player;
 
     public void ReloadScene()
     {
