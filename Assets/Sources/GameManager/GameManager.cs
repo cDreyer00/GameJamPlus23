@@ -19,12 +19,8 @@ public class GameManager : Singleton<GameManager>
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
 
-    [CanBeNull] Character _player; 
-<<<<<<< HEAD
-    public Character Player => _player ??= FindObjectOfType<PlayerController>();
-=======
+    [CanBeNull] Character _player;
     public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
->>>>>>> 61378061eb64197ba54f6181d33dfd2fe3422a01
     public static bool IsGameOver { get; private set; }
 
     public Timer Timer { get; private set; }
@@ -46,12 +42,6 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
-
-<<<<<<< HEAD
-    //public void RegisterPlayer(Character player) => Player = player;
-
-=======
->>>>>>> 61378061eb64197ba54f6181d33dfd2fe3422a01
     public void ReloadScene()
     {
         if (fading) return;
@@ -75,42 +65,6 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.Stop();
         fading = false;
     }
-
-<<<<<<< HEAD
-    int GetCamId()
-    {
-        Vector3 magnitudeVector  = Player.Position;
-        Vector3 normalizedVector = magnitudeVector.normalized;
-
-        float maxAbsValue = Mathf.Max(Mathf.Abs(normalizedVector.x), Mathf.Abs(normalizedVector.y),
-            Mathf.Abs(normalizedVector.z));
-
-        Vector3 closestDirectionVector;
-
-        if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.x))) {
-            closestDirectionVector = new Vector3(Mathf.Sign(normalizedVector.x), 0, 0);
-        }
-        else if (Mathf.Approximately(maxAbsValue, Mathf.Abs(normalizedVector.y))) {
-            closestDirectionVector = new Vector3(0, Mathf.Sign(normalizedVector.y), 0);
-        }
-        else {
-            closestDirectionVector = new Vector3(0, 0, Mathf.Sign(normalizedVector.z));
-        }
-
-        if (closestDirectionVector.x == -1)
-            return 1;
-        if (closestDirectionVector.z == 1)
-            return 2;
-        if (closestDirectionVector.x == 1)
-            return 3;
-        if (closestDirectionVector.z == -1)
-            return 0;
-
-        return 0;
-    }
-
-=======
->>>>>>> 61378061eb64197ba54f6181d33dfd2fe3422a01
     public static T GetGlobalInstance<T>(string key) where T : Object
     {
         return GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);
