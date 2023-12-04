@@ -286,7 +286,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5962248598678447632}
+  m_Father: {fileID: 883693740590126824}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6889678233916714880
@@ -847,6 +847,38 @@ Transform:
   - {fileID: 4643755089008548817}
   - {fileID: 5324831888023449376}
   m_Father: {fileID: 2654001651851760137}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1125825097874232659
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 883693740590126824}
+  m_Layer: 2
+  m_Name: Feedbacks
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &883693740590126824
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125825097874232659}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 478653178653690183}
+  m_Father: {fileID: 167829896736789762}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647882389762402891
@@ -2424,8 +2456,9 @@ Transform:
   - {fileID: 2030193239284623269}
   - {fileID: 6924845005692411197}
   - {fileID: 7424804650109205010}
+  - {fileID: 883693740590126824}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7411618165646411253
 MonoBehaviour:
@@ -2445,16 +2478,16 @@ MonoBehaviour:
   anchor: {fileID: 2030193239284623269}
   rb: {fileID: 2799235822207906874}
   aim: {fileID: 192714377665351109}
-  dashForce: 10.4
+  recoilForce: 6
   shootDelay: 0.8
-  breakDrag: 5
+  braking: 5
   shootAudios:
   - {fileID: 8300000, guid: 848dc889a43848a49a63a71da6c16fb4, type: 3}
   - {fileID: 8300000, guid: 09aa1460e0268584d8a9ef11c0f4a2f0, type: 3}
   - {fileID: 8300000, guid: 9c9758f79734b4d4fa8ce4fb068b639f, type: 3}
   - {fileID: 8300000, guid: a729eac921de1c1468430a8598cef1ed, type: 3}
   damageAudio: {fileID: 0}
-  cameraShake: {fileID: 0}
+  inputRot: {x: 0, y: 0}
 --- !u!54 &2799235822207906874
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2643,8 +2676,7 @@ Transform:
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 478653178653690183}
+  m_Children: []
   m_Father: {fileID: 7845753504402394049}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -1799,10 +1799,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 6087302238658029148, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 6283975830697673519, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2004,20 +2000,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4930184713420487661}
     - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: endGameCanvas
       value: 
       objectReference: {fileID: 2794706002601230790}
     - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: gameLoopTimer
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
-      propertyPath: dontDestroyOnLoad
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

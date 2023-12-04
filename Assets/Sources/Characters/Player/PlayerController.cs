@@ -21,11 +21,8 @@ public class PlayerController : Character
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.02f);
 
-    [SerializeField] CameraShake cameraShake;
-
     Progress.Upgrades Upgrades => Progress.Instance.upgrades;
 
-    bool useController = true;
     PlayerInputs inputs;
     [SerializeField] Vector2 inputRot;
 
@@ -42,9 +39,6 @@ public class PlayerController : Character
         inputs.Gameplay.Aim.performed += (ctx) => inputRot = ctx.ReadValue<Vector2>();
         inputs.Gameplay.Aim.canceled += (ctx) => inputRot = Vector2.zero;
 
-        // 1d negative/positive value, negative rotate left and positive rotate right
-        // CameraController.Instance.RotateLeft();
-        // CameraController.Instance.RotateRight();
         inputs.Gameplay.RotateCamera.performed += (ctx) =>
         {
             if (ctx.ReadValue<float>() < 0)
@@ -56,7 +50,7 @@ public class PlayerController : Character
 
     void Start()
     {
-        team = "Player";
+        team = tag;
         _cam = CameraController.Instance.Cam;
         _baseDrag = rb.drag;
 

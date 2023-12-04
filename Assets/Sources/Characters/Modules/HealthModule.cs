@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using MoreMountains.Feedbacks;
 
 public class HealthModule : CharacterModule
 {
-    [SerializeField] Canvas                  canvas;
-    [SerializeField] Slider                  healthSlider;
+    [SerializeField] Canvas canvas;
+    [SerializeField] Slider healthSlider;
     [SerializeField] ClampedPrimitive<float> health;
+    [SerializeField] MMFeedbacks hitFeedback;
 
     public float Health => health.Value;
     public void OnEnable()
@@ -35,7 +37,7 @@ public class HealthModule : CharacterModule
     void OnTakeDamage(float amount)
     {
         health.Value -= amount;
-
+        if (hitFeedback != null) hitFeedback.PlayFeedbacks();
         if (health <= 0) Character.Events.Died(Character);
 
         UpdateSlider();
