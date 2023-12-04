@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Gameplay 2.unity
-    guid: 180d5bf0339f09c48ab737d6a029f25b
+    path: Assets/Scenes/Gameplay Cristian.unity
+    guid: da88f9a8fe5dff542ace8af1bb90ad20
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: dc37e48c64a79734984fe099a2922059, type: 2}

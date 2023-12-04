@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 using static Progress;
 using static Progress.Upgrades;
@@ -17,6 +18,24 @@ public class UIAttribute : MonoBehaviour
     [Space]
     [SerializeField] AnimationCurve costCurve;
 
+    public event System.Action OnUpgradeDisabled;
+
+    bool _enabled;
+    public bool Enabled
+    {
+        get => _enabled;
+        set
+        {
+            if (value == _enabled) return;
+            
+            _enabled = value;
+            upgradeBtn.interactable = value;
+
+            if (!value)
+                OnUpgradeDisabled?.Invoke();
+        }
+    }
+
     int level => Progress.Instance.upgrades.GetLevel(upgradeType);
     int cost => (int)costCurve.Evaluate(level);
 
@@ -28,12 +47,17 @@ public class UIAttribute : MonoBehaviour
     public void OnEnable()
     {
         UpdateInfos(upgradeType, playerUpgrades.GetLevel(upgradeType));
+        playerUpgrades.OnUpgrade += UpdateInfos;
+    }
+
+    void OnDisable()
+    {
+        playerUpgrades.OnUpgrade -= UpdateInfos;
     }
 
     void Start()
     {
         upgradeBtn.onClick.AddListener(Upgrade);
-        playerUpgrades.OnUpgrade += UpdateInfos;
     }
 
     public void Upgrade()
@@ -41,6 +65,10 @@ public class UIAttribute : MonoBehaviour
         playerCurrency.money -= cost;
         Progress.Instance.upgrades.Upgrade(upgradeType);
     }
+
+    public void Select() => upgradeBtn.Select();
+
+    // bool IsSelected(Selectable s) => EventSystem.current.currentSelectedGameObject == s.gameObject;
 
     void UpdateInfos(Type uprType, int level) => UpdateInfos();
     void UpdateInfos()
@@ -56,6 +84,6 @@ public class UIAttribute : MonoBehaviour
         costTxt.text = $"${cost}";
         levelTxt.text = $"lv{level}";
 
-        upgradeBtn.interactable = playerCurrency.money >= cost;
+        Enabled = playerCurrency.money >= cost;
     }
 }

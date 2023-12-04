@@ -6,18 +6,18 @@ using UnityEngine.Rendering;
 
 public class Battle
 {
+    BattleConfig _config;
+    Queue<Wave> _wavesQueue = new();
+
     public float ElapsedTime { get; private set; }
     public bool IsCompleted { get; private set; }
     public bool IsPaused { get; set; }
     public Wave CurWave { get; private set; }
-
-    BattleConfig _config;
-    Queue<Wave> _wavesQueue = new();
+    public int TotalWaves => _config.Waves.Length;
+    public int RemainingWaves => _wavesQueue.Count;
 
     public event Action onBattleEnd;
-
     public event Action<MonoBehaviour, int> onUpdateSpawnCount;
-
 
     public Battle(BattleConfig config)
     {
@@ -63,6 +63,8 @@ public class Battle
 
     void GetNextWave()
     {
+        if (IsCompleted) return;
+
         CurWave = _wavesQueue.Dequeue();
         CurWave.onWaveComplete += CompleteWave;
     }

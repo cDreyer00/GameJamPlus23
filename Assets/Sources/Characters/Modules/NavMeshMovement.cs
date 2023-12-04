@@ -10,15 +10,19 @@ using Sources.Systems.FSM;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine.Serialization;
+using MoreMountains.Feedbacks;
+using Sources;
 
 [RequireComponent(typeof(NavMeshAgent)), Serializable]
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform    target;
-    [SerializeField] float        dashDistance;
-    [SerializeField] float        dashDuration;
-    [SerializeField] Ease         dashEase;
+    [SerializeField] Transform target;
+    [SerializeField] float dashDistance;
+    [SerializeField] float dashDuration;
+    [SerializeField] Ease dashEase;
+    [SerializeField] MMFeedbacks freezeFeedback;
+
     public NavMeshAgent Agent => agent;
     public Tween dashTween;
     public Transform Target
@@ -62,7 +66,8 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     IEnumerator ChaseCoroutine()
     {
-        while (!agent.isStopped) {
+        while (!agent.isStopped)
+        {
             agent.SetDestination(target.position);
             yield return null;
         }
@@ -70,7 +75,9 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     void OnFreeze(float duration)
     {
         agent.isStopped = true;
-        this.Delay(duration, static c => {
+        if (freezeFeedback != null) freezeFeedback.PlayFeedbacks();
+        this.Delay(duration, static c =>
+        {
             if (c.IsDestroyed() || !c.gameObject.activeInHierarchy) return;
             c.agent.isStopped = false;
         });

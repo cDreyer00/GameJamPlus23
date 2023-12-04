@@ -18,6 +18,7 @@ public class Spawner : MonoBehaviour
     Battle _battle;
 
     public bool IsPaused => _battle?.IsPaused ?? false;
+    public int RemainingWaves => _battle?.RemainingWaves ?? 0;
     public event Action onAllEnemiesDead;
 
     void Awake()

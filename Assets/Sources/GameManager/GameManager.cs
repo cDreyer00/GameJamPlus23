@@ -8,13 +8,15 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Canvas       endGameCanvas;
     [SerializeField] Spawner      spawner;
 
+    public bool useController;
+
     Scene _currentScene;
     float _initTime;
     bool  fading;
 
-    public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
-    public float GameElapsedTime => Time.time - _initTime;
-    public Spawner Spawner => spawner;
+    public Bounds GameBounds        => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
+    public float GameElapsedTime    => Time.time - _initTime;
+    public Spawner Spawner          => spawner;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
