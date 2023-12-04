@@ -99,12 +99,12 @@ NavMeshAgent:
   m_GameObject: {fileID: 6089110235842682470}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 2
   m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 100000
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -154,9 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cda6859974040469756f4cf568f581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slamRange: 8
+  slamRange: 4
   slamCooldown: 0.5
-  dashCooldown: {x: 1, y: 5}
+  dashCooldown: {x: 1, y: 7}
   performDash: 1
   animator: {fileID: 6261761397198140387}
   state: 0

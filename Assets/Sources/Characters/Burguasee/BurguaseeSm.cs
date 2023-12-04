@@ -65,9 +65,10 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     {
         stateMachine.From(Dash)
             .Transition(Idle, sm => !sm._movementModule.Target)
-            .Transition(Chasing, sm => sm._movementModule.dashTween.IsActive())
+            .Transition(Chasing, sm => !sm._movementModule.dashTween.IsActive())
             .SetCallback(LifeCycle.Enter, sm => sm._movementModule.StartDash())
             .SetCallback(LifeCycle.Exit, sm => {
+                sm._movementModule.dashTween.Kill();
                 sm._dashCooldownTimer = UnityEngine.Random.Range(sm.dashCooldown.x, sm.dashCooldown.y);
             });
     }
@@ -130,22 +131,11 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         bool hitPlayer = collision.gameObject.CompareTag("Player");
 
         if (stateMachine.CurrentState == Dash) {
-            if (hitPlayer) {
-                slamCooldown = 0;
+            if (hitPlayer && slamCooldown == 0) {
                 stateMachine.ChangeState(HammerSlam);
             }
             stateMachine.ChangeState(Chasing);
         }
-    }
-    void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.TryGetComponent(out Rigidbody rb)) {
-            rb.velocity *= 0.1f;
-        }
-    }
-    static bool Always(BurguaseeSm _)
-    {
-        return true;
     }
 }
 public enum BorguaseState
