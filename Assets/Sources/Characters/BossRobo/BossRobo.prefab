@@ -758,7 +758,7 @@ MonoBehaviour:
   DebugActive: 0
   Mode: 0
   CachedRecycle: 1
-  ParticlesPrefab: {fileID: 5003561575862723922}
+  ParticlesPrefab: {fileID: 3909967482097803663, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
   RandomParticlePrefabs: []
   ForceSetActiveOnPlay: 0
   PositionMode: 1
@@ -1115,7 +1115,7 @@ Transform:
   - {fileID: 1682849676795768962}
   - {fileID: 7023380847109344112}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5477748820582512605
 Animator:
@@ -3674,6 +3674,10 @@ PrefabInstance:
     - target: {fileID: 3909967482097803656, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
       propertyPath: m_Name
       value: ParticleHitChao
+      objectReference: {fileID: 0}
+    - target: {fileID: 3909967482097803656, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3909967482097803657, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
       propertyPath: m_RootOrder

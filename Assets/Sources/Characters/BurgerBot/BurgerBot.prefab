@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 1
-  delay: 0.5
+  delay: 0.25
   damage: 20
   impactDamage: {fileID: 5471473074406424210}
 --- !u!114 &-4291083372791572725
