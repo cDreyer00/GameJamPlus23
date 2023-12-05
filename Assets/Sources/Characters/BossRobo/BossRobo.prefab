@@ -483,8 +483,6 @@ GameObject:
   - component: {fileID: 1650854984}
   - component: {fileID: 1650854983}
   - component: {fileID: 1650854985}
-  - component: {fileID: 450279183042402517}
-  - component: {fileID: 1383642437752852296}
   m_Layer: 0
   m_Name: FeedAttack
   m_TagString: Untagged
@@ -524,8 +522,6 @@ MonoBehaviour:
   Feedbacks:
   - {fileID: 1650854983}
   - {fileID: 1650854985}
-  - {fileID: 450279183042402517}
-  - {fileID: 1383642437752852296}
   InitializationMode: 2
   AutoInitialization: 1
   SafeMode: 3
@@ -613,7 +609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27131831afa28b499cb120fc9059997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Active: 0
+  Active: 1
   Label: Particles Play
   Chance: 100
   Timing:
@@ -720,102 +716,6 @@ MonoBehaviour:
     m_PropagationSpeed: 343
   Velocity: {x: 0.5, y: 0.5, z: 0.5}
   ClearImpulseOnStop: 0
---- !u!114 &450279183042402517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1650854981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdfe4b9b079619143a9748eeee75e698, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Active: 0
-  Label: Particles Instantiation
-  Chance: 100
-  Timing:
-    TimescaleMode: 0
-    ExcludeFromHoldingPauses: 0
-    ContributeToTotalDuration: 1
-    InitialDelay: 0
-    CooldownDuration: 0
-    InterruptsOnStop: 1
-    NumberOfRepeats: 0
-    RepeatForever: 0
-    DelayBetweenRepeats: 1
-    MMFeedbacksDirectionCondition: 0
-    PlayDirection: 0
-    ConstantIntensity: 0
-    UseIntensityInterval: 0
-    IntensityIntervalMin: 0
-    IntensityIntervalMax: 0
-    Sequence: {fileID: 0}
-    TrackID: 0
-    Quantized: 0
-    TargetBPM: 120
-  DebugActive: 0
-  Mode: 0
-  CachedRecycle: 1
-  ParticlesPrefab: {fileID: 3909967482097803663, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
-  RandomParticlePrefabs: []
-  ForceSetActiveOnPlay: 0
-  PositionMode: 1
-  InstantiateParticlesPosition: {fileID: 1650854982}
-  TargetWorldPosition: {x: 0, y: 0, z: 0}
-  Offset: {x: 0, y: 1, z: 0}
-  NestParticles: 1
-  ApplyRotation: 0
-  ApplyScale: 0
---- !u!114 &1383642437752852296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1650854981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdfe4b9b079619143a9748eeee75e698, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Active: 0
-  Label: Particles Instantiation
-  Chance: 100
-  Timing:
-    TimescaleMode: 0
-    ExcludeFromHoldingPauses: 0
-    ContributeToTotalDuration: 1
-    InitialDelay: 0
-    CooldownDuration: 0
-    InterruptsOnStop: 1
-    NumberOfRepeats: 0
-    RepeatForever: 0
-    DelayBetweenRepeats: 1
-    MMFeedbacksDirectionCondition: 0
-    PlayDirection: 0
-    ConstantIntensity: 0
-    UseIntensityInterval: 0
-    IntensityIntervalMin: 0
-    IntensityIntervalMax: 0
-    Sequence: {fileID: 0}
-    TrackID: 0
-    Quantized: 0
-    TargetBPM: 120
-  DebugActive: 0
-  Mode: 0
-  CachedRecycle: 1
-  ParticlesPrefab: {fileID: 7163757113534089217}
-  RandomParticlePrefabs: []
-  ForceSetActiveOnPlay: 0
-  PositionMode: 1
-  InstantiateParticlesPosition: {fileID: 1650854982}
-  TargetWorldPosition: {x: 0, y: 0, z: 0}
-  Offset: {x: 0, y: 1, z: 0}
-  NestParticles: 1
-  ApplyRotation: 0
-  ApplyScale: 0
 --- !u!1 &1704642749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,7 +1015,7 @@ Transform:
   - {fileID: 1682849676795768962}
   - {fileID: 7023380847109344112}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5477748820582512605
 Animator:
@@ -3677,7 +3577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3909967482097803656, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3909967482097803657, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
       propertyPath: m_RootOrder
@@ -3722,6 +3622,10 @@ PrefabInstance:
     - target: {fileID: 3909967482097803657, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3909967482097803663, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3909967482097803663, guid: 308df2aaa4688f64bb54d34c6ac54511, type: 3}
       propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].value
@@ -3810,6 +3714,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1840799659579416646, guid: 953abfaf9825d4045b5bca159fe618a6, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3722239911608550701, guid: 953abfaf9825d4045b5bca159fe618a6, type: 3}
       propertyPath: m_Name
       value: Particle DeadPlayer
@@ -3822,10 +3730,5 @@ PrefabInstance:
 --- !u!4 &7111494942982332361 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1751909406564841358, guid: 953abfaf9825d4045b5bca159fe618a6, type: 3}
-  m_PrefabInstance: {fileID: 8854378864454182983}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &7163757113534089217 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 1840799659579416646, guid: 953abfaf9825d4045b5bca159fe618a6, type: 3}
   m_PrefabInstance: {fileID: 8854378864454182983}
   m_PrefabAsset: {fileID: 0}
