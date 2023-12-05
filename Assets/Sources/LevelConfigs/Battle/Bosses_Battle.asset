@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ff0248bd53353b40812b03aecb8f422, type: 3}
-  m_Name: HammerBot_Wave
+  m_Script: {fileID: 11500000, guid: a3cfc533bb376044d9a30f016d9956fc, type: 3}
+  m_Name: Bosses_Battle
   m_EditorClassIdentifier: 
-  objectsList:
-  - {fileID: 11400000, guid: 6c3385bd52502dd4a8a64b6fd9bc986d, type: 2}
+  waves:
+  - {fileID: 11400000, guid: 90aaadc46d9f51649a59bc7cdb807a74, type: 2}
   duration: 1
