@@ -6,11 +6,13 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     [SerializeField] float radius = 1f;
     [SerializeField] float effectDuration;
     [SerializeField] float lifeTime;
+    [SerializeField] Material baseMat, interactableMat;
+    [SerializeField] MeshRenderer botao;
 
     Effect effect;
     Direction direction;
     GenericPool<EffectSign> _pool;
-    SpriteRenderer _sprite;
+    //SpriteRenderer _sprite;
     Direction _curCameraDir;
     float _curLifeTime;
 
@@ -31,12 +33,12 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         set => effect = value;
     }
 
-    Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.red;
+    //Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.red;
     bool CanInteract => _curCameraDir == direction;
 
     void Start()
     {
-        _sprite = GetComponentInChildren<SpriteRenderer>();
+        //_sprite = GetComponentInChildren<SpriteRenderer>();
         Init();
     }
 
@@ -60,7 +62,7 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         effect.duration = effectDuration;
         effect.damage = effectDuration;
 
-        _sprite.color = ColorByType;
+        //_sprite.color = ColorByType;
         _curLifeTime = lifeTime;
 
         OnCamDirectionChanged(CameraController.Instance.Direction);
@@ -128,8 +130,11 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     void SetColor()
     {
-        Color c = CanInteract ? Color.green : ColorByType;
-        _sprite.color = c;
+        Material c = CanInteract ? interactableMat : baseMat;
+        //_sprite.color = c;
+        var mats = botao.materials;
+        mats[1] = c;
+        botao.materials = mats;
     }
 
     public void OnRelease()
