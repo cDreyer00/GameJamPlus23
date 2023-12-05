@@ -20,6 +20,7 @@ public class GameManager : Singleton<GameManager>
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
+    bool ChangeInputs => Input.GetKeyDown(KeyCode.Space);
 
     [CanBeNull] Character _player;
     public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
@@ -41,6 +42,9 @@ public class GameManager : Singleton<GameManager>
             CameraController.Instance.RotateLeft();
         if (RotateRight)
             CameraController.Instance.RotateRight();
+        
+        if (ChangeInputs)
+            useController = !useController;
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }

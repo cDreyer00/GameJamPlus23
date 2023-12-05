@@ -16,9 +16,10 @@ public class SoundManager : Singleton<SoundManager>
 
     public void PlayClip(AudioClip clip)
     {
+        return;
         source.PlayOneShot(clip);
-
     }
+
     public void Stop()
     {
         source.Stop();
