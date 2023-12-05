@@ -99,14 +99,14 @@ NavMeshAgent:
   m_GameObject: {fileID: 6089110235842682470}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2
+  m_Radius: 1.5
   m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 100000
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
@@ -142,6 +142,7 @@ MonoBehaviour:
   dashDistance: 30
   dashDuration: 2
   dashEase: 10
+  freezeFeedback: {fileID: 0}
 --- !u!114 &-570705804352135054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,10 +155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cda6859974040469756f4cf568f581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slamRange: 4
+  slamRange: 5
   slamCooldown: 0.5
-  dashCooldown: {x: 1, y: 7}
-  performDash: 1
+  dashCooldown: {x: 0, y: 0}
+  performDash: 0
   animator: {fileID: 6261761397198140387}
   state: 0
 --- !u!114 &5580071086566916570
@@ -173,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 1
-  delay: 1
+  delay: 0.5
   damage: 20
   impactDamage: {fileID: 8120068728015767444}
 --- !u!1001 &749126826422696785
@@ -318,9 +319,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss
       objectReference: {fileID: 0}
-    - target: {fileID: 2057906509480352165, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
-      propertyPath: m_TagString
-      value: Enemy
+    - target: {fileID: 7116585369600175331, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
+      propertyPath: m_Radius
+      value: 1.3617438
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116585369600175331, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
+      propertyPath: m_Center.x
+      value: -0.068232104
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116585369600175331, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
+      propertyPath: m_Center.y
+      value: -0.26999876
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116585369600175331, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
+      propertyPath: m_Center.z
+      value: 0.76929563
+      objectReference: {fileID: 0}
+    - target: {fileID: 8727156373551234222, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8727156373551234222, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
       propertyPath: m_LocalPosition.x
@@ -365,125 +382,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2057906509480352165, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 713394028235195897}
-    - targetCorrespondingSourceObject: {fileID: 2057906509480352165, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6600934769813041413}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
 --- !u!4 &3457401855808769454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8727156373551234222, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
   m_PrefabInstance: {fileID: 6261761398427922688}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5361845151889549477 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2057906509480352165, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}
-  m_PrefabInstance: {fileID: 6261761398427922688}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &713394028235195897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5361845151889549477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37ba5389111d45543b3b1596727039d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  marteloFeel: {fileID: 6600934769813041413}
---- !u!114 &6600934769813041413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5361845151889549477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841b72de2996c5c40bfb394f3d0e0a98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Feedbacks: []
-  InitializationMode: 2
-  AutoInitialization: 1
-  SafeMode: 3
-  Direction: 0
-  AutoChangeDirectionOnEnd: 0
-  AutoPlayOnStart: 0
-  AutoPlayOnEnable: 0
-  ForceTimescaleMode: 0
-  ForcedTimescaleMode: 1
-  DurationMultiplier: 1
-  RandomizeDuration: 0
-  RandomDurationMultiplier: {x: 0.5, y: 1.5}
-  DisplayFullDurationDetails: 0
-  PlayerTimescaleMode: 1
-  OnlyPlayIfWithinRange: 0
-  RangeCenter: {fileID: 0}
-  RangeDistance: 5
-  UseRangeFalloff: 0
-  RangeFalloff:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  RemapRangeFalloff: {x: 0, y: 1}
-  IgnoreRangeEvents: 0
-  CooldownDuration: 0
-  InitialDelay: 0
-  CanPlay: 1
-  CanPlayWhileAlreadyPlaying: 1
-  ChanceToPlay: 100
-  FeedbacksIntensity: 1
-  Events:
-    TriggerMMFeedbacksEvents: 0
-    TriggerUnityEvents: 1
-    OnPlay:
-      m_PersistentCalls:
-        m_Calls: []
-    OnPause:
-      m_PersistentCalls:
-        m_Calls: []
-    OnResume:
-      m_PersistentCalls:
-        m_Calls: []
-    OnRevert:
-      m_PersistentCalls:
-        m_Calls: []
-    OnComplete:
-      m_PersistentCalls:
-        m_Calls: []
-    OnRestoreInitialValues:
-      m_PersistentCalls:
-        m_Calls: []
-    OnSkipToTheEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  DebugActive: 0
 --- !u!95 &6261761397198140387 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1236468451, guid: 7aa8abdce8307524a9be36dae712f898, type: 3}

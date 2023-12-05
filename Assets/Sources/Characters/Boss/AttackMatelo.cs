@@ -6,7 +6,7 @@ using Sources;
 
 public class AttackMatelo : MonoBehaviour
 {
-    [SerializeField] MMFeedbacks marteloFeel;
+    public MMFeedbacks marteloFeel;
     public void Martelo()
     {
         marteloFeel.OrNull()?.PlayFeedbacks();

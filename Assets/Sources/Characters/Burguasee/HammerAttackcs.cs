@@ -21,18 +21,11 @@ public class HammerAttack : CharacterModule
     void OnValidate()
     {
         if (!impactDamage) impactDamage = GetComponentInChildren<ImpactDamage>();
+        impactDamage.gameObject.SetActive(false);
     }
     void Start()
     {
         _attackCoroutine = AttackCoroutine();
-    }
-    public void SetListener(Action<Character> action)
-    {
-        if (AttackCallback != null) {
-            Debug.LogWarning("HammerAttack already has a listener, Use AddListener instead.");
-            return;
-        }
-        AttackCallback = action;
     }
     public void AddListener(Action<Character> action)
     {
@@ -72,7 +65,7 @@ public class HammerAttack : CharacterModule
     protected override void Init()
     {
         IgnoreTeam(Character.team);
-        impactDamage.SetListener(OnImpact);
+        impactDamage.AddListener(OnImpact);
 
         void OnImpact(Collider col)
         {

@@ -8,11 +8,12 @@ using static BorguaseState;
 
 public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
 {
-    [SerializeField] float    slamRange;
-    [SerializeField] float    slamCooldown;
-    [SerializeField] Vector2  dashCooldown;
-    [SerializeField] bool     performDash;
-    [SerializeField] Animator animator;
+    [SerializeField] float        slamRange;
+    [SerializeField] float        slamCooldown;
+    [SerializeField] Vector2      dashCooldown;
+    [SerializeField] bool         performDash;
+    [SerializeField] Animator     animator;
+
 
     readonly int _hAttackTrigger = Animator.StringToHash("attack");
     readonly int _walkBool       = Animator.StringToHash("isWalk");
@@ -37,7 +38,7 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         base.Init();
         _movementModule = Character.GetModule<NavMeshMovement>();
         _hammerAttack = Character.GetModule<HammerAttack>();
-        _hammerAttack.SetListener(_ => animator.SetTrigger(_hAttackTrigger));
+        _hammerAttack.AddListener(_ => animator.SetTrigger(_hAttackTrigger));
         _target = GameManager.Instance.Player.transform;
         _movementModule.Target = _target;
 
@@ -84,16 +85,17 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
             .SetCallback(LifeCycle.Exit, sm => {
                 sm._hammerAttack.StopAttack();
                 sm._slamCooldownTimer = sm.slamCooldown;
-            })
-            .SetCallback(LifeCycle.Update, sm => {
-                var smTransform = sm.transform;
-                var targetPos   = sm._target.position;
-                var position    = smTransform.position;
-                var direction   = Vector3Ext.Direction(position, targetPos);
-                var rotation    = Quaternion.LookRotation(direction);
-                rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
-                smTransform.rotation = rotation;
             });
+
+        // .SetCallback(LifeCycle.Update, sm => {
+        //     var smTransform = sm.transform;
+        //     var targetPos   = sm._target.position;
+        //     var position    = smTransform.position;
+        //     var direction   = Vector3Ext.Direction(position, targetPos);
+        //     var rotation    = Quaternion.LookRotation(direction);
+        //     rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+        //     smTransform.rotation = rotation;
+        // })
     }
     void ChasingState()
     {
