@@ -4,29 +4,29 @@ using Sources.Characters.Modules;
 using Sources.Systems.FSM;
 using UnityEngine;
 using UnityEngine.Serialization;
-using static BorguaseState;
+using static BurgerBotState;
 
-public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
+public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
 {
-    [SerializeField] float        slamRange;
-    [SerializeField] float        slamCooldown;
-    [SerializeField] Vector2      dashCooldown;
-    [SerializeField] bool         performDash;
-    [SerializeField] Animator     animator;
-
-
-    readonly int _hAttackTrigger = Animator.StringToHash("attack");
-    readonly int _walkBool       = Animator.StringToHash("isWalk");
+    [SerializeField] float    slamRange;
+    [SerializeField] float    slamCooldown;
+    [SerializeField] Vector2  dashCooldown;
+    [SerializeField] bool     performDash;
+    [SerializeField] Animator animator;
+    
+    readonly         int      _hAttackTrigger    = Animator.StringToHash("isAttack");
+    readonly         int      _hMarteladaTrigger = Animator.StringToHash("martelada");
+    readonly         int      _walkBool          = Animator.StringToHash("isWalk");
 
     NavMeshMovement _movementModule;
     HammerAttack    _hammerAttack;
     Transform       _target;
     float           _dashCooldownTimer;
     float           _slamCooldownTimer;
-    protected override BorguaseState InitialState => Idle;
-    protected override BurguaseeSm Context => this;
+    protected override BurgerBotState InitialState => Idle;
+    protected override BurgerBotSm Context => this;
 
-    [SerializeField] BorguaseState state;
+    [SerializeField] BurgerBotState state;
 
     void OnValidate()
     {
@@ -38,7 +38,10 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         base.Init();
         _movementModule = Character.GetModule<NavMeshMovement>();
         _hammerAttack = Character.GetModule<HammerAttack>();
-        _hammerAttack.AddListener(_ => animator.SetTrigger(_hAttackTrigger));
+        _hammerAttack.AddListener(_ => {
+            animator.SetTrigger(_hAttackTrigger);
+            animator.SetTrigger(_hMarteladaTrigger);
+        });
         _target = GameManager.Instance.Player.transform;
         _movementModule.Target = _target;
 
@@ -86,16 +89,6 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
                 sm._hammerAttack.StopAttack();
                 sm._slamCooldownTimer = sm.slamCooldown;
             });
-
-        // .SetCallback(LifeCycle.Update, sm => {
-        //     var smTransform = sm.transform;
-        //     var targetPos   = sm._target.position;
-        //     var position    = smTransform.position;
-        //     var direction   = Vector3Ext.Direction(position, targetPos);
-        //     var rotation    = Quaternion.LookRotation(direction);
-        //     rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
-        //     smTransform.rotation = rotation;
-        // })
     }
     void ChasingState()
     {
@@ -112,7 +105,7 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
                 sm._movementModule.StopMovement();
             });
     }
-    static bool HammerSlamRangePredicate(BurguaseeSm sm)
+    static bool HammerSlamRangePredicate(BurgerBotSm sm)
     {
         var   targetPos = sm._target.position;
         var   position  = sm.transform.position;
@@ -121,7 +114,7 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         float rangeTip  = sm.slamRange;
         return canSlam & distSqr < Mathf.Pow(rangeTip, 2);
     }
-    static bool DashPredicate(BurguaseeSm sm)
+    static bool DashPredicate(BurgerBotSm sm)
     {
         bool canDash    = sm._dashCooldownTimer <= 0 && sm.performDash;
         bool outOfRange = !HammerSlamRangePredicate(sm);
@@ -140,7 +133,7 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         }
     }
 }
-public enum BorguaseState
+public enum BurgerBotState
 {
     Idle,
     Dash,

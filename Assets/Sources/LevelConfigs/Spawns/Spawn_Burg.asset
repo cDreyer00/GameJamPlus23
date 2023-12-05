@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cb2d4c6d3b77c64a8485bd496b34ba3, type: 3}
-  m_Name: Spawn_Hammer_Bot
+  m_Name: Spawn_Burg
   m_EditorClassIdentifier: 
   objectCurvePair:
     key: {fileID: -6668827168535340871, guid: 29b9bd084790a8646b53adf631df6096, type: 3}
