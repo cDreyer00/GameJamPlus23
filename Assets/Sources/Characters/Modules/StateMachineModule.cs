@@ -15,6 +15,10 @@ namespace Sources.Characters.Modules
         {
             stateMachine = new StateMachine<TContext, TEnum>(InitialState, Context);
         }
+        void OnEnable()
+        {
+            stateMachine.ChangeState(InitialState);
+        }
         virtual protected void Update() => stateMachine.Update();
         virtual protected void FixedUpdate() => stateMachine.FixedUpdate();
     }
