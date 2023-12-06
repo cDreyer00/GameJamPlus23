@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 8072571289080277699}
   - component: {fileID: 5163468526109500774}
   - component: {fileID: 6939101503789093292}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seta
   m_TagString: Untagged
   m_Icon: {fileID: 0}

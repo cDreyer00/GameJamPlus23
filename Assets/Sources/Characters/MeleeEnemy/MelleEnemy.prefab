@@ -869,7 +869,7 @@ Transform:
   - {fileID: 6135306661199203443}
   - {fileID: 5576002548102181666}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1516845875696123519
 Rigidbody:
@@ -1253,7 +1253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2666873333853790762, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2.5
+      value: 3.02
       objectReference: {fileID: 0}
     - target: {fileID: 2666873333853790762, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1307,7 +1307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6803520171924584603, guid: 14e317a25c6b6394dbe03df718422e16, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.52
       objectReference: {fileID: 0}
     - target: {fileID: 6803520171924584603, guid: 14e317a25c6b6394dbe03df718422e16, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1341,9 +1341,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6895336862615252819, guid: 14e317a25c6b6394dbe03df718422e16, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8472098436354083384, guid: 14e317a25c6b6394dbe03df718422e16, type: 3}
       propertyPath: m_Name
       value: Particle Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472098436354083384, guid: 14e317a25c6b6394dbe03df718422e16, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1382,7 +1390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7156521822150859325, guid: bbe8440497bdcf14fa362c11f9f194c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.52
       objectReference: {fileID: 0}
     - target: {fileID: 7156521822150859325, guid: bbe8440497bdcf14fa362c11f9f194c0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1461,7 +1469,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ea82aa81c77b5994b9bc498f4b6d5eb8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.63
+      value: -1.11
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ea82aa81c77b5994b9bc498f4b6d5eb8, type: 3}
       propertyPath: m_LocalPosition.z

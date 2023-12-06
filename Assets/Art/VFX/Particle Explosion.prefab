@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6803520171924584603}
   - component: {fileID: 6895336862615252819}
   - component: {fileID: 7429217071021678024}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Particle Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &6895336862615252819
 ParticleSystem:
