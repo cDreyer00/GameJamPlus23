@@ -88,7 +88,18 @@ public class CameraController : Singleton<CameraController>
     {
         foreach (var wall in walls)
         {
-            wall.gameObject.SetActive(!hitWalls.Contains(wall));
+            // wall.gameObject.SetActive(!hitWalls.Contains(wall));
+            wall.gameObject.GetComponentsInChildren<MeshRenderer>();
+            foreach (var wallss in wall.gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                if (!hitWalls.Contains(wall))
+                {
+                    wallss.material.SetFloat("_Opacity", 1f);
+                }
+                else
+                    wallss.material.SetFloat("_Opacity", 0.2f);
+            }           
+            
         }
 
         hitWalls.Clear();
