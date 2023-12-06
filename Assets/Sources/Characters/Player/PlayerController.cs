@@ -1,6 +1,7 @@
 using Sources.Camera;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using MoreMountains.Feedbacks;
 
 public class PlayerController : Character
 {
@@ -14,6 +15,8 @@ public class PlayerController : Character
     [SerializeField] float braking = 5f;
     [Space, SerializeField] AudioClip[] shootAudios;
     [SerializeField] AudioClip damageAudio;
+
+    [SerializeField] MMFeedbacks shoot;
 
     Camera _cam;
     float _curDelay;
@@ -146,6 +149,7 @@ public class PlayerController : Character
         proj.damage = (int)Upgrades.GetModValue(proj.damage, Progress.Upgrades.Type.Damage, 1);
         proj.IgnoreTeam(team);
         Dash(-proj.transform.forward);
+        shoot?.PlayFeedbacks();
 
         if (shootAudios.Length > 0)
             shootAudios[Random.Range(0, shootAudios.Length)].Play();
