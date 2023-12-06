@@ -6,9 +6,19 @@ using Sources;
 
 public class AttackMatelo : MonoBehaviour
 {
-    public MMFeedbacks marteloFeel;
+    public MMFeedbacks marteloFeel, dash, dashOff;
     public void Martelo()
     {
         marteloFeel.OrNull()?.PlayFeedbacks();
+    }
+
+    public void Dash()
+    {
+        dash.OrNull()?.PlayFeedbacks();
+    }
+
+    public void DashOff()
+    {
+        dashOff.OrNull()?.PlayFeedbacks();
     }
 }

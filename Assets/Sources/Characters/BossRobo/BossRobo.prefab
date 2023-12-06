@@ -1015,7 +1015,7 @@ Transform:
   - {fileID: 1682849676795768962}
   - {fileID: 7023380847109344112}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5477748820582512605
 Animator:
@@ -1050,6 +1050,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   marteloFeel: {fileID: 1650854984}
+  dash: {fileID: 1704642752}
+  dashOff: {fileID: 0}
 --- !u!1 &791159517260307501
 GameObject:
   m_ObjectHideFlags: 0
@@ -2790,9 +2792,9 @@ Transform:
   - {fileID: 1650854982}
   - {fileID: 778663476}
   - {fileID: 4655065621806239825}
+  - {fileID: 7208991333246696783}
   - {fileID: 4717224438349588305}
   - {fileID: 3645884125736722349}
-  - {fileID: 7208991333246696783}
   m_Father: {fileID: 161909224768146161}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
