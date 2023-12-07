@@ -34,6 +34,6 @@ public class ProjectileLauncher : CharacterModule
         var dir      = (position - Character.Position).normalized;
         var p        = _projectilePool.Get(Character.Position, Quaternion.LookRotation(dir));
         p.IgnoreTeam(Character.team);
-        p.target = position;
+        p.Target = position;
     }
 }

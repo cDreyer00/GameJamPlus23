@@ -148,7 +148,7 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        proj.damage = (int)Upgrades.GetModValue(proj.damage, Progress.Upgrades.Type.Damage, 1);
+        proj.Damage = (int)Upgrades.GetModValue(proj.Damage, Progress.Upgrades.Type.Damage, 1);
         proj.IgnoreTeam(team);
         Dash(-proj.transform.forward);
         shoot?.PlayFeedbacks();
