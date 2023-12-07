@@ -9,6 +9,7 @@ public class ProjectileLauncher : CharacterModule
 
     [SerializeField] Projectile projectile;
     [SerializeField] Transform  target;
+    [SerializeField] int        damage;
     [SerializeField] float      delay;
     [SerializeField] float      coolDown;
     public Transform Target
@@ -33,6 +34,7 @@ public class ProjectileLauncher : CharacterModule
         var position = target.position;
         var dir      = (position - Character.Position).normalized;
         var p        = _projectilePool.Get(Character.Position, Quaternion.LookRotation(dir));
+        p.Damage = damage;
         p.IgnoreTeam(Character.team);
         p.Target = position;
     }
