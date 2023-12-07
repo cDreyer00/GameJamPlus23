@@ -11,7 +11,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Canvas endGameCanvas;
     [SerializeField] Spawner spawner;
 
-    public bool useController;
+    public bool useController = true;
 
     Scene _currentScene;
     float _initTime;
@@ -86,8 +86,8 @@ public class GameManager : Singleton<GameManager>
         });
         SoundManager.Instance.Stop();
 
-        Progress.ClearProgress();
-        Progress.LoadProgress();
+        Progress.Instance.Clear();
+        Progress.Instance.Load();
     }
 
     public void ShowEndGame()
