@@ -55,6 +55,7 @@ public class HammerAttack : CharacterModule
         while (true) {
             AttackCallback?.Invoke(Character);
             impactDamage.gameObject.SetActive(true);
+            yield return null;
         }
     }
     protected override void Init()
