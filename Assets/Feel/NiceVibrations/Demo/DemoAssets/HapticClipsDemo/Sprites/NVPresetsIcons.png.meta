@@ -107,7 +107,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -120,7 +119,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -133,7 +131,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -146,7 +143,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -159,7 +155,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -172,7 +167,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -185,7 +179,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -413,15 +406,15 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       NVPresetsIcons_0: 4279260276780606416
-      NVPresetsIcons_1: -2389462326047053563
-      NVPresetsIcons_2: 6684065222803499413
-      NVPresetsIcons_3: -8308906585651362545
-      NVPresetsIcons_4: -7933564687622153330
-      NVPresetsIcons_5: 2657873270443967794
-      NVPresetsIcons_6: -6415259062133742075
-      NVPresetsIcons_7: -3820048696943746370
       NVPresetsIcons_8: -312768529563260625
+      NVPresetsIcons_5: 2657873270443967794
       NVPresetsIcons_9: -8918885832014658072
+      NVPresetsIcons_6: -6415259062133742075
+      NVPresetsIcons_2: 6684065222803499413
+      NVPresetsIcons_1: -2389462326047053563
+      NVPresetsIcons_7: -3820048696943746370
+      NVPresetsIcons_4: -7933564687622153330
+      NVPresetsIcons_3: -8308906585651362545
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -107,7 +107,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -120,7 +119,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -133,7 +131,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -146,7 +143,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -159,7 +155,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -172,7 +167,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -185,7 +179,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -412,16 +405,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      RegularPresetsIcons_7: -1001581268832274596
       RegularPresetsIcons_0: -122496617620796665
-      RegularPresetsIcons_1: -970488182351979515
-      RegularPresetsIcons_2: 7590535577056678407
+      RegularPresetsIcons_6: -1927911570766903740
+      RegularPresetsIcons_5: -4594720345167028440
       RegularPresetsIcons_3: 1161443714384828998
       RegularPresetsIcons_4: -5435255387823749147
-      RegularPresetsIcons_5: -4594720345167028440
-      RegularPresetsIcons_6: -1927911570766903740
-      RegularPresetsIcons_7: -1001581268832274596
-      RegularPresetsIcons_8: -6205461316961850552
+      RegularPresetsIcons_2: 7590535577056678407
       RegularPresetsIcons_9: 1833921066897734877
+      RegularPresetsIcons_1: -970488182351979515
+      RegularPresetsIcons_8: -6205461316961850552
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

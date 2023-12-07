@@ -483,6 +483,7 @@ GameObject:
   - component: {fileID: 1650854984}
   - component: {fileID: 1650854983}
   - component: {fileID: 1650854985}
+  - component: {fileID: 8514233812472640031}
   m_Layer: 0
   m_Name: FeedAttack
   m_TagString: Untagged
@@ -522,6 +523,7 @@ MonoBehaviour:
   Feedbacks:
   - {fileID: 1650854983}
   - {fileID: 1650854985}
+  - {fileID: 8514233812472640031}
   InitializationMode: 2
   AutoInitialization: 1
   SafeMode: 3
@@ -716,6 +718,47 @@ MonoBehaviour:
     m_PropagationSpeed: 343
   Velocity: {x: 0.5, y: 0.5, z: 0.5}
   ClearImpulseOnStop: 0
+--- !u!114 &8514233812472640031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650854981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c27131831afa28b499cb120fc9059997, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Active: 1
+  Label: Particles Play
+  Chance: 100
+  Timing:
+    TimescaleMode: 0
+    ExcludeFromHoldingPauses: 0
+    ContributeToTotalDuration: 1
+    InitialDelay: 0
+    CooldownDuration: 0
+    InterruptsOnStop: 1
+    NumberOfRepeats: 0
+    RepeatForever: 0
+    DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
+    Sequence: {fileID: 0}
+    TrackID: 0
+    Quantized: 0
+    TargetBPM: 120
+  DebugActive: 0
+  Mode: 0
+  BoundParticleSystem: {fileID: 7163757113534089217}
+  RandomParticleSystems: []
+  MoveToPosition: 0
+  ActivateOnPlay: 0
 --- !u!1 &1704642749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,7 +1058,7 @@ Transform:
   - {fileID: 1682849676795768962}
   - {fileID: 7023380847109344112}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5477748820582512605
 Animator:
@@ -1050,6 +1093,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   marteloFeel: {fileID: 1650854984}
+  dash: {fileID: 1704642752}
+  dashOff: {fileID: 778663478}
 --- !u!1 &791159517260307501
 GameObject:
   m_ObjectHideFlags: 0
@@ -2790,9 +2835,9 @@ Transform:
   - {fileID: 1650854982}
   - {fileID: 778663476}
   - {fileID: 4655065621806239825}
+  - {fileID: 7208991333246696783}
   - {fileID: 4717224438349588305}
   - {fileID: 3645884125736722349}
-  - {fileID: 7208991333246696783}
   m_Father: {fileID: 161909224768146161}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3730,5 +3775,10 @@ PrefabInstance:
 --- !u!4 &7111494942982332361 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1751909406564841358, guid: 953abfaf9825d4045b5bca159fe618a6, type: 3}
+  m_PrefabInstance: {fileID: 8854378864454182983}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7163757113534089217 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1840799659579416646, guid: 953abfaf9825d4045b5bca159fe618a6, type: 3}
   m_PrefabInstance: {fileID: 8854378864454182983}
   m_PrefabAsset: {fileID: 0}
