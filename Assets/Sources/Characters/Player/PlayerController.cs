@@ -2,6 +2,7 @@ using Sources.Camera;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using MoreMountains.Feedbacks;
+using UnityEngine.InputSystem;
 
 public class PlayerController : Character
 {
@@ -34,7 +35,7 @@ public class PlayerController : Character
     void Awake()
     {
         inputs = new PlayerInputs();
-        inputs.Enable();
+        inputs.Gameplay.Enable();
 
         inputs.Gameplay.Shoot.performed += (ctx) => shooting = true;
         inputs.Gameplay.Shoot.canceled += (ctx) => shooting = false;
@@ -62,6 +63,7 @@ public class PlayerController : Character
     void Update()
     {
         if (GameManager.IsGameOver) return;
+        if (GameManager.GetGlobalInstance<Spawner>("spawner").IsPaused) return;
 
         _curDelay += Time.deltaTime;
 

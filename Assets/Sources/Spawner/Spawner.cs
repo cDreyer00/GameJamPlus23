@@ -30,6 +30,8 @@ public class Spawner : MonoBehaviour
     {
         Init(_battleConfig);
         StartWave();
+
+        GameManager.Instance.OnTimerPauseCheck += () => IsPaused;
     }
 
     void Update() { _battle.Tick(Time.deltaTime); }

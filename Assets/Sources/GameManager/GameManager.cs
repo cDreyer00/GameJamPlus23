@@ -5,24 +5,44 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
-    [SerializeField] Canvas       endGameCanvas;
-    [SerializeField] Spawner      spawner;
+    [SerializeField] Canvas endGameCanvas;
+    [SerializeField] Spawner spawner;
 
     public bool useController;
 
     Scene _currentScene;
     float _initTime;
-    bool  fading;
+    bool fading;
 
-    public Bounds GameBounds        => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
-    public float GameElapsedTime    => Time.time - _initTime;
-    public Spawner Spawner          => spawner;
+    public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
+    public Spawner Spawner => spawner;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
     bool ChangeInputs => Input.GetKeyDown(KeyCode.Space);
+    
+    public delegate bool TimerPauseVerifier();
+    public event TimerPauseVerifier OnTimerPauseCheck;
 
-    [CanBeNull] Character _player;
+    public bool IsTimerPaused
+    {
+        get
+        {
+            if (OnTimerPauseCheck != null)
+            {                
+                foreach (var verifier in OnTimerPauseCheck.GetInvocationList())
+                {
+                    if (((TimerPauseVerifier)verifier)())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
+    Character _player;
     public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
     public static bool IsGameOver { get; private set; }
 
@@ -36,13 +56,14 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
-        Timer.Tick(Time.deltaTime);
-        
+        if (!IsTimerPaused)
+            Timer.Tick(Time.deltaTime);
+
         if (RotateLeft)
             CameraController.Instance.RotateLeft();
         if (RotateRight)
             CameraController.Instance.RotateRight();
-        
+
         if (ChangeInputs)
             useController = !useController;
 
@@ -53,7 +74,8 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
 
         fading = true;
-        LoadingManager.Instance.FadeIn(() => {
+        LoadingManager.Instance.FadeIn(() =>
+        {
             LoadingManager.Instance.SetLoading(true)
                 .LoadScene( /*TODO: Fix Hacky Solution(criminal)*/(SceneType)_currentScene.buildIndex);
             IsGameOver = false;
