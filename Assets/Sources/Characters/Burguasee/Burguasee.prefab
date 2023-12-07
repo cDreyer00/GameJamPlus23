@@ -173,8 +173,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4687381371260746933f242adbd1b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 1
-  delay: 0.5
+  lifeTime: 0.25
+  delay: 0.25
   damage: 20
   impactDamage: {fileID: 8120068728015767444}
 --- !u!1001 &749126826422696785

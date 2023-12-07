@@ -8,11 +8,10 @@ using static BorguaseState;
 
 public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
 {
-    [SerializeField] float        slamRange;
-    [SerializeField] float        slamCooldown;
-    [SerializeField] Vector2      dashCooldown;
-    [SerializeField] bool         performDash;
-    [SerializeField] Animator     animator;
+    [SerializeField] float    slamRange;
+    [SerializeField] Vector2  dashCooldown;
+    [SerializeField] bool     performDash;
+    [SerializeField] Animator animator;
 
 
     readonly int _hAttackTrigger = Animator.StringToHash("attack");
@@ -84,18 +83,15 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
             })
             .SetCallback(LifeCycle.Exit, sm => {
                 sm._hammerAttack.StopAttack();
-                sm._slamCooldownTimer = sm.slamCooldown;
+            }).SetCallback(LifeCycle.Update, sm => {
+                var smTransform = sm.transform;
+                var targetPos   = sm._target.position;
+                var position    = smTransform.position;
+                var direction   = Vector3Ext.Direction(position, targetPos);
+                var rotation    = Quaternion.LookRotation(direction);
+                rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+                smTransform.rotation = rotation;
             });
-
-        // .SetCallback(LifeCycle.Update, sm => {
-        //     var smTransform = sm.transform;
-        //     var targetPos   = sm._target.position;
-        //     var position    = smTransform.position;
-        //     var direction   = Vector3Ext.Direction(position, targetPos);
-        //     var rotation    = Quaternion.LookRotation(direction);
-        //     rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
-        //     smTransform.rotation = rotation;
-        // })
     }
     void ChasingState()
     {
@@ -133,7 +129,7 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         bool hitPlayer = collision.gameObject.CompareTag("Player");
 
         if (stateMachine.CurrentState == Dash) {
-            if (hitPlayer && slamCooldown == 0) {
+            if (hitPlayer) {
                 stateMachine.ChangeState(HammerSlam);
             }
             stateMachine.ChangeState(Chasing);
