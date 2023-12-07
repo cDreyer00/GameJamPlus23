@@ -13,10 +13,10 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     [SerializeField] Vector2  dashCooldown;
     [SerializeField] bool     performDash;
     [SerializeField] Animator animator;
-    
-    readonly         int      _hAttackTrigger    = Animator.StringToHash("isAttack");
-    readonly         int      _hMarteladaTrigger = Animator.StringToHash("martelada");
-    readonly         int      _walkBool          = Animator.StringToHash("isWalk");
+
+    readonly int _hAttackTrigger    = Animator.StringToHash("isAttack");
+    readonly int _hMarteladaTrigger = Animator.StringToHash("martelada");
+    readonly int _walkBool          = Animator.StringToHash("isWalk");
 
     NavMeshMovement _movementModule;
     HammerAttack    _hammerAttack;
@@ -88,6 +88,15 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .SetCallback(LifeCycle.Exit, sm => {
                 sm._hammerAttack.StopAttack();
                 sm._slamCooldownTimer = sm.slamCooldown;
+            })
+            .SetCallback(LifeCycle.Update, sm => {
+                var smTransform = sm.transform;
+                var targetPos   = sm._target.position;
+                var position    = smTransform.position;
+                var direction   = Vector3Ext.Direction(position, targetPos);
+                var rotation    = Quaternion.LookRotation(direction);
+                rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+                smTransform.rotation = rotation;
             });
     }
     void ChasingState()
