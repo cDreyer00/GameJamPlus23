@@ -13,13 +13,13 @@ public class HammerAttack : CharacterModule
 {
     IEnumerator           _attackCoroutine;
     readonly List<string> _ignoreList = new();
+    public   float        cooldown;
     public   float        damage;
     public   ImpactDamage impactDamage;
     event Action<Character> AttackCallback;
     void OnValidate()
     {
         if (!impactDamage) impactDamage = GetComponentInChildren<ImpactDamage>();
-        impactDamage.gameObject.SetActive(false);
     }
     void Start()
     {
@@ -35,13 +35,11 @@ public class HammerAttack : CharacterModule
     }
     public virtual void StartAttack()
     {
-        impactDamage.gameObject.SetActive(false);
         StartCoroutine(_attackCoroutine);
     }
     public virtual void StopAttack()
     {
         StopCoroutine(_attackCoroutine);
-        impactDamage.gameObject.SetActive(false);
     }
     void IgnoreTeam(string team)
     {
@@ -50,12 +48,9 @@ public class HammerAttack : CharacterModule
     }
     IEnumerator AttackCoroutine()
     {
-        impactDamage.gameObject.SetActive(false);
-
         while (true) {
+            yield return Helpers.GetWait(cooldown);
             AttackCallback?.Invoke(Character);
-            impactDamage.gameObject.SetActive(true);
-            yield return null;
         }
     }
     protected override void Init()

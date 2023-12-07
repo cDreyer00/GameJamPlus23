@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5382163784930078625
 Transform:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6089110235842682470}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3
+  m_Radius: 2.5
   m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -221,8 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4687381371260746933f242adbd1b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 1
-  delay: 2
+  cooldown: 1
   damage: 20
   impactDamage: {fileID: 5471473074406424210}
 --- !u!114 &-4291083372791572725
@@ -238,7 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slamRange: 4
-  slamCooldown: 0.2
+  slamCooldown: 0.5
   dashCooldown: {x: 3, y: 7}
   performDash: 1
   animator: {fileID: 7577314980058005502}

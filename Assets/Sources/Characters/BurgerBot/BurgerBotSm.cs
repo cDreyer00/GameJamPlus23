@@ -16,7 +16,9 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
 
     readonly int _hAttackTrigger    = Animator.StringToHash("isAttack");
     readonly int _hMarteladaTrigger = Animator.StringToHash("martelada");
-    readonly int _walkBool          = Animator.StringToHash("isWalk");
+    readonly int _hWalkBool         = Animator.StringToHash("isWalk");
+    readonly int _hIdleBool         = Animator.StringToHash("isIdle");
+    readonly int _hDashTrigger      = Animator.StringToHash("dash");
 
     NavMeshMovement _movementModule;
     HammerAttack    _hammerAttack;
@@ -63,14 +65,25 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
         stateMachine.From(Idle)
             .Transition(Dash, DashPredicate)
             .Transition(Chasing, sm => sm._movementModule.Target)
-            .Transition(HammerSlam, HammerSlamRangePredicate);
+            .Transition(HammerSlam, HammerSlamRangePredicate)
+            .SetCallback(LifeCycle.Enter, sm => {
+                sm.animator.SetBool(sm._hIdleBool, true);
+            })
+            .SetCallback(LifeCycle.Exit, sm => {
+                sm.animator.SetBool(sm._hIdleBool, false);
+            });
     }
     void DashState()
     {
         stateMachine.From(Dash)
             .Transition(Idle, sm => !sm._movementModule.Target)
+            .Transition(Chasing, sm => sm._movementModule.Agent.isStopped)
             .Transition(Chasing, sm => !sm._movementModule.dashTween.IsActive())
-            .SetCallback(LifeCycle.Enter, sm => sm._movementModule.StartDash())
+            .SetCallback(LifeCycle.Enter, sm => {
+                sm.animator.SetTrigger(sm._hAttackTrigger);
+                sm.animator.SetTrigger(sm._hDashTrigger);
+                sm.Delay(Time.deltaTime * 33.34f, sm => sm._movementModule.StartDash());
+            })
             .SetCallback(LifeCycle.Exit, sm => {
                 sm._movementModule.dashTween.Kill();
                 sm._dashCooldownTimer = UnityEngine.Random.Range(sm.dashCooldown.x, sm.dashCooldown.y);
@@ -82,7 +95,6 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .Transition(Idle, sm => !sm._movementModule.Target)
             .Transition(Chasing, sm => !HammerSlamRangePredicate(sm))
             .SetCallback(LifeCycle.Enter, sm => {
-                sm.animator.SetTrigger(sm._hAttackTrigger);
                 sm._hammerAttack.StartAttack();
             })
             .SetCallback(LifeCycle.Exit, sm => {
@@ -106,11 +118,11 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .Transition(Dash, DashPredicate)
             .Transition(HammerSlam, HammerSlamRangePredicate)
             .SetCallback(LifeCycle.Enter, sm => {
-                sm.animator.SetBool(sm._walkBool, true);
+                sm.animator.SetBool(sm._hWalkBool, true);
                 sm._movementModule.StartChase();
             })
             .SetCallback(LifeCycle.Exit, sm => {
-                sm.animator.SetBool(sm._walkBool, false);
+                sm.animator.SetBool(sm._hWalkBool, false);
                 sm._movementModule.StopMovement();
             });
     }
