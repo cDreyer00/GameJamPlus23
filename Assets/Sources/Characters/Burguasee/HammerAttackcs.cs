@@ -13,8 +13,6 @@ public class HammerAttack : CharacterModule
 {
     IEnumerator           _attackCoroutine;
     readonly List<string> _ignoreList = new();
-    public   float        lifeTime;
-    public   float        delay;
     public   float        damage;
     public   ImpactDamage impactDamage;
     event Action<Character> AttackCallback;
@@ -55,11 +53,8 @@ public class HammerAttack : CharacterModule
         impactDamage.gameObject.SetActive(false);
 
         while (true) {
-            yield return Helpers.GetWait(delay);
             AttackCallback?.Invoke(Character);
             impactDamage.gameObject.SetActive(true);
-            yield return Helpers.GetWait(lifeTime);
-            impactDamage.gameObject.SetActive(false);
         }
     }
     protected override void Init()
