@@ -1173,7 +1173,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: health.max
-      value: 30
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: hitFeedback
@@ -1181,7 +1181,7 @@ PrefabInstance:
       objectReference: {fileID: 3565708497735909073}
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: health.value
-      value: 30
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: stateMachineModule

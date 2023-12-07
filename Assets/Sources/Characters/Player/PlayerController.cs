@@ -1,8 +1,9 @@
 using Sources.Camera;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using MoreMountains.Feedbacks;
-using UnityEngine.InputSystem;
+using System;
+
+using static Progress;
 
 public class PlayerController : Character
 {
@@ -61,6 +62,17 @@ public class PlayerController : Character
 
         Events.OnDied += OnDied;
     }
+
+    void OnEnable()
+    {
+        Progress.Instance.upgrades.OnUpgrade += OnUpgrade;
+    }
+
+    void OnDisable()
+    {
+        Progress.Instance.upgrades.OnUpgrade -= OnUpgrade;
+    }
+
     void Update()
     {
         if (GameManager.IsGameOver) return;
@@ -152,10 +164,11 @@ public class PlayerController : Character
         proj.Damage = (int)Upgrades.GetModValue(damage, Progress.Upgrades.Type.Damage, 1.5f);
         proj.IgnoreTeam(team);
         Dash(-proj.transform.forward);
-        shoot?.PlayFeedbacks();
+
+        if (shoot != null) shoot.PlayFeedbacks();
 
         if (shootAudios.Length > 0)
-            shootAudios[Random.Range(0, shootAudios.Length)].Play();
+            shootAudios.GetRandom().Play();
     }
 
     void Dash(Vector3 dir)
@@ -167,5 +180,16 @@ public class PlayerController : Character
     static void OnDied(ICharacter character)
     {
         GameManager.Instance.ReloadScene();
+    }
+
+    void OnUpgrade(Upgrades.Type type, int level) => OnUpgrade(type);
+    void OnUpgrade(Upgrades.Type type)
+    {
+        var hm = GetModule<HealthModule>();
+
+        if (type == Upgrades.Type.Health)
+            hm.MaxHealth = Upgrades.GetModValue(hm.BaseHealth, type);
+
+        hm.Health = hm.MaxHealth;
     }
 }

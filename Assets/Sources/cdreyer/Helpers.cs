@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -181,6 +182,11 @@ public static class Helpers
     {
         type = GameObject.FindObjectOfType<T>();
         return type != null;
+    }
+
+    public static T GetRandom<T>(this IEnumerable<T> list)
+    {
+        return list.ElementAt(UnityEngine.Random.Range(0, list.Count()));
     }
 }
 
