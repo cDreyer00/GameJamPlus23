@@ -5,6 +5,7 @@ public class UIGameplay : MonoBehaviour
     [SerializeField] GameObject keysPanel;
     [SerializeField] ButtonBehaviour settingsBtn;
     [SerializeField] UIUpgrades uiUpgrades;
+    [SerializeField] Spawner spawner;
 
     void Start()
     {
@@ -13,8 +14,17 @@ public class UIGameplay : MonoBehaviour
             GameLogger.Log("Open settings");
         }, InteractionType.ClickUp);
 
-        var spawner = GameManager.GetGlobalInstance<Spawner>("spawner");
+        // var spawner = GameManager.GetGlobalInstance<Spawner>("spawner");
+    }
+
+    void OnEnable()
+    {
         spawner.onAllEnemiesDead += ShowUpgrades;
+    }
+
+    void OnDisable()
+    {
+        spawner.onAllEnemiesDead -= ShowUpgrades;
     }
 
     void ShowKeys()

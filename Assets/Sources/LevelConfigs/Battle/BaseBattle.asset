@@ -10,9 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3cfc533bb376044d9a30f016d9956fc, type: 3}
-  m_Name: Battle_Test_1
+  m_Name: BaseBattle
   m_EditorClassIdentifier: 
   waves:
   - {fileID: 11400000, guid: 478346ccc7aff6048b2806f41d53abce, type: 2}
   - {fileID: 11400000, guid: 7e86c70de0bd6254f81dba45e338e558, type: 2}
-  duration: 35
+  - {fileID: 11400000, guid: edd92603bd1852d41a4fb3e9c3d12e4c, type: 2}
+  - {fileID: 11400000, guid: 5871e481a245c8849b19638846e606cd, type: 2}
+  - {fileID: 11400000, guid: 5e3abc4cb76ebae4bbed8884ddd65d42, type: 2}
+  - {fileID: 11400000, guid: 6e6410d8fc0e6044296911ef4a8e0d70, type: 2}
+  duration: 114.680466

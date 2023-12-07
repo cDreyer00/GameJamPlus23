@@ -169,7 +169,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraShake: {fileID: 1639136930}
-  freeze: {fileID: 0}
 --- !u!4 &93325482 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 167829896736789762, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
@@ -502,6 +501,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3513188679338773719, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
+      propertyPath: spawner
+      value: 
+      objectReference: {fileID: 1784658821}
     - target: {fileID: 8235854435146186518, guid: 67af108bd2e872b409e3c5b6b8810525, type: 3}
       propertyPath: m_Name
       value: Canvas_Gameplay
@@ -1583,7 +1586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30c6f7c0b9557fd42b623eb84240313f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _battleConfig: {fileID: 11400000, guid: 0b77cf9d46d1c3145a8e6affd7bb6fdc, type: 2}
+  _battleConfig: {fileID: 11400000, guid: 0c29a4537cbfdac4083e7f8073c0950c, type: 2}
   elapsedTime: 0
   navMeshSurface: {fileID: 4930184713420487662}
 --- !u!1 &1353566045525805457
@@ -2061,7 +2064,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: useController
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

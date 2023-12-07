@@ -2794,6 +2794,7 @@ MonoBehaviour:
   anchor: {fileID: 2030193239284623269}
   rb: {fileID: 2799235822207906874}
   aim: {fileID: 192714377665351109}
+  damage: 12
   recoilForce: 6
   shootDelay: 0.8
   braking: 5

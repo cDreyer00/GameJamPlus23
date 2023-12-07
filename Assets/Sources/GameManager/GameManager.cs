@@ -1,4 +1,7 @@
-using JetBrains.Annotations;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,7 +23,7 @@ public class GameManager : Singleton<GameManager>
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
     bool ChangeInputs => Input.GetKeyDown(KeyCode.Space);
-    
+
     public delegate bool TimerPauseVerifier();
     public event TimerPauseVerifier OnTimerPauseCheck;
 
@@ -29,7 +32,7 @@ public class GameManager : Singleton<GameManager>
         get
         {
             if (OnTimerPauseCheck != null)
-            {                
+            {
                 foreach (var verifier in OnTimerPauseCheck.GetInvocationList())
                 {
                     if (((TimerPauseVerifier)verifier)())
@@ -77,11 +80,14 @@ public class GameManager : Singleton<GameManager>
         LoadingManager.Instance.FadeIn(() =>
         {
             LoadingManager.Instance.SetLoading(true)
-                .LoadScene( /*TODO: Fix Hacky Solution(criminal)*/(SceneType)_currentScene.buildIndex);
+                .LoadScene(SceneType.GAMEPLAY);
             IsGameOver = false;
             fading = false;
         });
         SoundManager.Instance.Stop();
+
+        Progress.ClearProgress();
+        Progress.LoadProgress();
     }
 
     public void ShowEndGame()
@@ -93,6 +99,29 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.Stop();
         fading = false;
     }
+
+    public static void GetGlobalInstance<T>(string key, float timeout, System.Action<T> callback) where T : Object
+    {
+        Instance.StartCoroutine(GetGlobalInstanceCoroutine(key, timeout, callback));
+        static IEnumerator GetGlobalInstanceCoroutine(string key, float timeout, System.Action<T> callback)
+        {
+            float startTime = Time.time;
+            T instance = null;
+
+            while (Time.time - startTime < timeout)
+            {
+                instance = GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);
+                if (instance != null)
+                {
+                    break;
+                }
+                yield return null; // wait for next frame
+            }
+
+            callback(instance);
+        }
+    }
+
     public static T GetGlobalInstance<T>(string key) where T : Object
     {
         return GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);

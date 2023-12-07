@@ -15,5 +15,5 @@ public class UIMainMenu : MonoBehaviour
         LoadingManager.Instance.FadeIn(() =>
             LoadingManager.Instance.LoadScene(SceneType.GAMEPLAY)
         );
-    }
+    }    
 }
