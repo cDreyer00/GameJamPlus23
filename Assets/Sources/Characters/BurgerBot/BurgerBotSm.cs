@@ -11,7 +11,6 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     [SerializeField] float    slamRange;
     [SerializeField] float    slamCooldown;
     [SerializeField] Vector2  dashCooldown;
-    [SerializeField] bool     performDash;
     [SerializeField] Animator animator;
 
     readonly int _hAttackTrigger    = Animator.StringToHash("isAttack");
@@ -20,11 +19,12 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     readonly int _hIdleBool         = Animator.StringToHash("isIdle");
     readonly int _hDashTrigger      = Animator.StringToHash("dash");
 
-    NavMeshMovement _movementModule;
-    HammerAttack    _hammerAttack;
-    Transform       _target;
-    float           _dashCooldownTimer;
-    float           _slamCooldownTimer;
+    public AttackEventEmitter hammerAttackEvent;
+    public AttackEventEmitter dashAttackEvent;
+    NavMeshMovement           _movementModule;
+    Transform                 _target;
+    float                     _dashCooldownTimer;
+    float                     _slamCooldownTimer;
     protected override BurgerBotState InitialState => Idle;
     protected override BurgerBotSm Context => this;
 
@@ -39,8 +39,7 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     {
         base.Init();
         _movementModule = Character.GetModule<NavMeshMovement>();
-        _hammerAttack = Character.GetModule<HammerAttack>();
-        _hammerAttack.AddListener(_ => {
+        hammerAttackEvent.AddListener(() => {
             animator.SetTrigger(_hAttackTrigger);
             animator.SetTrigger(_hMarteladaTrigger);
         });
@@ -80,11 +79,13 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .Transition(Chasing, sm => sm._movementModule.Agent.isStopped)
             .Transition(Chasing, sm => !sm._movementModule.dashTween.IsActive())
             .SetCallback(LifeCycle.Enter, sm => {
+                sm.dashAttackEvent.StartAttack();
                 sm.animator.SetTrigger(sm._hAttackTrigger);
                 sm.animator.SetTrigger(sm._hDashTrigger);
                 sm.Delay(Time.deltaTime * 33.34f, sm => sm._movementModule.StartDash());
             })
             .SetCallback(LifeCycle.Exit, sm => {
+                sm.dashAttackEvent.StopAttack();
                 sm._movementModule.dashTween.Kill();
                 sm._dashCooldownTimer = UnityEngine.Random.Range(sm.dashCooldown.x, sm.dashCooldown.y);
             });
@@ -95,10 +96,10 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .Transition(Idle, sm => !sm._movementModule.Target)
             .Transition(Chasing, sm => !HammerSlamRangePredicate(sm))
             .SetCallback(LifeCycle.Enter, sm => {
-                sm._hammerAttack.StartAttack();
+                sm.hammerAttackEvent.StartAttack();
             })
             .SetCallback(LifeCycle.Exit, sm => {
-                sm._hammerAttack.StopAttack();
+                sm.hammerAttackEvent.StopAttack();
                 sm._slamCooldownTimer = sm.slamCooldown;
             })
             .SetCallback(LifeCycle.Update, sm => {
@@ -137,7 +138,7 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     }
     static bool DashPredicate(BurgerBotSm sm)
     {
-        bool canDash    = sm._dashCooldownTimer <= 0 && sm.performDash;
+        bool canDash    = sm._dashCooldownTimer <= 0 && sm.dashAttackEvent;
         bool outOfRange = !HammerSlamRangePredicate(sm);
         bool hasTarget  = sm._movementModule.Target;
         return canDash & hasTarget & outOfRange;

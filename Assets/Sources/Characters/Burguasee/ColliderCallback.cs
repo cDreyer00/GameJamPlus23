@@ -5,19 +5,20 @@ using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class ImpactDamage : MonoBehaviour
+public class ColliderCallback : MonoBehaviour
 {
-    event Action<Collider> OnImpact;
+    event Action<Collider> TriggerEventCallback;
     void OnTriggerEnter(Collider other)
     {
-        OnImpact?.Invoke(other);
+        if (!enabled) return;
+        TriggerEventCallback?.Invoke(other);
     }
     public void AddListener(Action<Collider> action)
     {
-        OnImpact += action;
+        TriggerEventCallback += action;
     }
     public void RemoveListener(Action<Collider> action)
     {
-        OnImpact -= action;
+        TriggerEventCallback -= action;
     }
 }

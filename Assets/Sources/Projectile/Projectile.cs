@@ -62,7 +62,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
             ignoreList.Add(team);
     }
     void Move(float step)
-    {        
+    {
         var position = _transform.position;
         var forward  = _transform.forward;
 
@@ -84,9 +84,12 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
             if (ignoreList.Contains(character.team)) {
                 return;
             }
-
             character.Events.TakeDamage(damage);
+            goto Release;
         }
+        if (!col.CompareTag("Wall")) return;
+
+        Release:
         if (Pool != null) Pool.Release(this);
         else Destroy(gameObject);
     }

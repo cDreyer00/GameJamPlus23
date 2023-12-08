@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Bosses_Battle
   m_EditorClassIdentifier: 
   waves:
+  - {fileID: 11400000, guid: 6af883310d705ff49a7d1a229bcc178a, type: 2}
   - {fileID: 11400000, guid: 90aaadc46d9f51649a59bc7cdb807a74, type: 2}
-  duration: 1
+  duration: 2

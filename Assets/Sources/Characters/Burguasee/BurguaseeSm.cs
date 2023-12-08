@@ -10,18 +10,18 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
 {
     [SerializeField] float    slamRange;
     [SerializeField] Vector2  dashCooldown;
-    [SerializeField] bool     performDash;
     [SerializeField] Animator animator;
 
 
     readonly int _hAttackTrigger = Animator.StringToHash("attack");
     readonly int _walkBool       = Animator.StringToHash("isWalk");
 
-    NavMeshMovement _movementModule;
-    HammerAttack    _hammerAttack;
-    Transform       _target;
-    float           _dashCooldownTimer;
-    float           _slamCooldownTimer;
+    public AttackEventEmitter hammerAttackEvent;
+    
+    Transform                 _target;
+    NavMeshMovement           _movementModule;
+    float                     _dashCooldownTimer;
+    float                     _slamCooldownTimer;
     protected override BorguaseState InitialState => Idle;
     protected override BurguaseeSm Context => this;
 
@@ -36,14 +36,12 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     {
         base.Init();
         _movementModule = Character.GetModule<NavMeshMovement>();
-        _hammerAttack = Character.GetModule<HammerAttack>();
-        _hammerAttack.AddListener(_ => animator.SetTrigger(_hAttackTrigger));
+        hammerAttackEvent.AddListener(() => animator.SetTrigger(_hAttackTrigger));
         _target = GameManager.Instance.Player.transform;
         _movementModule.Target = _target;
 
         IdleState();
         HammerSlamState();
-        DashState();
         ChasingState();
     }
     protected override void Update()
@@ -57,20 +55,8 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     void IdleState()
     {
         stateMachine.From(Idle)
-            .Transition(Dash, DashPredicate)
             .Transition(Chasing, sm => sm._movementModule.Target)
             .Transition(HammerSlam, HammerSlamRangePredicate);
-    }
-    void DashState()
-    {
-        stateMachine.From(Dash)
-            .Transition(Idle, sm => !sm._movementModule.Target)
-            .Transition(Chasing, sm => !sm._movementModule.dashTween.IsActive())
-            .SetCallback(LifeCycle.Enter, sm => sm._movementModule.StartDash())
-            .SetCallback(LifeCycle.Exit, sm => {
-                sm._movementModule.dashTween.Kill();
-                sm._dashCooldownTimer = UnityEngine.Random.Range(sm.dashCooldown.x, sm.dashCooldown.y);
-            });
     }
     void HammerSlamState()
     {
@@ -79,10 +65,10 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
             .Transition(Chasing, sm => !HammerSlamRangePredicate(sm))
             .SetCallback(LifeCycle.Enter, sm => {
                 sm.animator.SetTrigger(sm._hAttackTrigger);
-                sm._hammerAttack.StartAttack();
+                sm.hammerAttackEvent.StartAttack();
             })
             .SetCallback(LifeCycle.Exit, sm => {
-                sm._hammerAttack.StopAttack();
+                sm.hammerAttackEvent.StopAttack();
             }).SetCallback(LifeCycle.Update, sm => {
                 var smTransform = sm.transform;
                 var targetPos   = sm._target.position;
@@ -97,7 +83,6 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     {
         stateMachine.From(Chasing)
             .Transition(Idle, sm => !sm._movementModule.Target)
-            .Transition(Dash, DashPredicate)
             .Transition(HammerSlam, HammerSlamRangePredicate)
             .SetCallback(LifeCycle.Enter, sm => {
                 sm.animator.SetBool(sm._walkBool, true);
@@ -116,13 +101,6 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
         float distSqr   = Vector3Ext.SqrDistance(position, targetPos);
         float rangeTip  = sm.slamRange;
         return canSlam & distSqr < Mathf.Pow(rangeTip, 2);
-    }
-    static bool DashPredicate(BurguaseeSm sm)
-    {
-        bool canDash    = sm._dashCooldownTimer <= 0 && sm.performDash;
-        bool outOfRange = !HammerSlamRangePredicate(sm);
-        bool hasTarget  = sm._movementModule.Target;
-        return canDash & hasTarget & outOfRange;
     }
     void OnCollisionEnter(Collision collision)
     {
