@@ -12,16 +12,37 @@ public class HealthModule : CharacterModule
     [SerializeField] ClampedPrimitive<float> health;
     [SerializeField] MMFeedbacks hitFeedback;
 
-    public float Health => health.Value;
+    public float BaseHealth { get; private set; }
+
+    public float Health
+    {
+        get => health.Value;
+        set
+        {
+            health.Value = value;
+            UpdateSlider();
+        }
+    }
+
+    public float MaxHealth
+    {
+        get => health.max;
+        set
+        {
+            health.max = value;
+            UpdateSlider();
+        }
+    }
+
     public void OnEnable()
     {
-        Character.Events.OnTakeDamage += OnTakeDamage;
+        Character.Events.OnTakeDamage += TakeDamage;
         Character.Events.OnInitialized += Init;
     }
 
     public void OnDisable()
     {
-        Character.Events.OnTakeDamage -= OnTakeDamage;
+        Character.Events.OnTakeDamage -= TakeDamage;
         Character.Events.OnInitialized -= Init;
     }
 
@@ -30,11 +51,11 @@ public class HealthModule : CharacterModule
         canvas.worldCamera = Camera.main;
 
         health.Value = health.max;
+        BaseHealth = health.max;
         UpdateSlider();
     }
 
-
-    void OnTakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         health.Value -= amount;
         if (hitFeedback != null) hitFeedback.PlayFeedbacks();

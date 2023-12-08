@@ -1,28 +1,51 @@
-using JetBrains.Annotations;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
-    [SerializeField] Canvas       endGameCanvas;
-    [SerializeField] Spawner      spawner;
+    [SerializeField] Canvas endGameCanvas;
+    [SerializeField] Spawner spawner;
 
-    public bool useController;
+    public bool useController = true;
 
     Scene _currentScene;
     float _initTime;
-    bool  fading;
+    bool fading;
 
-    public Bounds GameBounds        => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
-    public float GameElapsedTime    => Time.time - _initTime;
-    public Spawner Spawner          => spawner;
+    public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
+    public Spawner Spawner => spawner;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
     bool ChangeInputs => Input.GetKeyDown(KeyCode.Space);
 
-    [CanBeNull] Character _player;
+    public delegate bool TimerPauseVerifier();
+    public event TimerPauseVerifier OnTimerPauseCheck;
+
+    public bool IsTimerPaused
+    {
+        get
+        {
+            if (OnTimerPauseCheck != null)
+            {
+                foreach (var verifier in OnTimerPauseCheck.GetInvocationList())
+                {
+                    if (((TimerPauseVerifier)verifier)())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
+    Character _player;
     public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
     public static bool IsGameOver { get; private set; }
 
@@ -36,13 +59,14 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
-        Timer.Tick(Time.deltaTime);
-        
+        if (!IsTimerPaused)
+            Timer.Tick(Time.deltaTime);
+
         if (RotateLeft)
             CameraController.Instance.RotateLeft();
         if (RotateRight)
             CameraController.Instance.RotateRight();
-        
+
         if (ChangeInputs)
             useController = !useController;
 
@@ -53,13 +77,17 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
 
         fading = true;
-        LoadingManager.Instance.FadeIn(() => {
+        LoadingManager.Instance.FadeIn(() =>
+        {
             LoadingManager.Instance.SetLoading(true)
-                .LoadScene( /*TODO: Fix Hacky Solution(criminal)*/(SceneType)_currentScene.buildIndex);
+                .LoadScene(SceneType.GAMEPLAY);
             IsGameOver = false;
             fading = false;
         });
         SoundManager.Instance.Stop();
+
+        Progress.Instance.Clear();
+        Progress.Instance.Load();
     }
 
     public void ShowEndGame()
@@ -71,6 +99,29 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.Stop();
         fading = false;
     }
+
+    public static void GetGlobalInstance<T>(string key, float timeout, System.Action<T> callback) where T : Object
+    {
+        Instance.StartCoroutine(GetGlobalInstanceCoroutine(key, timeout, callback));
+        static IEnumerator GetGlobalInstanceCoroutine(string key, float timeout, System.Action<T> callback)
+        {
+            float startTime = Time.time;
+            T instance = null;
+
+            while (Time.time - startTime < timeout)
+            {
+                instance = GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);
+                if (instance != null)
+                {
+                    break;
+                }
+                yield return null; // wait for next frame
+            }
+
+            callback(instance);
+        }
+    }
+
     public static T GetGlobalInstance<T>(string key) where T : Object
     {
         return GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);

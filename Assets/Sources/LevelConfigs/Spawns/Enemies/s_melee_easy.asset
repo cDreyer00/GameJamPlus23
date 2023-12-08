@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cb2d4c6d3b77c64a8485bd496b34ba3, type: 3}
-  m_Name: Spawn_Melee_High
+  m_Name: s_melee_easy
   m_EditorClassIdentifier: 
   objectCurvePair:
     key: {fileID: -6668827168535340871, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
@@ -20,23 +20,41 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0.45750266
-        outSlope: 0.45750266
+        inSlope: 0.4948051
+        outSlope: 0.4948051
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.11856823
+        outWeight: 0.03803132
       - serializedVersion: 3
-        time: 20
-        value: 20
-        inSlope: 2.4439309
-        outSlope: 2.4439309
+        time: 1.4601979
+        value: 0.98561144
+        inSlope: 0.070695676
+        outSlope: 0.070695676
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.049217034
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.12570584
+      - serializedVersion: 3
+        time: 5.0683384
+        value: 3.0240893
+        inSlope: 0.0470708
+        outSlope: 0.0470708
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 9.859424
+        value: 3.9659169
+        inSlope: 0.05051252
+        outSlope: 0.05051252
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.3288897
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  duration: 20
-  amount: 20
+  duration: 9.859424
+  amount: 3

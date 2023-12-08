@@ -10,33 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cb2d4c6d3b77c64a8485bd496b34ba3, type: 3}
-  m_Name: Spawn_DMGSign_Short
+  m_Name: Spawn_Melee_High
   m_EditorClassIdentifier: 
   objectCurvePair:
-    key: {fileID: 2395199984281271198, guid: cbb2982c12f901e42bc7a22ac706ca3e, type: 3}
+    key: {fileID: -6668827168535340871, guid: 9302b6fec3ef1dd4aba45af953a82dbe, type: 3}
     value:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0.12447099
-        outSlope: 0.12447099
+        inSlope: 0.45750266
+        outSlope: 0.45750266
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.067855455
+        outWeight: 0.11856823
       - serializedVersion: 3
-        time: 14.977363
-        value: 4.001909
-        inSlope: 0.16837204
-        outSlope: 0.16837204
+        time: 19.821045
+        value: 9.764153
+        inSlope: -0.0175703
+        outSlope: -0.0175703
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0.27088094
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  duration: 14.977363
-  amount: 4
+  duration: 19.821045
+  amount: 9

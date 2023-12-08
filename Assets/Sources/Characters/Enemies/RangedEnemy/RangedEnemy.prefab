@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4973546733883391624}
   - component: {fileID: 2516487243285910786}
   - component: {fileID: 2321365576416800683}
+  - component: {fileID: 640164179368213352}
   m_Layer: 6
   m_Name: RangedEnemy
   m_TagString: Enemy
@@ -140,8 +141,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 3364622944419438653, guid: 44b178d1a07e72a4080778ca2517f7ad, type: 3}
   target: {fileID: 0}
-  delay: 1
-  coolDown: 0.75
+  damage: 10
+  delay: 3
+  coolDown: 3
 --- !u!114 &2516487243285910786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +169,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atSameDirection: 0
+--- !u!114 &640164179368213352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5976046371013820665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b514f49d97f9084b85797580d6ddf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currencyOnDie: 8
 --- !u!1 &7294085985294971187
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,9 @@
 using Sources.Camera;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using MoreMountains.Feedbacks;
+using System;
+
+using static Progress;
 
 public class PlayerController : Character
 {
@@ -10,6 +12,7 @@ public class PlayerController : Character
     [SerializeField] Transform anchor;
     [SerializeField] Rigidbody rb;
     [SerializeField] PlayerAim aim;
+    [SerializeField] float damage = 5;
     [SerializeField] float recoilForce = 3;
     [SerializeField] float shootDelay = 1.3f;
     [SerializeField] float braking = 5f;
@@ -34,7 +37,7 @@ public class PlayerController : Character
     void Awake()
     {
         inputs = new PlayerInputs();
-        inputs.Enable();
+        inputs.Gameplay.Enable();
 
         inputs.Gameplay.Shoot.performed += (ctx) => shooting = true;
         inputs.Gameplay.Shoot.canceled += (ctx) => shooting = false;
@@ -59,9 +62,21 @@ public class PlayerController : Character
 
         Events.OnDied += OnDied;
     }
+
+    void OnEnable()
+    {
+        Progress.Instance.upgrades.OnUpgrade += OnUpgrade;
+    }
+
+    void OnDisable()
+    {
+        Progress.Instance.upgrades.OnUpgrade -= OnUpgrade;
+    }
+
     void Update()
     {
         if (GameManager.IsGameOver) return;
+        if (GameManager.GetGlobalInstance<Spawner>("spawner").IsPaused) return;
 
         _curDelay += Time.deltaTime;
 
@@ -146,13 +161,14 @@ public class PlayerController : Character
     void Shoot()
     {
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        proj.damage = (int)Upgrades.GetModValue(proj.damage, Progress.Upgrades.Type.Damage, 1);
+        proj.Damage = (int)Upgrades.GetModValue(damage, Progress.Upgrades.Type.Damage, 1.5f);
         proj.IgnoreTeam(team);
         Dash(-proj.transform.forward);
-        shoot?.PlayFeedbacks();
+
+        if (shoot != null) shoot.PlayFeedbacks();
 
         if (shootAudios.Length > 0)
-            shootAudios[Random.Range(0, shootAudios.Length)].Play();
+            shootAudios.GetRandom().Play();
     }
 
     void Dash(Vector3 dir)
@@ -164,5 +180,16 @@ public class PlayerController : Character
     static void OnDied(ICharacter character)
     {
         GameManager.Instance.ReloadScene();
+    }
+
+    void OnUpgrade(Upgrades.Type type, int level) => OnUpgrade(type);
+    void OnUpgrade(Upgrades.Type type)
+    {
+        var hm = GetModule<HealthModule>();
+
+        if (type == Upgrades.Type.Health)
+            hm.MaxHealth = Upgrades.GetModValue(hm.BaseHealth, type);
+
+        hm.Health = hm.MaxHealth;
     }
 }

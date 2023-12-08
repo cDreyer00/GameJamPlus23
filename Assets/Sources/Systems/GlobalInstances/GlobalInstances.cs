@@ -29,9 +29,9 @@ public class GlobalInstances<TObject> where TObject : Object
 
     public TTarget AddInstance<TTarget>(string key, TTarget instance) where TTarget : TObject
     {
-        var i = GetInstance<TTarget>(key);
-        if (i != null && !i.IsDestroyed())
-            return i;
+        // var i = GetInstance<TTarget>(key);
+        // // if (i != null && !i.IsDestroyed())
+        // //     return i;
 
         instancesDict[key] = instance;
         return instance;

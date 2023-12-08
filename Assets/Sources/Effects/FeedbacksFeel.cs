@@ -6,19 +6,9 @@ using MoreMountains.Feedbacks;
 
 public class FeedbacksFeel : MonoBehaviour
 {
-    [SerializeField] MMFeedbacks cameraShake, freeze;
+    [SerializeField] MMFeedbacks cameraShake;
     public void HitPlayer()
     {
         cameraShake?.PlayFeedbacks();
-    }
-
-    public void HitEnemy(MMFeedbacks enemy)
-    {
-        enemy?.PlayFeedbacks();
-    }
-
-    public void Freeze()
-    {
-        freeze?.PlayFeedbacks();
     }
 }

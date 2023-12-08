@@ -18,8 +18,11 @@ public class Spawner : MonoBehaviour
     Battle _battle;
 
     public bool IsPaused => _battle?.IsPaused ?? false;
+    public bool IsCompleted { get; private set; }
     public int RemainingWaves => _battle?.RemainingWaves ?? 0;
+
     public event Action onAllEnemiesDead;
+    public event Action onBattleCompleted;
 
     void Awake()
     {
@@ -30,6 +33,8 @@ public class Spawner : MonoBehaviour
     {
         Init(_battleConfig);
         StartWave();
+
+        GameManager.Instance.OnTimerPauseCheck += () => IsPaused;
     }
 
     void Update() { _battle.Tick(Time.deltaTime); }
@@ -39,6 +44,8 @@ public class Spawner : MonoBehaviour
         _battleConfig = battleConfig;
         _battle = new(battleConfig);
         _battle.onUpdateSpawnCount += SpawnObj;
+
+        IsCompleted = false;
 
         // initialize pools
         var wavesObjs = battleConfig.GetObjects();
@@ -108,6 +115,12 @@ public class Spawner : MonoBehaviour
         });
         if (_battle.CurWave.IsCompleted && !containsEnemy)
         {
+            if (_battle.IsCompleted)
+            {
+                IsCompleted = true;
+                onBattleCompleted?.Invoke();
+                return;
+            }
             onAllEnemiesDead?.Invoke();
             _battle.Pause();
         }

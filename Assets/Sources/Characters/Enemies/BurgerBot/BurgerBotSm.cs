@@ -76,9 +76,8 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     {
         stateMachine.From(Dash)
             .Transition(Idle, sm => !sm._movementModule.Target)
-            .Transition(Chasing, sm => sm._movementModule.Agent.isStopped)
-            .Transition(Chasing, sm => !sm._movementModule.dashTween.IsActive())
             .SetCallback(LifeCycle.Enter, sm => {
+                TurnToTarget(sm);
                 sm.dashAttackEvent.StartAttack();
                 sm.animator.SetTrigger(sm._hAttackTrigger);
                 sm.animator.SetTrigger(sm._hDashTrigger);
@@ -96,21 +95,25 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .Transition(Idle, sm => !sm._movementModule.Target)
             .Transition(Chasing, sm => !HammerSlamRangePredicate(sm))
             .SetCallback(LifeCycle.Enter, sm => {
+                sm.animator.SetTrigger(sm._hAttackTrigger);
+                sm.animator.SetTrigger(sm._hMarteladaTrigger);
                 sm.hammerAttackEvent.StartAttack();
             })
             .SetCallback(LifeCycle.Exit, sm => {
                 sm.hammerAttackEvent.StopAttack();
                 sm._slamCooldownTimer = sm.slamCooldown;
             })
-            .SetCallback(LifeCycle.Update, sm => {
-                var smTransform = sm.transform;
-                var targetPos   = sm._target.position;
-                var position    = smTransform.position;
-                var direction   = Vector3Ext.Direction(position, targetPos);
-                var rotation    = Quaternion.LookRotation(direction);
-                rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
-                smTransform.rotation = rotation;
-            });
+            .SetCallback(LifeCycle.Update, TurnToTarget);
+    }
+    static void TurnToTarget(BurgerBotSm sm)
+    {
+        var smTransform = sm.transform;
+        var targetPos   = sm._target.position;
+        var position    = smTransform.position;
+        var direction   = Vector3Ext.Direction(position, targetPos);
+        var rotation    = Quaternion.LookRotation(direction);
+        rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+        smTransform.rotation = rotation;
     }
     void ChasingState()
     {
@@ -145,12 +148,10 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     }
     void OnCollisionEnter(Collision collision)
     {
-        bool hitPlayer = collision.gameObject.CompareTag("Player");
+        bool witWall   = collision.gameObject.CompareTag("Wall");
+        bool witPlayer = collision.gameObject.CompareTag("Player");
 
-        if (stateMachine.CurrentState == Dash) {
-            if (hitPlayer && slamCooldown == 0) {
-                stateMachine.ChangeState(HammerSlam);
-            }
+        if (stateMachine.CurrentState == Dash & (witWall | witPlayer)) {
             stateMachine.ChangeState(Chasing);
         }
     }

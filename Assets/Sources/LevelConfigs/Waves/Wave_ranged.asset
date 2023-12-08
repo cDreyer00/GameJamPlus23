@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3cfc533bb376044d9a30f016d9956fc, type: 3}
-  m_Name: Battle_Test_1
+  m_Script: {fileID: 11500000, guid: 6ff0248bd53353b40812b03aecb8f422, type: 3}
+  m_Name: Wave_ranged
   m_EditorClassIdentifier: 
-  waves:
-  - {fileID: 11400000, guid: 478346ccc7aff6048b2806f41d53abce, type: 2}
-  - {fileID: 11400000, guid: 7e86c70de0bd6254f81dba45e338e558, type: 2}
-  duration: 35
+  objectsList:
+  - {fileID: 11400000, guid: 29135b3f54a95d143b1c97295af3df64, type: 2}
+  duration: 1

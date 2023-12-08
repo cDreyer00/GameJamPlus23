@@ -9,28 +9,29 @@ using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour, IPoolable<Projectile>
 {
-    [SerializeField] public int            damage;
-    [SerializeField]        float          moveSpeed = 1;
-    [SerializeField]        float          lifeTime;
-    [SerializeField]        AnimationCurve yAxisTrajectory;
+    [SerializeField] float moveSpeed = 1;
+    [SerializeField] float lifeTime;
 
-    public Vector3 target;
+    public int Damage { get; set; }
+    public Vector3 Target { get; set; }
 
-    Transform _transform;
-    float     _currentLifeTime;
-    Vector3   _anchor;
-
+    protected Transform _transform;
+    float               _currentLifeTime;
+    protected Vector3   _anchor;
 
     public List<string> ignoreList;
     public GenericPool<Projectile> Pool { get; set; }
+
     public void OnGet()
     {
         Init();
     }
+
     public void OnRelease()
     {
         Init();
     }
+
     public void OnCreated()
     {
         Init();
@@ -61,34 +62,20 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
         if (!ignoreList.Contains(team))
             ignoreList.Add(team);
     }
-    void Move(float step)
+    protected virtual void Move(float step)
     {
-        var position = _transform.position;
-        var forward  = _transform.forward;
-
-        var maxSqrDistance = Vector3.SqrMagnitude(_anchor - target);
-        var sqrDistance    = Vector3.SqrMagnitude(target - position);
-        var magnitude01    = Ranges.Map01(sqrDistance, 0, maxSqrDistance);
-
-        //print(magnitude01);
-
-        float eval = yAxisTrajectory.Evaluate(magnitude01);
-        position.x += step * forward.x;
-        position.z += step * forward.z;
-        position.y = _anchor.y * (1 + eval);
-        _transform.position = position;
+        // go forward
+        transform.Translate(Vector3.forward * step);
     }
     void OnTriggerEnter(Collider col)
     {
+        if (col.CompareTag("Wall")) goto Release;
         if (col.TryGetComponent<Character>(out var character)) {
-            if (ignoreList.Contains(character.team)) {
-                return;
-            }
-            character.Events.TakeDamage(damage);
-            goto Release;
+            if (ignoreList.Contains(character.team)) return;
+            character.Events.TakeDamage(Damage);
         }
-        if (!col.CompareTag("Wall")) return;
-
+        return;
+        
         Release:
         if (Pool != null) Pool.Release(this);
         else Destroy(gameObject);
