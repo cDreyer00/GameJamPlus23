@@ -66,7 +66,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     IEnumerator ChaseCoroutine()
     {
-        while (!agent.isStopped)
+        while (true)
         {
             agent.SetDestination(target.position);
             yield return null;
