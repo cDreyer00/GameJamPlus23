@@ -69,13 +69,12 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
     }
     void OnTriggerEnter(Collider col)
     {
+        if (col.CompareTag("Untagged")) return;
         if (col.CompareTag("Wall")) goto Release;
         if (col.TryGetComponent<Character>(out var character)) {
             if (ignoreList.Contains(character.team)) return;
             character.Events.TakeDamage(Damage);
         }
-        return;
-        
         Release:
         if (Pool != null) Pool.Release(this);
         else Destroy(gameObject);

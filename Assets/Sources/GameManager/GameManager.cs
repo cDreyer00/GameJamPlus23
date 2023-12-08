@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] MeshRenderer groundMr;
-    [SerializeField] Canvas endGameCanvas;
-    [SerializeField] Spawner spawner;
+    [SerializeField] Canvas       endGameCanvas;
+    [SerializeField] Spawner      spawner;
 
     public bool useController = true;
 
     Scene _currentScene;
     float _initTime;
-    bool fading;
+    bool  fading;
 
     public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
     public Spawner Spawner => spawner;
@@ -31,12 +31,9 @@ public class GameManager : Singleton<GameManager>
     {
         get
         {
-            if (OnTimerPauseCheck != null)
-            {
-                foreach (var verifier in OnTimerPauseCheck.GetInvocationList())
-                {
-                    if (((TimerPauseVerifier)verifier)())
-                    {
+            if (OnTimerPauseCheck != null) {
+                foreach (var verifier in OnTimerPauseCheck.GetInvocationList()) {
+                    if (((TimerPauseVerifier)verifier)()) {
                         return true;
                     }
                 }
@@ -75,17 +72,20 @@ public class GameManager : Singleton<GameManager>
     public void ReloadScene()
     {
         if (fading) return;
-
         fading = true;
-        LoadingManager.Instance.FadeIn(() =>
-        {
+
+        LoadingManager.Instance.FadeIn(() => {
+            var root = SceneManager.GetActiveScene().GetRootGameObjects();
+            foreach (var go in root) {
+                if (go.GetComponentInChildren<Camera>()) continue;
+                go.SetActive(false);
+            } 
             LoadingManager.Instance.SetLoading(true)
-                .LoadScene(SceneType.GAMEPLAY);
+                 .LoadScene(SceneType.GAMEPLAY);
             IsGameOver = false;
             fading = false;
         });
         SoundManager.Instance.Stop();
-
         Progress.Instance.Clear();
         Progress.Instance.Load();
     }
@@ -103,16 +103,15 @@ public class GameManager : Singleton<GameManager>
     public static void GetGlobalInstance<T>(string key, float timeout, System.Action<T> callback) where T : Object
     {
         Instance.StartCoroutine(GetGlobalInstanceCoroutine(key, timeout, callback));
+
         static IEnumerator GetGlobalInstanceCoroutine(string key, float timeout, System.Action<T> callback)
         {
             float startTime = Time.time;
-            T instance = null;
+            T     instance  = null;
 
-            while (Time.time - startTime < timeout)
-            {
+            while (Time.time - startTime < timeout) {
                 instance = GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);
-                if (instance != null)
-                {
+                if (instance != null) {
                     break;
                 }
                 yield return null; // wait for next frame

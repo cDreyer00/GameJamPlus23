@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1901098025241794362}
   - component: {fileID: 7125467496695489876}
   - component: {fileID: 8781063013087613678}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DashHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1786000083852450080}
   - component: {fileID: 5471473074406424210}
   - component: {fileID: 1518173422149889911}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HammerHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
