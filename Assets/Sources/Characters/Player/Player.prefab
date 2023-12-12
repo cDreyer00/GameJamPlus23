@@ -2510,7 +2510,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.25629425
+        value: 0.44860077
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -3886,6 +3886,14 @@ PrefabInstance:
     - target: {fileID: 7941237018563587854, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: m_Name
       value: HealthCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 8745297957394019696, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8745297957394019696, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: m_Color.r
+      value: 0.1300379
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
