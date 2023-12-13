@@ -1020,7 +1020,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1175829196258515807}
-  - component: {fileID: 7868707650894141540}
   m_Layer: 0
   m_Name: Armature
   m_TagString: Untagged
@@ -1047,26 +1046,6 @@ Transform:
   m_Father: {fileID: 7845753504402394049}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &7868707650894141540
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 778744770610778389}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4ebb4d4f91a75154b9aa680256d9e2f9, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &921511111270829660
 GameObject:
   m_ObjectHideFlags: 0
@@ -2805,6 +2784,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a729eac921de1c1468430a8598cef1ed, type: 3}
   damageAudio: {fileID: 0}
   shoot: {fileID: 506536439}
+  animator: {fileID: 0}
   inputRot: {x: 0, y: 0}
 --- !u!54 &2799235822207906874
 Rigidbody:
