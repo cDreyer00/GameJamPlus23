@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f60a0ca78ddea4387b52c145b5b4cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 3364622944419438653, guid: 44b178d1a07e72a4080778ca2517f7ad, type: 3}
+  projectile: {fileID: 3963023063598774550, guid: e2ef9fe648b20c442a8e5df465526a06, type: 3}
   target: {fileID: 0}
   damage: 10
   delay: 3
