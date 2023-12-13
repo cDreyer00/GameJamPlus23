@@ -1827,10 +1827,30 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 941093883803955830, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: becd5d218a2c1eb46910fd7ef7b8e1d5, type: 2}
+    - target: {fileID: 1641836887754570457, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: becd5d218a2c1eb46910fd7ef7b8e1d5, type: 2}
+    - target: {fileID: 2895434948248122262, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: becd5d218a2c1eb46910fd7ef7b8e1d5, type: 2}
     - target: {fileID: 3635047327046750971, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 3718638671559780332, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: becd5d218a2c1eb46910fd7ef7b8e1d5, type: 2}
+    - target: {fileID: 3776504090364683442, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: becd5d218a2c1eb46910fd7ef7b8e1d5, type: 2}
     - target: {fileID: 3994610940910881282, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1880,9 +1900,21 @@ PrefabInstance:
       value: Plane_3x3
       objectReference: {fileID: 0}
     - target: {fileID: 6477866902723622003, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6477866902723622003, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
       propertyPath: m_TagString
       value: Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 6522843208602135221, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689052235623521565, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: becd5d218a2c1eb46910fd7ef7b8e1d5, type: 2}
     - target: {fileID: 7005323700593533388, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
       propertyPath: m_IsActive
       value: 1
