@@ -20,10 +20,13 @@ public class PlayerController : Character
     [SerializeField] AudioClip damageAudio;
 
     [SerializeField] MMFeedbacks shoot;
-
-    Camera _cam;
-    float _curDelay;
-    float _baseDrag;
+    [SerializeField] Animator animator;
+    
+    readonly int _hIsShoot = Animator.StringToHash("isShoot");
+    
+    Camera                       _cam;
+    float                        _curDelay;
+    float                        _baseDrag;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.02f);
 
@@ -33,6 +36,11 @@ public class PlayerController : Character
     [SerializeField] Vector2 inputRot;
 
     bool shooting;
+
+    void OnValidate()
+    {
+        if (!animator) animator = GetComponentInChildren<Animator>(); 
+    }
 
     void Awake()
     {
@@ -93,7 +101,7 @@ public class PlayerController : Character
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
             aim.SetAim(anchor.forward);
-
+            
             if (shooting)
             {
                 if (_curDelay >= ShootDelay)
@@ -160,6 +168,8 @@ public class PlayerController : Character
 
     void Shoot()
     {
+        animator.SetTrigger(_hIsShoot);
+        
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
         proj.Damage = (int)Upgrades.GetModValue(damage, Progress.Upgrades.Type.Damage, 1.5f);
         proj.IgnoreTeam(team);
