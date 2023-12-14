@@ -30,10 +30,10 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     void OnValidate()
     {
-        if (onClickDown.Equals(default)) onClickDown = EventListener.CreateInstance();
-        if (onClickUp.Equals(default)) onClickUp = EventListener.CreateInstance();
-        if (onEnter.Equals(default)) onEnter = EventListener.CreateInstance();
-        if (onExit.Equals(default)) onExit = EventListener.CreateInstance();
+        if (onClickDown.Equals(default)) onClickDown = EventListener.CreateInstance(delegate {});
+        if (onClickUp.Equals(default)) onClickUp = EventListener.CreateInstance(delegate {});
+        if (onEnter.Equals(default)) onEnter = EventListener.CreateInstance(delegate {});
+        if (onExit.Equals(default)) onExit = EventListener.CreateInstance(delegate {});
     }
     private void Awake()
     {

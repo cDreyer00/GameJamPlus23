@@ -28,7 +28,7 @@ public class EventListenerBehavior : MonoBehaviour
     }
     public static implicit operator EventListener(EventListenerBehavior listenerBehavior)
     {
-        return new(listenerBehavior.eventSource, listenerBehavior.eventResponse);
+        return EventListener.CreateBinding(listenerBehavior.eventSource, listenerBehavior.eventResponse);
     }
 
     #region Editor

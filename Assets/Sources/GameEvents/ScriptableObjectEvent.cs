@@ -29,24 +29,24 @@ public class ScriptableObjectEvent : ScriptableObject
     public void RemoveAllListeners() => listeners.Clear();
     public void AddListener(Action<Object, object> listener)
     {
-        var eventListener = new EventListener(this, listener);
+        var eventListener = EventListener.CreateBinding(this, listener);
         if (!listeners.Contains(eventListener))
             listeners.Add(eventListener);
     }
     public void AddListener(Action listener)
     {
-        var eventListener = new EventListener(this, listener);
+        var eventListener = EventListener.CreateBinding(this, listener);
         if (!listeners.Contains(eventListener))
             listeners.Add(eventListener);
     }
     public void RemoveListener(Action<Object, object> listener)
     {
-        var eventListener = new EventListener(this, listener);
+        var eventListener = EventListener.CreateBinding(this, listener);
         listeners.Remove(eventListener);
     }
     public void RemoveListener(Action listener)
     {
-        var eventListener = new EventListener(this, listener);
+        var eventListener = EventListener.CreateBinding(this, listener);
         listeners.Remove(eventListener);
     }
 
