@@ -11,7 +11,7 @@ using UnityEditor;
 #endif
 
 [CreateAssetMenu(fileName = "ScriptableObjectEvent", menuName = "ScriptableObjectEvent")]
-public class ScriptableObjectEvent : AbstractScriptableObjectEvent
+public class ScriptableObjectEvent : ScriptableObject
 {
     public List<EventListener> listeners = new();
     public void Invoke(Object sender, object args)
