@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
-  groundMr: {fileID: 0}
   endGameCanvas: {fileID: 0}
-  spawner: {fileID: 0}
+  gameOverEvent: {fileID: 11400000, guid: acf6961bf76589e4abffcafeafff40fd, type: 2}
   useController: 1

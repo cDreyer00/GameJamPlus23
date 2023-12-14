@@ -1,24 +1,19 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] MeshRenderer groundMr;
-    [SerializeField] Canvas       endGameCanvas;
-    [SerializeField] Spawner      spawner;
+    //[SerializeField] MeshRenderer groundMr;
+    //[SerializeField] Spawner      spawner;
+    [SerializeField] ScriptableObjectEvent gameOverEvent;
+    public           bool                  useController = true;
+    float                                  _initTime;
+    public bool                            fading;
 
-    public bool useController = true;
-
-    Scene _currentScene;
-    float _initTime;
-    bool  fading;
-
-    public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
-    public Spawner Spawner => spawner;
+    //public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
+    //public Spawner Spawner => spawner;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
@@ -44,16 +39,9 @@ public class GameManager : Singleton<GameManager>
 
     Character _player;
     public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
-    public static bool IsGameOver { get; private set; }
+    //public static bool IsGameOver { get; private set; }
 
-    public Timer Timer { get; private set; }
-
-    void Start()
-    {
-        _currentScene = SceneManager.GetActiveScene();
-        Timer = new();
-    }
-
+    public Timer Timer { get; private set; } = new();
     void Update()
     {
         if (!IsTimerPaused)
@@ -74,37 +62,36 @@ public class GameManager : Singleton<GameManager>
         if (fading) return;
         fading = true;
 
+        DeactivateSceneExceptCameraNode(SceneManager.GetActiveScene());
         LoadingManager.Instance.FadeIn(() => {
-            var root = SceneManager.GetActiveScene().GetRootGameObjects();
-            foreach (var go in root) {
-                if (go.GetComponentInChildren<Camera>()) continue;
-                go.SetActive(false);
-            } 
-            LoadingManager.Instance.SetLoading(true)
-                 .LoadScene(SceneType.GAMEPLAY);
-            IsGameOver = false;
+            LoadingManager.Instance
+                .SetLoading(true)
+                .LoadScene(SceneType.GAMEPLAY);
+            //IsGameOver = false;
             fading = false;
         });
         SoundManager.Instance.Stop();
         Progress.Instance.Clear();
         Progress.Instance.Load();
     }
-
-    public void ShowEndGame()
+    public void GameOver()
     {
-        if (fading) return;
-        IsGameOver = true;
-        fading = true;
-        LoadingManager.Instance.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
-        SoundManager.Instance.Stop();
-        fading = false;
+        gameOverEvent.Invoke(this, null);
     }
-
-    public static void GetGlobalInstance<T>(string key, float timeout, System.Action<T> callback) where T : Object
+    static void DeactivateSceneExceptCameraNode(Scene scene)
+    {
+        var rootGameObjects = scene.GetRootGameObjects();
+        foreach (var go in rootGameObjects) {
+            if (go.GetComponentInChildren<Camera>()) continue;
+            if(go == Instance.gameObject) continue;
+            go.SetActive(false);
+        }
+    }
+    public static void GetGlobalInstance<T>(string key, float timeout, Action<T> callback) where T : UnityEngine.Object
     {
         Instance.StartCoroutine(GetGlobalInstanceCoroutine(key, timeout, callback));
 
-        static IEnumerator GetGlobalInstanceCoroutine(string key, float timeout, System.Action<T> callback)
+        static IEnumerator GetGlobalInstanceCoroutine(string key, float timeout, Action<T> callback)
         {
             float startTime = Time.time;
             T     instance  = null;
@@ -121,7 +108,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public static T GetGlobalInstance<T>(string key) where T : Object
+    public static T GetGlobalInstance<T>(string key) where T : UnityEngine.Object
     {
         return GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);
     }

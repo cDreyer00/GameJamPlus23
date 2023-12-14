@@ -8,7 +8,7 @@ namespace Sources.Systems.FSM
         readonly TEnum                         _state;
         public StateConfigurator(TEnum state, StateMachine<TContext, TEnum> stateMachine)
         {
-            this._stateMachine = stateMachine;
+            _stateMachine = stateMachine;
             _state = state;
         }
         public StateConfigurator<TContext, TEnum> Transition(TEnum dst, Func<TContext, bool> predicate = null)

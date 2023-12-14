@@ -30,7 +30,7 @@ public class PlayerController : Character
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.02f);
 
-    Progress.Upgrades Upgrades => Progress.Instance.upgrades;
+    Upgrades Upgrades => Progress.Instance.upgrades;
 
     PlayerInputs inputs;
     [SerializeField] Vector2 inputRot;
@@ -83,7 +83,7 @@ public class PlayerController : Character
 
     void Update()
     {
-        if (GameManager.IsGameOver) return;
+        //if (GameManager.IsGameOver) return;
         if (GameManager.GetGlobalInstance<Spawner>("spawner").IsPaused) return;
 
         _curDelay += Time.deltaTime;
@@ -127,7 +127,7 @@ public class PlayerController : Character
             if (Input.GetKey(KeyCode.Space))
             {
                 // rb.drag = _baseDrag * braking;
-                rb.drag = _baseDrag * Upgrades.GetModValue(braking, Progress.Upgrades.Type.Braking);
+                rb.drag = _baseDrag * Upgrades.GetModValue(braking, Upgrades.Type.Braking);
             }
             else
             {
@@ -171,7 +171,7 @@ public class PlayerController : Character
         animator.SetTrigger(_hIsShoot);
         
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
-        proj.Damage = (int)Upgrades.GetModValue(damage, Progress.Upgrades.Type.Damage, 1.5f);
+        proj.Damage = (int)Upgrades.GetModValue(damage, Upgrades.Type.Damage, 1.5f);
         proj.IgnoreTeam(team);
         Dash(-proj.transform.forward);
 
@@ -184,14 +184,12 @@ public class PlayerController : Character
     void Dash(Vector3 dir)
     {
         rb.velocity = Vector3.zero;
-        rb.AddForce(dir * Upgrades.GetModValue(recoilForce, Progress.Upgrades.Type.Recoil, 0.5f), ForceMode.Impulse);
+        rb.AddForce(dir * Upgrades.GetModValue(recoilForce, Upgrades.Type.Recoil, 0.5f), ForceMode.Impulse);
     }
-
     static void OnDied(ICharacter character)
     {
-        GameManager.Instance.ReloadScene();
+        GameManager.Instance.GameOver();
     }
-
     void OnUpgrade(Upgrades.Type type, int level) => OnUpgrade(type);
     void OnUpgrade(Upgrades.Type type)
     {
