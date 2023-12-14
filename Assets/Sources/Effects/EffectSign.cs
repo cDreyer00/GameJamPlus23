@@ -16,6 +16,8 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     Direction _curCameraDir;
     float _curLifeTime;
 
+    [SerializeField] ParticleSystem effectParticle;
+
     public float Radius => radius;
 
     public GenericPool<EffectSign> Pool
@@ -133,8 +135,16 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         Material c = CanInteract ? interactableMat : baseMat;
         //_sprite.color = c;
         var mats = botao.materials;
-        mats[1] = c;
+        mats[mats.Length-1] = c;
+        
         botao.materials = mats;
+
+        if (CanInteract)
+        {
+            effectParticle.Play();
+        }
+        else
+            effectParticle.Stop();
     }
 
     public void OnRelease()
