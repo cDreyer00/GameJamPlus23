@@ -659,7 +659,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6924845005692411197}
   - {fileID: 7845753504402394049}
   m_Father: {fileID: 167829896736789762}
   m_RootOrder: -2
@@ -2516,7 +2515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6924845005692411197
 Transform:
   m_ObjectHideFlags: 0
@@ -2525,11 +2524,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5631187236003761713}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.64548063, y: 0.5370002, z: 1.9479998}
+  m_LocalPosition: {x: 0.64548063, y: 0.81700015, z: 1.9479998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2030193239284623269}
+  m_Father: {fileID: 167829896736789762}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &98108918132448726
@@ -2553,7 +2552,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cf812603540631947a86fa764cf24aba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2597,8 +2596,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0.027940273, a: 0.05882353}
-      key1: {r: 1, g: 0, b: 0.027940273, a: 0.05882353}
+      key0: {r: 1, g: 0, b: 0.027940273, a: 0.4745098}
+      key1: {r: 1, g: 0, b: 0.027940273, a: 1}
       key2: {r: 1, g: 0, b: 0, a: 1}
       key3: {r: 1, g: 0, b: 0, a: 1}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -2613,7 +2612,7 @@ LineRenderer:
       ctime5: 0
       ctime6: 0
       ctime7: 0
-      atime0: 0
+      atime0: 30262
       atime1: 65535
       atime2: 65535
       atime3: 65535
@@ -2847,8 +2846,9 @@ Transform:
   - {fileID: 7424804650109205010}
   - {fileID: 883693740590126824}
   - {fileID: 912516266}
+  - {fileID: 6924845005692411197}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7411618165646411253
 MonoBehaviour:
@@ -2879,7 +2879,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a729eac921de1c1468430a8598cef1ed, type: 3}
   damageAudio: {fileID: 0}
   shoot: {fileID: 506536439}
-  animator: {fileID: 0}
+  animator: {fileID: 1744770004}
   inputRot: {x: 0, y: 0}
 --- !u!54 &2799235822207906874
 Rigidbody:
