@@ -34,11 +34,11 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     void OnValidate()
     {
         if (!agent) agent = GetComponentInChildren<NavMeshAgent>();
-        if (!onPause) onPause = GameEvents.onPause;
     }
     void OnEnable()
     {
         Character.Events.OnFreeze += _freeze;
+        if (!onPause) onPause = GameEvents.onPause;
         onPause.AddListener(_toggleMovement);
     }
     void OnDisable()

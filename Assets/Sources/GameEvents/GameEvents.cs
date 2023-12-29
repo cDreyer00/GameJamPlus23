@@ -22,14 +22,19 @@ public struct LazyLoad<T>
         _factory = factory;
         _value = default;
     }
-    public static implicit operator T(LazyLoad<T> lazyLoad) => lazyLoad._value;
-    public static implicit operator LazyLoad<T>(T value) => new() { _value = value };
+    public LazyLoad(T value)
+    {
+        _value = value;
+        _factory = default;
+    }
+    public static implicit operator T(LazyLoad<T> lazyLoad) => lazyLoad.Value;
+    public static implicit operator LazyLoad<T>(T value) => new(value);
 
     public T Value
     {
         get
         {
-            if (_value == null)
+            if (_value == null && _factory != null)
                 _value = _factory();
             return _value;
         }
