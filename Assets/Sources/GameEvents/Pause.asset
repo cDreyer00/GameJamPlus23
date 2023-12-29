@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25d80836bcfd57248b4f23b402186ce7, type: 3}
-  m_Name: GameOver
+  m_Name: Pause
   m_EditorClassIdentifier: 
   listeners:
-    length: 1
+    length: 0
     firstValue:
       _event:
-        rid: 6154883919744073754
+        rid: -2
     additionalValues: []
   references:
     version: 2
     RefIds:
-    - rid: 6154883919744073754
-      type: {class: EmptyDelegate, ns: , asm: Assembly-CSharp}
+    - rid: -2
+      type: {class: , ns: , asm: }

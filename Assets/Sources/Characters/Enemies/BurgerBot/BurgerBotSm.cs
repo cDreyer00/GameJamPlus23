@@ -85,7 +85,7 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             })
             .SetCallback(LifeCycle.Exit, sm => {
                 sm.dashAttackEvent.StopAttack();
-                sm._movementModule.dashTween.Kill();
+                sm._movementModule.DashTween.Kill();
                 sm._dashCooldownTimer = UnityEngine.Random.Range(sm.dashCooldown.x, sm.dashCooldown.y);
             });
     }

@@ -10,15 +10,12 @@ namespace Sources.UI
 {
     public class UIEndGame : MonoBehaviour
     {
-        public enum ButtonType { Restart = 0, Menu = 1, }
-
         public ButtonBehaviour[] behaviours;
 
         [SerializeField] Canvas                canvas;
         [SerializeField] ScriptableObjectEvent gameOverEvent;
 
         Action _showCanvas;
-        Action _reloadScene;
         void OnValidate()
         {
             if (!canvas) canvas = GetComponentInChildren<Canvas>();
@@ -26,7 +23,6 @@ namespace Sources.UI
         void Awake()
         {
             _showCanvas = ShowCanvas;
-            _reloadScene = GameManager.Instance.ReloadScene;
         }
         void ShowCanvas()
         {
@@ -48,12 +44,12 @@ namespace Sources.UI
         {
             canvas.enabled = false;
             gameOverEvent.AddListener(_showCanvas);
-            behaviours[(int)ButtonType.Restart].AddListener(_reloadScene, InteractionType.ClickUp);
         }
         void OnDisable()
         {
-            gameOverEvent.RemoveListener(_showCanvas);
-            behaviours[(int)ButtonType.Restart].RemoveListener(_reloadScene, InteractionType.ClickUp);
+            if (!gameOverEvent.RemoveListener(_showCanvas)) {
+                Debug.LogWarning("Could not remove listener from gameOverEvent");
+            }
         }
     }
 

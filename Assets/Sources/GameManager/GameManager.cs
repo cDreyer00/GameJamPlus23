@@ -2,18 +2,33 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public class GameManager : Singleton<GameManager>
 {
     //[SerializeField] MeshRenderer groundMr;
     //[SerializeField] Spawner      spawner;
     [SerializeField] ScriptableObjectEvent gameOverEvent;
+    [SerializeField] ScriptableObjectEvent restartEvent;
+    [SerializeField] ScriptableObjectEvent pauseEvent;
     public           bool                  useController = true;
     float                                  _initTime;
     public bool                            fading;
 
     //public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
     //public Spawner Spawner => spawner;
+
+    void OnEnable()
+    {
+        restartEvent.AddListener(ReloadScene);
+    }
+
+    void OnDisable()
+    {
+        if (!restartEvent.RemoveListener(ReloadScene)) {
+            Debug.LogWarning("Could not remove listener from restartEvent");
+        }
+    }
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
@@ -39,7 +54,7 @@ public class GameManager : Singleton<GameManager>
 
     Character _player;
     public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
-    //public static bool IsGameOver { get; private set; }
+    public static bool Paused { get; private set; }
 
     public Timer Timer { get; private set; } = new();
     void Update()
@@ -57,33 +72,44 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
-    public void ReloadScene()
+    public static void ReloadScene()
     {
-        if (fading) return;
-        fading = true;
+        if (Instance.fading) return;
+        Instance.fading = true;
 
-        DeactivateSceneExceptCameraNode(SceneManager.GetActiveScene());
+        var scene = SceneManager.GetActiveScene();
+        DeactivateSceneExceptCameraNode(scene);
         LoadingManager.Instance.FadeIn(() => {
             LoadingManager.Instance
                 .SetLoading(true)
-                .LoadScene(SceneType.GAMEPLAY);
-            //IsGameOver = false;
-            fading = false;
+                .LoadScene(scene);
+            Paused = false;
+            Instance.fading = false;
         });
         SoundManager.Instance.Stop();
         Progress.Instance.Clear();
         Progress.Instance.Load();
+        Resume();
     }
     public void GameOver()
     {
-        gameOverEvent.Invoke(this, null);
+        gameOverEvent.Invoke(this, default(object));
     }
+    public static void Pause()
+    {
+        Instance.pauseEvent.Invoke((Object)null, true);
+    }
+    public static void Resume()
+    {
+        Instance.pauseEvent.Invoke((Object)null, false);
+    }
+
     static void DeactivateSceneExceptCameraNode(Scene scene)
     {
         var rootGameObjects = scene.GetRootGameObjects();
         foreach (var go in rootGameObjects) {
             if (go.GetComponentInChildren<Camera>()) continue;
-            if(go == Instance.gameObject) continue;
+            if (go == Instance.gameObject) continue;
             go.SetActive(false);
         }
     }

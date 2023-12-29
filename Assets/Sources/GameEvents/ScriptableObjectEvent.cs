@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
@@ -13,69 +9,55 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "ScriptableObjectEvent", menuName = "ScriptableObjectEvent")]
 public class ScriptableObjectEvent : ScriptableObject
 {
-    public List<EventListener> listeners = new();
-    public void Invoke(Object sender, object args)
+    public InlinedArray<EventListener> listeners;
+    public void Invoke<TObject, TArgs>(TObject sender, TArgs args)
+        where TObject : Object
     {
-        for (int i = listeners.Count - 1; i >= 0; i--) {
+        for (int i = listeners.length - 1; i >= 0; i--) {
             listeners[i].OnInvoke(sender, args);
         }
     }
     public void AddListener(EventListener listener)
     {
         if (!listeners.Contains(listener))
-            listeners.Add(listener);
+            listeners.Append(listener);
     }
     public bool RemoveListener(EventListener listener) => listeners.Remove(listener);
     public void RemoveAllListeners() => listeners.Clear();
-    public void AddListener(Action<Object, object> listener)
+    public void AddListener<TSender, TArgs>(Action<TSender, TArgs> listener)
+        where TSender : Object
     {
-        var eventListener = EventListener.CreateBinding(this, listener);
+        var eventListener = new EventListener();
+        eventListener.SetEvent(listener);
         if (!listeners.Contains(eventListener))
-            listeners.Add(eventListener);
+            listeners.Append(eventListener);
     }
     public void AddListener(Action listener)
     {
-        var eventListener = EventListener.CreateBinding(this, listener);
+        var eventListener = new EventListener();
+        eventListener.SetEvent(listener);
         if (!listeners.Contains(eventListener))
-            listeners.Add(eventListener);
+            listeners.Append(eventListener);
     }
-    public void RemoveListener(Action<Object, object> listener)
+    public bool RemoveListener(Action listener)
     {
-        var eventListener = EventListener.CreateBinding(this, listener);
-        listeners.Remove(eventListener);
+        var eventListener = new EventListener();
+        eventListener.SetEvent(listener);
+        return listeners.Remove(eventListener);
     }
-    public void RemoveListener(Action listener)
+    public bool RemoveListener<TSender, TArgs>(Action<TSender, TArgs> listener)
+        where TSender : Object
     {
-        var eventListener = EventListener.CreateBinding(this, listener);
-        listeners.Remove(eventListener);
+        var eventListener = new EventListener();
+        eventListener.SetEvent(listener);
+        return listeners.Remove(eventListener);
     }
-
     public static ScriptableObjectEvent operator +(ScriptableObjectEvent scriptableObjectEvent, EventListener listener)
     {
         scriptableObjectEvent.AddListener(listener);
         return scriptableObjectEvent;
     }
     public static ScriptableObjectEvent operator -(ScriptableObjectEvent scriptableObjectEvent, EventListener listener)
-    {
-        scriptableObjectEvent.RemoveListener(listener);
-        return scriptableObjectEvent;
-    }
-    public static ScriptableObjectEvent operator +(ScriptableObjectEvent scriptableObjectEvent, Action<Object, object> listener)
-    {
-        scriptableObjectEvent.AddListener(listener);
-        return scriptableObjectEvent;
-    }
-    public static ScriptableObjectEvent operator -(ScriptableObjectEvent scriptableObjectEvent, Action<Object, object> listener)
-    {
-        scriptableObjectEvent.RemoveListener(listener);
-        return scriptableObjectEvent;
-    }
-    public static ScriptableObjectEvent operator +(ScriptableObjectEvent scriptableObjectEvent, Action listener)
-    {
-        scriptableObjectEvent.AddListener(listener);
-        return scriptableObjectEvent;
-    }
-    public static ScriptableObjectEvent operator -(ScriptableObjectEvent scriptableObjectEvent, Action listener)
     {
         scriptableObjectEvent.RemoveListener(listener);
         return scriptableObjectEvent;
@@ -104,24 +86,81 @@ public class ScriptableObjectEvent : ScriptableObject
             var scriptableObjectEvent = (ScriptableObjectEvent)target;
             _sender = EditorGUILayout.ObjectField("Sender", _sender, typeof(Object), true);
             _eventArgumentType = (EventArgumentType)EditorGUILayout.EnumPopup("Argument Type", _eventArgumentType);
-            _eventArgument = _eventArgumentType switch
-            {
-                EventArgumentType.Object  => EditorGUILayout.ObjectField("Argument", (Object)_eventArgument, typeof(Object), true),
-                EventArgumentType.Int     => EditorGUILayout.IntField("Argument", _eventArgument as int? ?? 0),
-                EventArgumentType.Float   => EditorGUILayout.FloatField("Argument", _eventArgument as float? ?? 0f),
-                EventArgumentType.String  => EditorGUILayout.TextField("Argument", _eventArgument as string ?? string.Empty),
-                EventArgumentType.Bool    => EditorGUILayout.Toggle("Argument", _eventArgument as bool? ?? false),
-                EventArgumentType.Vector2 => EditorGUILayout.Vector2Field("Argument", _eventArgument as Vector2? ?? Vector2.zero),
-                EventArgumentType.Vector3 => EditorGUILayout.Vector3Field("Argument", _eventArgument as Vector3? ?? Vector3.zero),
-                EventArgumentType.Vector4 => EditorGUILayout.Vector4Field("Argument", _eventArgument as Vector4? ?? Vector4.zero),
-                EventArgumentType.Color   => EditorGUILayout.ColorField("Argument", _eventArgument as Color? ?? Color.white),
-                EventArgumentType.Rect    => EditorGUILayout.RectField("Argument", _eventArgument as Rect? ?? new Rect()),
-                EventArgumentType.Bounds  => EditorGUILayout.BoundsField("Argument", _eventArgument as Bounds? ?? new Bounds()),
-                EventArgumentType.None    => null,
-                _                         => throw new ArgumentOutOfRangeException()
-            };
-            if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
-                scriptableObjectEvent.Invoke(_sender, _eventArgument);
+            switch (_eventArgumentType) {
+            case EventArgumentType.Object:
+                _eventArgument = EditorGUILayout.ObjectField("Argument", (Object)_eventArgument, typeof(Object), true);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (Object)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Int:
+                _eventArgument = EditorGUILayout.IntField("Argument", _eventArgument as int? ?? 0);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (int)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Float:
+                _eventArgument = EditorGUILayout.FloatField("Argument", _eventArgument as float? ?? 0f);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (float)_eventArgument);
+                }
+                break;
+            case EventArgumentType.String:
+                _eventArgument = EditorGUILayout.TextField("Argument", _eventArgument as string ?? string.Empty);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (string)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Bool:
+                _eventArgument = EditorGUILayout.Toggle("Argument", _eventArgument as bool? ?? false);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (bool)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Vector2:
+                _eventArgument = EditorGUILayout.Vector2Field("Argument", _eventArgument as Vector2? ?? Vector2.zero);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (Vector2)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Vector3:
+                _eventArgument = EditorGUILayout.Vector3Field("Argument", _eventArgument as Vector3? ?? Vector3.zero);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (Vector3)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Vector4:
+                _eventArgument = EditorGUILayout.Vector4Field("Argument", _eventArgument as Vector4? ?? Vector4.zero);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (Vector4)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Color:
+                _eventArgument = EditorGUILayout.ColorField("Argument", _eventArgument as Color? ?? Color.white);
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (Color)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Rect:
+                _eventArgument = EditorGUILayout.RectField("Argument", _eventArgument as Rect? ?? new Rect());
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (Rect)_eventArgument);
+                }
+                break;
+            case EventArgumentType.Bounds:
+                _eventArgument = EditorGUILayout.BoundsField("Argument", _eventArgument as Bounds? ?? new Bounds());
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, (Bounds)_eventArgument);
+                }
+                break;
+            case EventArgumentType.None:
+                _eventArgument = null;
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Invoke")) {
+                    scriptableObjectEvent.Invoke(_sender, _eventArgument);
+                }
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
             }
         }
     }

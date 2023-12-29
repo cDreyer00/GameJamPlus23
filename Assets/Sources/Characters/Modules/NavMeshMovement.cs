@@ -1,39 +1,52 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using DG.Tweening;
-using Sources.Characters.Modules;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.AI;
-using Sources.Systems.FSM;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEngine.Serialization;
 using MoreMountains.Feedbacks;
 using Sources;
+using Object = UnityEngine.Object;
 
 [RequireComponent(typeof(NavMeshAgent)), Serializable]
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
-    [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform target;
-    [SerializeField] float dashDistance;
-    [SerializeField] float dashDuration;
-    [SerializeField] Ease dashEase;
-    [SerializeField] MMFeedbacks freezeFeedback;
+    [SerializeField] NavMeshAgent          agent;
+    [SerializeField] Transform             target;
+    [SerializeField] float                 dashDistance;
+    [SerializeField] float                 dashDuration;
+    [SerializeField] Ease                  dashEase;
+    [SerializeField] MMFeedbacks           freezeFeedback;
+    [SerializeField] ScriptableObjectEvent onPause;
 
     public NavMeshAgent Agent => agent;
-    public Tween dashTween;
+    public Tween DashTween;
     public Transform Target
     {
         get => target;
         set => target = value;
     }
-    IEnumerator _chaseCoroutine;
-    void Start()
+    IEnumerator   _chaseCoroutine;
+    Action        _toggleMovement;
+    Action<float> _freeze;
+    void ToggleMovement() => agent.isStopped = !agent.isStopped;
+    void OnValidate()
     {
-        _chaseCoroutine = ChaseCoroutine();
+        if (!agent) agent = GetComponentInChildren<NavMeshAgent>();
+        if (!onPause) onPause = GameEvents.onPause;
+    }
+    void OnEnable()
+    {
+        Character.Events.OnFreeze += _freeze;
+        onPause.AddListener(_toggleMovement);
+    }
+    void OnDisable()
+    {
+        if (!onPause.RemoveListener(_toggleMovement)) {
+            Debug.LogWarning("Listener not found on disable, possible memory leak");
+        }
+        Character.Events.OnFreeze -= _freeze;
     }
     public void StartChase()
     {
@@ -46,12 +59,12 @@ public class NavMeshMovement : CharacterModule, IMovementModule
 
         agent.transform.LookAt(target);
         var direction = Vector3Ext.Direction(transform.position, target.position);
-        dashTween = agent.transform.DOMove(direction * dashDistance, dashDuration).SetEase(dashEase);
+        DashTween = agent.transform.DOMove(direction * dashDistance, dashDuration).SetEase(dashEase);
     }
     void OnCollisionEnter(Collision collision)
     {
         bool hitWall = collision.gameObject.CompareTag("Wall");
-        if (hitWall) dashTween?.Kill();
+        if (hitWall) DashTween?.Kill();
     }
     public void StopMovement()
     {
@@ -62,12 +75,13 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
-        Character.Events.OnFreeze += OnFreeze;
+        _chaseCoroutine = ChaseCoroutine();
+        _toggleMovement = ToggleMovement;
+        _freeze = OnFreeze;
     }
     IEnumerator ChaseCoroutine()
     {
-        while (true)
-        {
+        while (true) {
             agent.SetDestination(target.position);
             yield return null;
         }
@@ -76,8 +90,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     {
         agent.isStopped = true;
         if (freezeFeedback != null) freezeFeedback.PlayFeedbacks();
-        this.Delay(duration, static c =>
-        {
+        this.Delay(duration, static c => {
             if (c.IsDestroyed() || !c.gameObject.activeInHierarchy) return;
             c.agent.isStopped = false;
         });

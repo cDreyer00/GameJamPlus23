@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -7,10 +8,10 @@ using MoreMountains.Feedbacks;
 
 public class HealthModule : CharacterModule
 {
-    [SerializeField] Canvas canvas;
-    [SerializeField] Slider healthSlider;
+    [SerializeField] Canvas                  canvas;
+    [SerializeField] Slider                  healthSlider;
     [SerializeField] ClampedPrimitive<float> health;
-    [SerializeField] MMFeedbacks hitFeedback;
+    [SerializeField] MMFeedbacks             hitFeedback;
 
     public float BaseHealth { get; private set; }
 
