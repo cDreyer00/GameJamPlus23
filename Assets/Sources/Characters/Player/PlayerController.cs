@@ -51,7 +51,7 @@ public class PlayerController : Character
                 CameraController.Instance.RotateLeft();
             else
                 CameraController.Instance.RotateRight();
-        };
+        };        
     }
 
     void Start()
@@ -71,6 +71,8 @@ public class PlayerController : Character
     void OnDisable()
     {
         Progress.Instance.upgrades.OnUpgrade -= OnUpgrade;
+
+        inputs.Gameplay.Disable();
     }
 
     void Update()
