@@ -2324,6 +2324,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5189811709580147210, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5367526890334910458, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
       propertyPath: m_Name
       value: Plane_3x3
