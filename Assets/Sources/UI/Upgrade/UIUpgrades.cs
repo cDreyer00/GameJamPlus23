@@ -41,11 +41,11 @@ public class UIUpgrades : MonoBehaviour
     public void Enable()
     {
         gameObject.SetActive(true);
-        foreach (var uiattr in uiAttributes)
-        {
-            if (!uiattr.Enabled) continue;
-            uiattr.Select();
-        }
+        // foreach (var uiattr in uiAttributes)
+        // {
+        //     if (!uiattr.Enabled) continue;
+        //     uiattr.Select();
+        // }
     }
 
     public void Disable()

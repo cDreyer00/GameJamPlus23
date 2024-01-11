@@ -7,18 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] MeshRenderer groundMr;
-    [SerializeField] Canvas       endGameCanvas;
-    [SerializeField] Spawner      spawner;
-
     public bool useController = true;
 
-    Scene _currentScene;
-    float _initTime;
     bool  fading;
-
-    public Bounds GameBounds => groundMr == null ? new(Vector3.zero, Vector3.zero) : groundMr.bounds;
-    public Spawner Spawner => spawner;
 
     bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
@@ -50,7 +41,6 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        _currentScene = SceneManager.GetActiveScene();
         Timer = new();
     }
 
@@ -88,16 +78,6 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.Stop();
         Progress.Instance.Clear();
         Progress.Instance.Load();
-    }
-
-    public void ShowEndGame()
-    {
-        if (fading) return;
-        IsGameOver = true;
-        fading = true;
-        LoadingManager.Instance.FadeIn(() => endGameCanvas.gameObject.SetActive(true));
-        SoundManager.Instance.Stop();
-        fading = false;
     }
 
     public static void GetGlobalInstance<T>(string key, float timeout, System.Action<T> callback) where T : Object
