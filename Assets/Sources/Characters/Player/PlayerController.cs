@@ -2,7 +2,7 @@ using Sources.Camera;
 using UnityEngine;
 using MoreMountains.Feedbacks;
 using System;
-
+using UnityEngine.InputSystem;
 using static Progress;
 
 public class PlayerController : Character
@@ -42,24 +42,27 @@ public class PlayerController : Character
         if (!animator) animator = GetComponentInChildren<Animator>(); 
     }
 
+    Action<InputAction.CallbackContext> _shootPerformed;
+    Action<InputAction.CallbackContext> _shootCanceled;
+    Action<InputAction.CallbackContext> _aimPerformed;
+    Action<InputAction.CallbackContext> _aimCanceled;
+    Action<InputAction.CallbackContext> _rotateCameraPerformed;
+    Action<Upgrades.Type,int> _onUpgrade;
     void Awake()
     {
         inputs = new PlayerInputs();
-        inputs.Gameplay.Enable();
-
-        inputs.Gameplay.Shoot.performed += (ctx) => shooting = true;
-        inputs.Gameplay.Shoot.canceled += (ctx) => shooting = false;
-
-        inputs.Gameplay.Aim.performed += (ctx) => inputRot = ctx.ReadValue<Vector2>();
-        inputs.Gameplay.Aim.canceled += (ctx) => inputRot = Vector2.zero;
-
-        inputs.Gameplay.RotateCamera.performed += (ctx) =>
+        _shootPerformed ??= _ => shooting = true;
+        _shootCanceled ??= _ => shooting = false;
+        _aimPerformed ??= ctx => inputRot = ctx.ReadValue<Vector2>();
+        _aimCanceled ??= _ => inputRot = Vector2.zero;
+        _rotateCameraPerformed ??= ctx =>
         {
             if (ctx.ReadValue<float>() < 0)
                 CameraController.Instance.RotateLeft();
             else
                 CameraController.Instance.RotateRight();
-        };        
+        };
+        _onUpgrade ??= OnUpgrade;
     }
 
     void Start()
@@ -70,17 +73,25 @@ public class PlayerController : Character
 
         Events.OnDied += OnDied;
     }
-
     void OnEnable()
     {
-        Progress.Instance.upgrades.OnUpgrade += OnUpgrade;
+        inputs.Gameplay.Shoot.performed += _shootPerformed;
+        inputs.Gameplay.Shoot.canceled +=  _shootCanceled;
+        inputs.Gameplay.Aim.performed +=  _aimPerformed;
+        inputs.Gameplay.Aim.canceled += _aimCanceled;
+        inputs.Gameplay.RotateCamera.performed += _rotateCameraPerformed;
+        Progress.Instance.upgrades.OnUpgrade += _onUpgrade;
+        inputs.Gameplay.Enable(); 
     }
-
     void OnDisable()
     {
-        Progress.Instance.upgrades.OnUpgrade -= OnUpgrade;
-
         inputs.Gameplay.Disable();
+        inputs.Gameplay.Shoot.performed -= _shootPerformed;
+        inputs.Gameplay.Shoot.canceled -=  _shootCanceled;
+        inputs.Gameplay.Aim.performed -=  _aimPerformed;
+        inputs.Gameplay.Aim.canceled -= _aimCanceled;
+        inputs.Gameplay.RotateCamera.performed -= _rotateCameraPerformed;
+        Progress.Instance.upgrades.OnUpgrade -= _onUpgrade;
     }
 
     void Update()
