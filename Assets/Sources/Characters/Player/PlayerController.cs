@@ -86,7 +86,6 @@ public class PlayerController : Character
     }
     protected override void OnDisable()
     {
-<<<<<<< Updated upstream
         base.OnDisable();
         inputs.Gameplay.Disable();
         inputs.Gameplay.Shoot.performed -= _shootPerformed;
@@ -95,10 +94,7 @@ public class PlayerController : Character
         inputs.Gameplay.Aim.canceled -= _aimCanceled;
         inputs.Gameplay.RotateCamera.performed -= _rotateCameraPerformed;
         Progress.Instance.upgrades.OnUpgrade -= _onUpgrade;
-=======
         inputs.Gameplay.Disable();
-        Progress.Instance.upgrades.OnUpgrade -= OnUpgrade;
->>>>>>> Stashed changes
     }
 
     void Update()
