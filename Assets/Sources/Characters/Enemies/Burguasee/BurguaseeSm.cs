@@ -1,27 +1,27 @@
 using System;
-using DG.Tweening;
 using Sources.Characters.Modules;
 using Sources.Systems.FSM;
 using UnityEngine;
 using UnityEngine.Serialization;
 using static BorguaseState;
+using Object = UnityEngine.Object;
 
 public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
 {
-    [SerializeField] float    slamRange;
-    [SerializeField] Vector2  dashCooldown;
-    [SerializeField] Animator animator;
-
+    [SerializeField] float     slamRange;
+    [SerializeField] Vector2   dashCooldown;
+    [SerializeField] Animator  animator;
+    [SerializeField] Character nextPhase;
 
     readonly int _hAttackTrigger = Animator.StringToHash("attack");
     readonly int _walkBool       = Animator.StringToHash("isWalk");
 
-    public AttackEventEmitter hammerAttackEvent;
-    
-    Transform                 _target;
-    NavMeshMovement           _movementModule;
-    float                     _dashCooldownTimer;
-    float                     _slamCooldownTimer;
+    public AttackEmitter hammerAttack;
+
+    Transform       _target;
+    NavMeshMovement _movementModule;
+    float           _dashCooldownTimer;
+    float           _slamCooldownTimer;
     protected override BorguaseState InitialState => Idle;
     protected override BurguaseeSm Context => this;
 
@@ -31,18 +31,39 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     {
         if (!animator) animator = GetComponentInChildren<Animator>();
     }
-
     protected override void Init()
     {
         base.Init();
+        _onDiedEvent = OnDiedEvent;
+        _attackEvent = HammerAttack;
         _movementModule = Character.GetModule<NavMeshMovement>();
-        hammerAttackEvent.AddListener(() => animator.SetTrigger(_hAttackTrigger));
         _target = GameManager.Instance.Player.transform;
         _movementModule.Target = _target;
 
         IdleState();
         HammerSlamState();
         ChasingState();
+    }
+    void OnEnable()
+    {
+        hammerAttack.AddListener(_attackEvent);
+        Character.Events.OnDied += _onDiedEvent;
+    }
+    Action<ICharacter> _onDiedEvent;
+    void OnDiedEvent(ICharacter c)
+    {
+        var t = transform;
+        if (nextPhase) Instantiate(nextPhase, t.position, t.rotation);
+    }
+    void OnDisable()
+    {
+        hammerAttack.RemoveListener(_attackEvent);
+        Character.Events.OnDied -= _onDiedEvent;
+    }
+    Action _attackEvent;
+    void HammerAttack()
+    {
+        animator.SetTrigger(_hAttackTrigger);
     }
     protected override void Update()
     {
@@ -65,16 +86,16 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
             .Transition(Chasing, sm => !HammerSlamRangePredicate(sm))
             .SetCallback(LifeCycle.Enter, sm => {
                 sm.animator.SetTrigger(sm._hAttackTrigger);
-                sm.hammerAttackEvent.StartAttack();
+                sm.hammerAttack.enabled = true;
             })
             .SetCallback(LifeCycle.Exit, sm => {
-                sm.hammerAttackEvent.StopAttack();
+                sm.hammerAttack.enabled = false;
             }).SetCallback(LifeCycle.Update, sm => {
                 var smTransform = sm.transform;
-                var targetPos   = sm._target.position;
-                var position    = smTransform.position;
-                var direction   = Vector3Ext.Direction(position, targetPos);
-                var rotation    = Quaternion.LookRotation(direction);
+                var targetPos = sm._target.position;
+                var position = smTransform.position;
+                var direction = Vector3Ext.Direction(position, targetPos);
+                var rotation = Quaternion.LookRotation(direction);
                 rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
                 smTransform.rotation = rotation;
             });
@@ -95,11 +116,11 @@ public class BurguaseeSm : StateMachineModule<BurguaseeSm, BorguaseState>
     }
     static bool HammerSlamRangePredicate(BurguaseeSm sm)
     {
-        var   targetPos = sm._target.position;
-        var   position  = sm.transform.position;
-        bool  canSlam   = sm._slamCooldownTimer <= 0;
-        float distSqr   = Vector3Ext.SqrDistance(position, targetPos);
-        float rangeTip  = sm.slamRange;
+        var targetPos = sm._target.position;
+        var position = sm.transform.position;
+        bool canSlam = sm._slamCooldownTimer <= 0;
+        float distSqr = Vector3Ext.SqrDistance(position, targetPos);
+        float rangeTip = sm.slamRange;
         return canSlam & distSqr < Mathf.Pow(rangeTip, 2);
     }
     void OnCollisionEnter(Collision collision)

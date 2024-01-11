@@ -19,12 +19,12 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     readonly int _hIdleBool         = Animator.StringToHash("isIdle");
     readonly int _hDashTrigger      = Animator.StringToHash("dash");
 
-    public AttackEventEmitter hammerAttackEvent;
-    public AttackEventEmitter dashAttackEvent;
-    NavMeshMovement           _movementModule;
-    Transform                 _target;
-    float                     _dashCooldownTimer;
-    float                     _slamCooldownTimer;
+    public AttackEmitter hammerAttack;
+    public AttackEmitter dashAttack;
+    NavMeshMovement      _movementModule;
+    Transform            _target;
+    float                _dashCooldownTimer;
+    float                _slamCooldownTimer;
     protected override BurgerBotState InitialState => Idle;
     protected override BurgerBotSm Context => this;
 
@@ -39,7 +39,7 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     {
         base.Init();
         _movementModule = Character.GetModule<NavMeshMovement>();
-        hammerAttackEvent.AddListener(() => {
+        hammerAttack.AddListener(() => {
             animator.SetTrigger(_hAttackTrigger);
             animator.SetTrigger(_hMarteladaTrigger);
         });
@@ -78,13 +78,13 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .Transition(Idle, sm => !sm._movementModule.Target)
             .SetCallback(LifeCycle.Enter, sm => {
                 TurnToTarget(sm);
-                sm.dashAttackEvent.StartAttack();
+                sm.dashAttack.enabled = true;
                 sm.animator.SetTrigger(sm._hAttackTrigger);
                 sm.animator.SetTrigger(sm._hDashTrigger);
                 sm.Delay(Time.deltaTime * 33.34f, sm => sm._movementModule.StartDash());
             })
             .SetCallback(LifeCycle.Exit, sm => {
-                sm.dashAttackEvent.StopAttack();
+                sm.dashAttack.enabled = false;
                 sm._movementModule.DashTween.Kill();
                 sm._dashCooldownTimer = UnityEngine.Random.Range(sm.dashCooldown.x, sm.dashCooldown.y);
             });
@@ -97,10 +97,10 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
             .SetCallback(LifeCycle.Enter, sm => {
                 sm.animator.SetTrigger(sm._hAttackTrigger);
                 sm.animator.SetTrigger(sm._hMarteladaTrigger);
-                sm.hammerAttackEvent.StartAttack();
+                sm.hammerAttack.enabled = true;
             })
             .SetCallback(LifeCycle.Exit, sm => {
-                sm.hammerAttackEvent.StopAttack();
+                sm.hammerAttack.enabled = false;
                 sm._slamCooldownTimer = sm.slamCooldown;
             })
             .SetCallback(LifeCycle.Update, TurnToTarget);
@@ -108,10 +108,10 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     static void TurnToTarget(BurgerBotSm sm)
     {
         var smTransform = sm.transform;
-        var targetPos   = sm._target.position;
-        var position    = smTransform.position;
-        var direction   = Vector3Ext.Direction(position, targetPos);
-        var rotation    = Quaternion.LookRotation(direction);
+        var targetPos = sm._target.position;
+        var position = smTransform.position;
+        var direction = Vector3Ext.Direction(position, targetPos);
+        var rotation = Quaternion.LookRotation(direction);
         rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
         smTransform.rotation = rotation;
     }
@@ -132,23 +132,23 @@ public class BurgerBotSm : StateMachineModule<BurgerBotSm, BurgerBotState>
     }
     static bool HammerSlamRangePredicate(BurgerBotSm sm)
     {
-        var   targetPos = sm._target.position;
-        var   position  = sm.transform.position;
-        bool  canSlam   = sm._slamCooldownTimer <= 0;
-        float distSqr   = Vector3Ext.SqrDistance(position, targetPos);
-        float rangeTip  = sm.slamRange;
+        var targetPos = sm._target.position;
+        var position = sm.transform.position;
+        bool canSlam = sm._slamCooldownTimer <= 0;
+        float distSqr = Vector3Ext.SqrDistance(position, targetPos);
+        float rangeTip = sm.slamRange;
         return canSlam & distSqr < Mathf.Pow(rangeTip, 2);
     }
     static bool DashPredicate(BurgerBotSm sm)
     {
-        bool canDash    = sm._dashCooldownTimer <= 0 && sm.dashAttackEvent;
+        bool canDash = sm._dashCooldownTimer <= 0 && sm.dashAttack;
         bool outOfRange = !HammerSlamRangePredicate(sm);
-        bool hasTarget  = sm._movementModule.Target;
+        bool hasTarget = sm._movementModule.Target;
         return canDash & hasTarget & outOfRange;
     }
     void OnCollisionEnter(Collision collision)
     {
-        bool witWall   = collision.gameObject.CompareTag("Wall");
+        bool witWall = collision.gameObject.CompareTag("Wall");
         bool witPlayer = collision.gameObject.CompareTag("Player");
 
         if (stateMachine.CurrentState == Dash & (witWall | witPlayer)) {

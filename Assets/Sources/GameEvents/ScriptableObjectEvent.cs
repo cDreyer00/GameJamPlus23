@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,18 +11,18 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "ScriptableObjectEvent", menuName = "ScriptableObjectEvent")]
 public class ScriptableObjectEvent : ScriptableObject
 {
-    public InlinedArray<EventListener> listeners;
+    public List<EventListener> listeners;
     public void Invoke<TObject, TArgs>(TObject sender, TArgs args)
         where TObject : Object
     {
-        for (int i = listeners.length - 1; i >= 0; i--) {
+        for (int i = listeners.Count - 1; i >= 0; i--) {
             listeners[i].OnInvoke(sender, args);
         }
     }
     public void AddListener(EventListener listener)
     {
         if (!listeners.Contains(listener))
-            listeners.Append(listener);
+            listeners.Add(listener);
     }
     public bool RemoveListener(EventListener listener) => listeners.Remove(listener);
     public void RemoveAllListeners() => listeners.Clear();
@@ -30,23 +32,23 @@ public class ScriptableObjectEvent : ScriptableObject
         var eventListener = new EventListener();
         eventListener.SetEvent(listener);
         if (!listeners.Contains(eventListener))
-            listeners.Append(eventListener);
+            listeners.Add(eventListener);
+    }
+    public bool RemoveListener<TSender, TArgs>(Action<TSender, TArgs> listener)
+        where TSender : Object
+    {
+        var eventListener = new EventListener();
+        eventListener.SetEvent(listener);
+        return listeners.Remove(eventListener);
     }
     public void AddListener(Action listener)
     {
         var eventListener = new EventListener();
         eventListener.SetEvent(listener);
         if (!listeners.Contains(eventListener))
-            listeners.Append(eventListener);
+            listeners.Add(eventListener);
     }
     public bool RemoveListener(Action listener)
-    {
-        var eventListener = new EventListener();
-        eventListener.SetEvent(listener);
-        return listeners.Remove(eventListener);
-    }
-    public bool RemoveListener<TSender, TArgs>(Action<TSender, TArgs> listener)
-        where TSender : Object
     {
         var eventListener = new EventListener();
         eventListener.SetEvent(listener);

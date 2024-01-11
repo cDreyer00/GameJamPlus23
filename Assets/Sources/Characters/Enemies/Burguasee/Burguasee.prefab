@@ -158,7 +158,8 @@ MonoBehaviour:
   slamRange: 5
   dashCooldown: {x: 0, y: 0}
   animator: {fileID: 6261761397198140387}
-  hammerAttackEvent: {fileID: 2960968751718062365}
+  nextPhase: {fileID: -6668827168535340871, guid: 757512819cee6274292d49092b8b59e3, type: 3}
+  hammerAttack: {fileID: 2960968751718062365}
   state: 0
 --- !u!114 &7961543003341049476
 MonoBehaviour:
@@ -391,7 +392,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2170624242238481340}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4c34a9ec52e15246a17264c8ab2f9b8, type: 3}
   m_Name: 
@@ -399,7 +400,7 @@ MonoBehaviour:
   ignoreList: []
   cooldown: 1
   damage: 10
-  colliderCallback: {fileID: 5112793811239050095}
+  collisionEmitter: {fileID: 5112793811239050095}
 --- !u!114 &5112793811239050095
 MonoBehaviour:
   m_ObjectHideFlags: 0

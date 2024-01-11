@@ -12,14 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d80836bcfd57248b4f23b402186ce7, type: 3}
   m_Name: Pause
   m_EditorClassIdentifier: 
-  listeners:
-    length: 0
-    firstValue:
-      _event:
-        rid: -2
-    additionalValues: []
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+  listeners: []

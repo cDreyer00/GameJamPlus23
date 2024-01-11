@@ -12,13 +12,12 @@ using Object = UnityEngine.Object;
 [RequireComponent(typeof(NavMeshAgent)), Serializable]
 public class NavMeshMovement : CharacterModule, IMovementModule
 {
-    [SerializeField] NavMeshAgent          agent;
-    [SerializeField] Transform             target;
-    [SerializeField] float                 dashDistance;
-    [SerializeField] float                 dashDuration;
-    [SerializeField] Ease                  dashEase;
-    [SerializeField] MMFeedbacks           freezeFeedback;
-    [SerializeField] ScriptableObjectEvent onPause;
+    [SerializeField] NavMeshAgent agent;
+    [SerializeField] Transform    target;
+    [SerializeField] float        dashDistance;
+    [SerializeField] float        dashDuration;
+    [SerializeField] Ease         dashEase;
+    [SerializeField] MMFeedbacks  freezeFeedback;
 
     public NavMeshAgent Agent => agent;
     public Tween DashTween;
@@ -38,14 +37,9 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     void OnEnable()
     {
         Character.Events.OnFreeze += _freeze;
-        if (!onPause) onPause = GameEvents.onPause;
-        onPause.AddListener(_toggleMovement);
     }
     void OnDisable()
     {
-        if (!onPause.RemoveListener(_toggleMovement)) {
-            Debug.LogWarning("Listener not found on disable, possible memory leak");
-        }
         Character.Events.OnFreeze -= _freeze;
     }
     public void StartChase()

@@ -13,14 +13,14 @@ public class EventListenerBehavior : MonoBehaviour
     void OnEnable()
     {
         if (eventSource != null) {
-            eventSource.listeners.Append(this);
+            eventSource.listeners.Add(this);
         }
     }
     void OnDisable()
     {
         if (eventSource != null) {
             bool removed = eventSource.listeners.Remove(this);
-            Debug.Assert(removed, "EventListenerBehavior was not removed from eventSource.listeners");
+            Debug.Assert(removed, "Listener was not removed from event source.");
         }
     }
     public void OnInvoke<TSender, TArg>(TSender sender, TArg args)

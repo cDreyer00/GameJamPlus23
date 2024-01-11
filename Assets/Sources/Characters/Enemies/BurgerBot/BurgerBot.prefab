@@ -62,7 +62,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555962529768158053}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4c34a9ec52e15246a17264c8ab2f9b8, type: 3}
   m_Name: 
@@ -70,7 +70,7 @@ MonoBehaviour:
   ignoreList: []
   cooldown: 0
   damage: 10
-  colliderCallback: {fileID: 8781063013087613678}
+  collisionEmitter: {fileID: 8781063013087613678}
 --- !u!114 &8781063013087613678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 556810179372430853}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4c34a9ec52e15246a17264c8ab2f9b8, type: 3}
   m_Name: 
@@ -153,7 +153,7 @@ MonoBehaviour:
   ignoreList: []
   cooldown: 1
   damage: 20
-  colliderCallback: {fileID: 1518173422149889911}
+  collisionEmitter: {fileID: 1518173422149889911}
 --- !u!114 &1518173422149889911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,6 +309,7 @@ MonoBehaviour:
   dashDuration: 2
   dashEase: 10
   freezeFeedback: {fileID: 0}
+  onPause: {fileID: 0}
 --- !u!114 &-4291083372791572725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,8 +326,8 @@ MonoBehaviour:
   slamCooldown: 0.5
   dashCooldown: {x: 3, y: 7}
   animator: {fileID: 7577314980058005502}
-  hammerAttackEvent: {fileID: 5471473074406424210}
-  dashAttackEvent: {fileID: 7125467496695489876}
+  hammerAttack: {fileID: 5471473074406424210}
+  dashAttack: {fileID: 7125467496695489876}
   state: 0
 --- !u!114 &2127655223526646716
 MonoBehaviour:

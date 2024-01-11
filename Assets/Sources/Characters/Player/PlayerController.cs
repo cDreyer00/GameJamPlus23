@@ -4,6 +4,7 @@ using MoreMountains.Feedbacks;
 using System;
 using UnityEditor;
 using static Progress;
+using Object = UnityEngine.Object;
 
 public class PlayerController : Character
 {
@@ -35,7 +36,6 @@ public class PlayerController : Character
     [SerializeField] Vector2 inputRot;
 
     bool shooting;
-
 
     void OnValidate()
     {
@@ -80,11 +80,12 @@ public class PlayerController : Character
     {
         base.OnDisable();
         Progress.Instance.upgrades.OnUpgrade -= OnUpgrade;
+
+        inputs.Gameplay.Disable();
     }
 
     void Update()
     {
-        if (GameManager.Paused) return;
         if (GameManager.GetGlobalInstance<Spawner>("spawner").IsPaused) return;
 
         CurDelay += Time.deltaTime;
@@ -130,19 +131,19 @@ public class PlayerController : Character
 
 
         if (transform.position.y <= -1) {
-            GameManager.ReloadScene();
+            GameManager.Instance.ReloadScene();
         }
     }
 
     Vector3 GetPosBasedOnCameraView(Vector3 pos)
     {
-        var cam    = CameraController.Instance.Cam;
-        var t      = cam.transform;
+        var cam = CameraController.Instance.Cam;
+        var t = cam.transform;
         var camPos = t.position;
         var camDir = t.forward;
-        var dir    = pos - camPos;
-        var dot    = Vector3.Dot(dir, camDir);
-        var proj   = camPos + camDir * dot;
+        var dir = pos - camPos;
+        var dot = Vector3.Dot(dir, camDir);
+        var proj = camPos + camDir * dot;
         return proj;
     }
 
@@ -180,7 +181,7 @@ public class PlayerController : Character
     }
     static void OnDied(ICharacter character)
     {
-        GameManager.Instance.GameOver();
+        GameEvents.OnGameOver.Invoke<Object, object>(null, null);
     }
     void OnUpgrade(Upgrades.Type type, int level) => OnUpgrade(type);
     void OnUpgrade(Upgrades.Type type)

@@ -12,8 +12,7 @@ namespace Sources.UI
     {
         public ButtonBehaviour[] behaviours;
 
-        [SerializeField] Canvas                canvas;
-        [SerializeField] ScriptableObjectEvent gameOverEvent;
+        [SerializeField] Canvas canvas;
 
         Action _showCanvas;
         void OnValidate()
@@ -43,11 +42,11 @@ namespace Sources.UI
         void OnEnable()
         {
             canvas.enabled = false;
-            gameOverEvent.AddListener(_showCanvas);
+            GameEvents.OnGameOver.AddListener(_showCanvas);
         }
         void OnDisable()
         {
-            if (!gameOverEvent.RemoveListener(_showCanvas)) {
+            if (!GameEvents.OnGameOver.RemoveListener(_showCanvas)) {
                 Debug.LogWarning("Could not remove listener from gameOverEvent");
             }
         }
