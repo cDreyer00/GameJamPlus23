@@ -21,7 +21,7 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] float rotDuration;
     [SerializeField] Transform wallRaycastAnchor;
     [SerializeField] Direction dir;
-    [SerializeField] AudioClip[] transitionClip;
+    [SerializeField] AudioClip[] transitionAudio;
 
     Vector3 curEuler = Vector3.zero;
     HashSet<Transform> walls = new();
@@ -63,7 +63,7 @@ public class CameraController : Singleton<CameraController>
         dir = Direction;
         camDirectionChanged?.Invoke(Direction);
 
-        transitionClip[left ? 0 : 1].Play();
+        transitionAudio[left ? 0 : 1].Play();
     }
 
     readonly RaycastHit[] _hits = new RaycastHit[4];

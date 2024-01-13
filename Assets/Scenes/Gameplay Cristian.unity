@@ -1906,6 +1906,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 177148885}
     - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1744770004}
+    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: cameraShake
       value: 
       objectReference: {fileID: 0}
@@ -2079,6 +2083,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2119692398542121546, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
+      propertyPath: transitionAudio.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119692398542121546, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
+      propertyPath: transitionAudio.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 21d599b5aa2be2949ae21578bc9147ef, type: 3}
+    - target: {fileID: 2119692398542121546, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
+      propertyPath: transitionAudio.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 67406246114cf4a4696ce6828b1048c9, type: 3}
     - target: {fileID: 3221490120522370547, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
       propertyPath: m_Name
       value: CameraController

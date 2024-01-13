@@ -11,6 +11,7 @@ public class HealthModule : CharacterModule
     [SerializeField] Slider healthSlider;
     [SerializeField] ClampedPrimitive<float> health;
     [SerializeField] MMFeedbacks hitFeedback;
+    [SerializeField] AudioClip hitAudio;
 
     public float BaseHealth { get; private set; }
 
@@ -33,6 +34,9 @@ public class HealthModule : CharacterModule
             UpdateSlider();
         }
     }
+
+    float audioDelay = 0.3f;
+    bool playingAudio = false;
 
     public void OnEnable()
     {
@@ -62,6 +66,12 @@ public class HealthModule : CharacterModule
         if (health <= 0) Character.Events.Died(Character);
 
         UpdateSlider();
+
+        if (hitAudio != null && !playingAudio) {
+            hitAudio.Play();
+            playingAudio = true;
+            this.Delay(audioDelay, c => c.playingAudio = false);
+        }
     }
 
     void UpdateSlider()
