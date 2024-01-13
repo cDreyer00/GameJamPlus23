@@ -186,6 +186,7 @@ public static class Helpers
 
     public static T GetRandom<T>(this IEnumerable<T> list)
     {
+        if (list == null || list.Count() == 0) return default;
         return list.ElementAt(UnityEngine.Random.Range(0, list.Count()));
     }
 }

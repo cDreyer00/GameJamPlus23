@@ -568,7 +568,7 @@ Transform:
   m_Children:
   - {fileID: 4217835413621907287}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2119692398542121546
 MonoBehaviour:
@@ -589,6 +589,9 @@ MonoBehaviour:
   rotDuration: 0.3
   wallRaycastAnchor: {fileID: 503827931854381814}
   dir: 0
+  transitionClip:
+  - {fileID: 8300000, guid: 21d599b5aa2be2949ae21578bc9147ef, type: 3}
+  - {fileID: 8300000, guid: 67406246114cf4a4696ce6828b1048c9, type: 3}
 --- !u!1 &4432651049494535962
 GameObject:
   m_ObjectHideFlags: 0
