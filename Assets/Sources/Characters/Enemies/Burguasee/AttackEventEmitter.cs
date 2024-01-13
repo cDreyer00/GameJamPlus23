@@ -11,6 +11,8 @@ using UnityEngine.Serialization;
 
 public class AttackEventEmitter : MonoBehaviour
 {
+    [SerializeField] AudioClip attackAudio;
+
     IEnumerator             _attackCoroutine;
     public List<string>     ignoreList;
     public float            cooldown;
@@ -29,6 +31,9 @@ public class AttackEventEmitter : MonoBehaviour
     {
         colliderCallback.enabled = true;
         StartCoroutine(_attackCoroutine);
+
+        // if(attackAudio)
+        //     attackAudio.Play();
     }
     public virtual void StopAttack()
     {

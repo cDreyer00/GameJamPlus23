@@ -17,6 +17,7 @@ public class UIAttribute : MonoBehaviour
     [SerializeField] Button upgradeBtn;
     [Space]
     [SerializeField] AnimationCurve costCurve;
+    [SerializeField] AudioClip purchaseAudio;
 
     public event System.Action OnUpgradeDisabled;
 
@@ -64,11 +65,12 @@ public class UIAttribute : MonoBehaviour
     {
         playerCurrency.money -= cost;
         Progress.Instance.upgrades.Upgrade(upgradeType);
+
+        if (purchaseAudio != null)
+            purchaseAudio.Play();
     }
 
     public void Select() => upgradeBtn.Select();
-
-    // bool IsSelected(Selectable s) => EventSystem.current.currentSelectedGameObject == s.gameObject;
 
     void UpdateInfos(Type uprType, int level) => UpdateInfos();
     void UpdateInfos()

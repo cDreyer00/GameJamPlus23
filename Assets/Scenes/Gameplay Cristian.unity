@@ -1586,7 +1586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30c6f7c0b9557fd42b623eb84240313f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _battleConfig: {fileID: 11400000, guid: 0c29a4537cbfdac4083e7f8073c0950c, type: 2}
+  _battleConfig: {fileID: 11400000, guid: a5e41fcc1a53d1b46b2d5ee2d5d35f97, type: 2}
   elapsedTime: 0
   navMeshSurface: {fileID: 4930184713420487662}
 --- !u!1 &1353566045525805457
@@ -1917,6 +1917,30 @@ PrefabInstance:
       propertyPath: positionBullet
       value: 
       objectReference: {fileID: 936969849}
+    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: shootAudios.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: shootAudios.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6fc141d291be3c64ea0984e5905cf787, type: 3}
+    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: shootAudios.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 5f6cabcc49bf36e448b424a306c5ee92, type: 3}
+    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: shootAudios.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 55bf19185fbd4bf4daa1264422abcb12, type: 3}
+    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: shootAudios.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6fc141d291be3c64ea0984e5905cf787, type: 3}
+    - target: {fileID: 7411618165646411253, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
+      propertyPath: shootAudios.Array.data[4]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6fc141d291be3c64ea0984e5905cf787, type: 3}
     - target: {fileID: 7424804650109205010, guid: 319c09aedef61a84baf529bf09cd6832, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0.18
@@ -2002,10 +2026,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7785691028745626150, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7943912860507824474, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -2051,24 +2071,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
-      propertyPath: spawner
-      value: 
-      objectReference: {fileID: 1784658821}
-    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
-      propertyPath: groundMr
-      value: 
-      objectReference: {fileID: 4930184713420487661}
-    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
-      propertyPath: endGameCanvas
-      value: 
-      objectReference: {fileID: 2794706002601230790}
-    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
-      propertyPath: gameLoopTimer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9160034106316796587, guid: a527e6ec82f8cb648a3399a2f0d12550, type: 3}
       propertyPath: dontDestroyOnLoad
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2148,11 +2152,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27bc586c2b83bbb4fa9cd71574b09e23, type: 3}
---- !u!23 &4930184713420487661 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 9047831960208752464, guid: a9259ae1475b25b46a11638827b6b138, type: 3}
-  m_PrefabInstance: {fileID: 8993667439726160967}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4930184713420487662 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7451326573356042203, guid: a9259ae1475b25b46a11638827b6b138, type: 3}

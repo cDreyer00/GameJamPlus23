@@ -396,6 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c34a9ec52e15246a17264c8ab2f9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackAudio: {fileID: 8300000, guid: bf215ea7b8c49444f963138d5875fd7c, type: 3}
   ignoreList: []
   cooldown: 1
   damage: 10

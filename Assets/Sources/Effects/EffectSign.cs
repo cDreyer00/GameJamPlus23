@@ -8,11 +8,11 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     [SerializeField] float lifeTime;
     [SerializeField] Material baseMat, interactableMat;
     [SerializeField] MeshRenderer botao;
+    [SerializeField] AudioClip interactAudio;
 
     Effect effect;
     Direction direction;
     GenericPool<EffectSign> _pool;
-    //SpriteRenderer _sprite;
     Direction _curCameraDir;
     float _curLifeTime;
 
@@ -23,10 +23,7 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     public GenericPool<EffectSign> Pool
     {
         get => _pool;
-        set
-        {
-            _pool = value;
-        }
+        set => _pool = value;
     }
 
     public Effect Effect
@@ -35,12 +32,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         set => effect = value;
     }
 
-    //Color ColorByType => effect is FreezeEffect ? Color.cyan : Color.red;
     bool CanInteract => _curCameraDir == direction;
 
     void Start()
     {
-        //_sprite = GetComponentInChildren<SpriteRenderer>();
         Init();
     }
 
@@ -98,7 +93,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         if (CheckInteraction())
         {
             ApplyEffect();
-            // Pool.Release(this);
+
+            if (interactAudio != null)
+                interactAudio.Play();
+
             Destroy(gameObject);
         }
     }
@@ -106,6 +104,9 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     bool CheckInteraction()
     {
         if (!CanInteract) return false;
+        
+        var player = GameManager.Instance.Player;
+        if(player == null) return false;
 
         float dist = Vector3.Distance(transform.position, GameManager.Instance.Player.Position);
         return dist <= radius;
@@ -133,16 +134,12 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     void SetColor()
     {
         Material c = CanInteract ? interactableMat : baseMat;
-        //_sprite.color = c;
         var mats = botao.materials;
-        mats[mats.Length-1] = c;
-        
+        mats[^1] = c;
         botao.materials = mats;
 
         if (CanInteract)
-        {
             effectParticle.Play();
-        }
         else
             effectParticle.Stop();
     }

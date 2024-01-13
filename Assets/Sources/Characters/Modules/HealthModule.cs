@@ -12,6 +12,7 @@ public class HealthModule : CharacterModule
     [SerializeField] ClampedPrimitive<float> health;
     [SerializeField] MMFeedbacks hitFeedback;
     [SerializeField] AudioClip hitAudio;
+    [SerializeField] AudioClip dieAudio;
 
     public float BaseHealth { get; private set; }
 
@@ -57,13 +58,19 @@ public class HealthModule : CharacterModule
         health.Value = health.max;
         BaseHealth = health.max;
         UpdateSlider();
+
+        playingAudio = false;
     }
 
     public void TakeDamage(float amount)
     {
         health.Value -= amount;
         if (hitFeedback != null) hitFeedback.PlayFeedbacks();
-        if (health <= 0) Character.Events.Died(Character);
+        if (health <= 0) {
+            Character.Events.Died(Character);
+
+            if(dieAudio != null) dieAudio.Play();
+        }
 
         UpdateSlider();
 

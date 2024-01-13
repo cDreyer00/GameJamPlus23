@@ -16,17 +16,17 @@ public class PlayerController : Character
     [SerializeField] float recoilForce = 3;
     [SerializeField] float shootDelay = 1.3f;
     [SerializeField] float braking = 5f;
-    [Space, SerializeField] AudioClip[] shootAudios;
+    [SerializeField] AudioClip[] shootAudios;
     [SerializeField] AudioClip damageAudio;
 
     [SerializeField] MMFeedbacks shoot;
     [SerializeField] Animator animator;
-    
+
     readonly int _hIsShoot = Animator.StringToHash("isShoot");
-    
-    Camera                       _cam;
-    float                        _curDelay;
-    float                        _baseDrag;
+
+    Camera _cam;
+    float _curDelay;
+    float _baseDrag;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.02f);
 
@@ -39,7 +39,7 @@ public class PlayerController : Character
 
     void OnValidate()
     {
-        if (!animator) animator = GetComponentInChildren<Animator>(); 
+        if (!animator) animator = GetComponentInChildren<Animator>();
     }
 
     Action<InputAction.CallbackContext> _shootPerformed;
@@ -47,7 +47,7 @@ public class PlayerController : Character
     Action<InputAction.CallbackContext> _aimPerformed;
     Action<InputAction.CallbackContext> _aimCanceled;
     Action<InputAction.CallbackContext> _rotateCameraPerformed;
-    Action<Upgrades.Type,int> _onUpgrade;
+    Action<Upgrades.Type, int> _onUpgrade;
     void Awake()
     {
         inputs = new PlayerInputs();
@@ -76,19 +76,19 @@ public class PlayerController : Character
     void OnEnable()
     {
         inputs.Gameplay.Shoot.performed += _shootPerformed;
-        inputs.Gameplay.Shoot.canceled +=  _shootCanceled;
-        inputs.Gameplay.Aim.performed +=  _aimPerformed;
+        inputs.Gameplay.Shoot.canceled += _shootCanceled;
+        inputs.Gameplay.Aim.performed += _aimPerformed;
         inputs.Gameplay.Aim.canceled += _aimCanceled;
         inputs.Gameplay.RotateCamera.performed += _rotateCameraPerformed;
         Progress.Instance.upgrades.OnUpgrade += _onUpgrade;
-        inputs.Gameplay.Enable(); 
+        inputs.Gameplay.Enable();
     }
     void OnDisable()
     {
         inputs.Gameplay.Disable();
         inputs.Gameplay.Shoot.performed -= _shootPerformed;
-        inputs.Gameplay.Shoot.canceled -=  _shootCanceled;
-        inputs.Gameplay.Aim.performed -=  _aimPerformed;
+        inputs.Gameplay.Shoot.canceled -= _shootCanceled;
+        inputs.Gameplay.Aim.performed -= _aimPerformed;
         inputs.Gameplay.Aim.canceled -= _aimCanceled;
         inputs.Gameplay.RotateCamera.performed -= _rotateCameraPerformed;
         Progress.Instance.upgrades.OnUpgrade -= _onUpgrade;
@@ -114,7 +114,7 @@ public class PlayerController : Character
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
             aim.SetAim(anchor.forward);
-            
+
             if (shooting)
             {
                 if (_curDelay >= ShootDelay)
@@ -182,7 +182,7 @@ public class PlayerController : Character
     void Shoot()
     {
         animator.SetTrigger(_hIsShoot);
-        
+
         Projectile proj = Instantiate(projPrefab, transform.position, anchor.rotation);
         proj.Damage = (int)Upgrades.GetModValue(damage, Progress.Upgrades.Type.Damage, 1.5f);
         proj.IgnoreTeam(team);
@@ -202,7 +202,7 @@ public class PlayerController : Character
 
     static void OnDied(ICharacter character)
     {
-        GameManager.Instance.ReloadScene();
+        GameManager.Instance.GameOver();
     }
 
     void OnUpgrade(Upgrades.Type type, int level) => OnUpgrade(type);
