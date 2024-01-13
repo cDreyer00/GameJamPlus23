@@ -8,6 +8,7 @@ using Object = UnityEngine.Object;
 
 public class PlayerController : Character
 {
+//<<<<<<< HEAD
     [SerializeField]        GameObject  model;
     [SerializeField]        Projectile  projPrefab;
     [SerializeField]        Transform   anchor;
@@ -25,12 +26,33 @@ public class PlayerController : Character
     [SerializeField] Animator    animator;
 
     HealthModule _healthModule;
+// =======
+//     [SerializeField] GameObject model;
+//     [SerializeField] Projectile projPrefab;
+//     [SerializeField] Transform anchor;
+//     [SerializeField] Rigidbody rb;
+//     [SerializeField] PlayerAim aim;
+//     [SerializeField] float damage = 5;
+//     [SerializeField] float recoilForce = 3;
+//     [SerializeField] float shootDelay = 1.3f;
+//     [SerializeField] float braking = 5f;
+//     [SerializeField] AudioClip[] shootAudios;
+//     [SerializeField] AudioClip damageAudio;
+//
+//     [SerializeField] MMFeedbacks shoot;
+//     [SerializeField] Animator animator;
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
 
     readonly int _hIsShoot = Animator.StringToHash("isShoot");
 
     Camera _cam;
+//<<<<<<< HEAD
     float  _curDelay;
     float  _baseDrag;
+// =======
+//     float _curDelay;
+//     float _baseDrag;
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.02f);
 
@@ -50,9 +72,13 @@ public class PlayerController : Character
     Action<InputAction.CallbackContext> _aimPerformed;
     Action<InputAction.CallbackContext> _aimCanceled;
     Action<InputAction.CallbackContext> _rotateCameraPerformed;
+//<<<<<<< HEAD
     Action<Upgrades.Type, int>          _onUpgrade;
     Action<float>                       _onTakeDamage;
     Action<ICharacter>                  _onDied;
+// =======
+//     Action<Upgrades.Type, int> _onUpgrade;
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     void Awake()
     {
         _healthModule = GetModule<HealthModule>();
@@ -79,6 +105,7 @@ public class PlayerController : Character
     }
     protected override void OnEnable()
     {
+//<<<<<<< HEAD
         base.OnEnable();
         _inputs.Gameplay.Shoot.performed += _shootPerformed;
         _inputs.Gameplay.Shoot.canceled += _shootCanceled;
@@ -89,9 +116,19 @@ public class PlayerController : Character
         Events.OnTakeDamage += _onTakeDamage;
         Events.OnDied += _onDied;
         _inputs.Gameplay.Enable();
+// =======
+//         inputs.Gameplay.Shoot.performed += _shootPerformed;
+//         inputs.Gameplay.Shoot.canceled += _shootCanceled;
+//         inputs.Gameplay.Aim.performed += _aimPerformed;
+//         inputs.Gameplay.Aim.canceled += _aimCanceled;
+//         inputs.Gameplay.RotateCamera.performed += _rotateCameraPerformed;
+//         Progress.Instance.upgrades.OnUpgrade += _onUpgrade;
+//         inputs.Gameplay.Enable();
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     }
     protected override void OnDisable()
     {
+//<<<<<<< HEAD
         base.OnDisable();
         _inputs.Gameplay.Disable();
         _inputs.Gameplay.Shoot.performed -= _shootPerformed;
@@ -99,6 +136,14 @@ public class PlayerController : Character
         _inputs.Gameplay.Aim.performed -= _aimPerformed;
         _inputs.Gameplay.Aim.canceled -= _aimCanceled;
         _inputs.Gameplay.RotateCamera.performed -= _rotateCameraPerformed;
+// =======
+//         inputs.Gameplay.Disable();
+//         inputs.Gameplay.Shoot.performed -= _shootPerformed;
+//         inputs.Gameplay.Shoot.canceled -= _shootCanceled;
+//         inputs.Gameplay.Aim.performed -= _aimPerformed;
+//         inputs.Gameplay.Aim.canceled -= _aimCanceled;
+//         inputs.Gameplay.RotateCamera.performed -= _rotateCameraPerformed;
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
         Progress.Instance.upgrades.OnUpgrade -= _onUpgrade;
         Events.OnTakeDamage -= _onTakeDamage;
         Events.OnDied -= _onDied;
@@ -125,8 +170,15 @@ public class PlayerController : Character
             anchor.LookAt(lookAtPos, Vector3.up);
             aim.SetAim(anchor.forward);
 
+//<<<<<<< HEAD
             if (_shooting) {
                 if (_curDelay >= ShootDelay) {
+// =======
+//             if (shooting)
+//             {
+//                 if (_curDelay >= ShootDelay)
+//                 {
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
                     Shoot();
                     _curDelay = 0;
                 }
@@ -198,7 +250,11 @@ public class PlayerController : Character
     }
     static void OnDied(ICharacter character)
     {
+//<<<<<<< HEAD
         GameEvents.OnGameOver.Invoke(null, null);
+// =======
+//         GameManager.Instance.GameOver();
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     }
     void OnUpgrade(Upgrades.Type type, int level) => OnUpgrade(type);
     void OnUpgrade(Upgrades.Type type)

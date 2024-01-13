@@ -6,6 +6,7 @@ using Object = UnityEngine.Object;
 
 public class AttackEmitter : MonoBehaviour, IEventEmitter<Action>
 {
+//<<<<<<< HEAD
     IEnumerator              _emmit;
     Action<Object, Collider> _onCollision;
     public List<string>      ignoreList;
@@ -14,13 +15,40 @@ public class AttackEmitter : MonoBehaviour, IEventEmitter<Action>
     public CollisionEmitter  collisionEmitter;
     event Action EventNoArgs;
     event Action<Object, object> Event;
+    [SerializeField] AudioClip attackAudio;
+// =======
+//
+//     IEnumerator             _attackCoroutine;
+//     public List<string>     ignoreList;
+//     public float            cooldown;
+//     public float            damage;
+//     public ColliderCallback colliderCallback;
+//     event Action AttackCallback;
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     public void AddListener(Action action)
     {
         EventNoArgs += action;
     }
     public void RemoveListener(Action action)
     {
+//<<<<<<< HEAD
         EventNoArgs -= action;
+// =======
+//         AttackCallback -= action;
+    }
+    public virtual void StartAttack()
+    {
+        collisionEmitter.enabled = true;
+        StartCoroutine(_emmit);
+
+        // if(attackAudio)
+        //     attackAudio.Play();
+    }
+    public virtual void StopAttack()
+    {
+        StopCoroutine(_emmit);
+        collisionEmitter.enabled = false;
+//>>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     }
     public void IgnoreTeam(string team)
     {

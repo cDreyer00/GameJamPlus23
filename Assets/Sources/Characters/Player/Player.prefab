@@ -3981,9 +3981,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 167829896736789762}
     m_Modifications:
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: dieAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 34298bc803f1edc4389ea56af4e00e3b, type: 3}
+    - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: e2e83c3721ce382419b6c79047e82541, type: 3}
+    - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: health.max
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: hitFeedback
+      value: 
+      objectReference: {fileID: 6889678233916714880}
     - target: {fileID: 1048989259734490095, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: health.value
       value: 100
@@ -4067,6 +4079,10 @@ PrefabInstance:
     - target: {fileID: 2666873333853790762, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2681151746271070526, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6373641930466815691, guid: 357a5a11b83096c42bce1bf751c66edd, type: 3}
       propertyPath: m_AnchorMax.x

@@ -11,6 +11,7 @@ public enum Direction
     Up,
     Left,
 }
+
 public class CameraController : Singleton<CameraController>
 {
     [SerializeField] Camera cam;
@@ -19,6 +20,7 @@ public class CameraController : Singleton<CameraController>
     [SerializeField] float rotDuration;
     [SerializeField] Transform wallRaycastAnchor;
     [SerializeField] Direction dir;
+    [SerializeField] AudioClip[] transitionAudio;
 
     Vector3 curEuler = Vector3.zero;
     HashSet<Transform> walls = new();
@@ -42,24 +44,25 @@ public class CameraController : Singleton<CameraController>
 
     public void RotateLeft()
     {
-        CurDirId--;
-        curEuler += Vector3.up * 90;
-        Vector3 endValue = new(0, curEuler.y, 0);
-        camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
-
-        dir = Direction;
-        camDirectionChanged?.Invoke(Direction);
+        Rotate(true);
     }
 
     public void RotateRight()
     {
-        CurDirId++;
-        curEuler += Vector3.down * 90;
+        Rotate(false);
+    }
+
+    void Rotate(bool left)
+    {
+        CurDirId += left ? 1 : -1;
+        curEuler = 90 * CurDirId * Vector3.up;
         Vector3 endValue = new(0, curEuler.y, 0);
         camAnchor.DOLocalRotate(endValue, rotDuration, rotateMode);
 
         dir = Direction;
         camDirectionChanged?.Invoke(Direction);
+
+        transitionAudio[left ? 0 : 1].Play();
     }
 
     readonly RaycastHit[] _hits = new RaycastHit[4];
@@ -97,8 +100,8 @@ public class CameraController : Singleton<CameraController>
                 }
                 else
                     wallss.material.SetFloat("_Opacity", 0.2f);
-            }           
-            
+            }
+
         }
 
         hitWalls.Clear();

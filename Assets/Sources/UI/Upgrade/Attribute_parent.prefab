@@ -744,3 +744,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  purchaseAudio: {fileID: 8300000, guid: 71da5d67055a758459c59603b46243d4, type: 3}

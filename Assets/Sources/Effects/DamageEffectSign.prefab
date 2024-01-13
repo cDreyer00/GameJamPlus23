@@ -55,6 +55,7 @@ MonoBehaviour:
   baseMat: {fileID: 2100000, guid: ea3a81f871dd3574eb6fb39b9dbc8df9, type: 2}
   interactableMat: {fileID: 2100000, guid: 2c39d3b0941a4d344a7ada78a5afaa73, type: 2}
   botao: {fileID: 361438185068361748}
+  interactAudio: {fileID: 8300000, guid: e7e4c4a1c796bba4dac9fae7331cba25, type: 3}
   effectParticle: {fileID: 4251960685928047213}
 --- !u!1 &5337252237332286137
 GameObject:

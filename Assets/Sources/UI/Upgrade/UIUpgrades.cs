@@ -20,7 +20,7 @@ public class UIUpgrades : MonoBehaviour
     {
         continueBtn.onClick.AddListener(() =>
         {
-            Disable();
+            Disable(); 
             var spawner = GameManager.GetGlobalInstance<Spawner>("spawner");
             spawner.StartWave();
         });

@@ -1,14 +1,12 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 public class GameManager : Singleton<GameManager>
 {
+
     public bool useController = true;
 
     public bool fading;
@@ -71,8 +69,22 @@ public class GameManager : Singleton<GameManager>
             useController = !useController;
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
     }
+//<<<<<<< HEAD
     void ReloadScene()
+//=======
+//
+//    public void GameOver(){
+//        
+//        ReloadScene();
+//
+//        // if(gameOverAudio != null)
+//            // gameOverAudio.Play();
+//    }
+//
+//    public void ReloadScene()
+//>>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     {
         if (fading) return;
         fading = true;

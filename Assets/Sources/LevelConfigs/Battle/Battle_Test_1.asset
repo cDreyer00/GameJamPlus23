@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Battle_Test_1
   m_EditorClassIdentifier: 
   waves:
-  - {fileID: 11400000, guid: 478346ccc7aff6048b2806f41d53abce, type: 2}
-  - {fileID: 11400000, guid: 7e86c70de0bd6254f81dba45e338e558, type: 2}
-  duration: 35
+  - {fileID: 11400000, guid: 6e6410d8fc0e6044296911ef4a8e0d70, type: 2}
+  - {fileID: 11400000, guid: ccc6ce341894d2c4093b705e6771a8a4, type: 2}
+  duration: 40

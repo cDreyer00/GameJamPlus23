@@ -14,8 +14,17 @@ public class HealthModule : CharacterModule
     [SerializeField] Canvas                  canvas;
     [SerializeField] Slider                  healthSlider;
     [SerializeField] ClampedPrimitive<float> health;
-    
-    public event Action<float> OnTakeDamage = delegate { };
+    [SerializeField] AudioClip               hitAudio;
+    [SerializeField] AudioClip               dieAudio;
+//<<<<<<< HEAD
+
+    public event Action<float> OnTakeDamage = delegate {};
+// =======
+//     [SerializeField] MMFeedbacks hitFeedback;
+//     [SerializeField] AudioClip hitAudio;
+//     [SerializeField] AudioClip dieAudio;
+//
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     public float BaseHealth { get; private set; }
 
     public float Health
@@ -38,6 +47,9 @@ public class HealthModule : CharacterModule
         }
     }
 
+    float audioDelay   = 0.3f;
+    bool  playingAudio = false;
+
     public void OnEnable()
     {
         Character.Events.OnTakeDamage += TakeDamage;
@@ -57,14 +69,34 @@ public class HealthModule : CharacterModule
         health.Value = health.max;
         BaseHealth = health.max;
         UpdateSlider();
+
+        playingAudio = false;
     }
 
     public void TakeDamage(float amount)
     {
+//<<<<<<< HEAD
         float damageTaken = health.Value - amount;
-        if(damageTaken > 0) OnTakeDamage.Invoke(damageTaken);
+        if (damageTaken > 0) OnTakeDamage.Invoke(damageTaken);
         health.Value = damageTaken;
+        if(health <= 0 && dieAudio) dieAudio.Play(); 
+// =======
+//         health.Value -= amount;
+//         if (hitFeedback != null) hitFeedback.PlayFeedbacks();
+//         if (health <= 0) {
+//             Character.Events.Died(Character);
+//
+//             if (dieAudio != null) dieAudio.Play();
+//         }
+//
+// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
         UpdateSlider();
+
+        if (hitAudio != null && !playingAudio) {
+            hitAudio.Play();
+            playingAudio = true;
+            this.Delay(audioDelay, c => c.playingAudio = false);
+        }
     }
 
     void UpdateSlider()
