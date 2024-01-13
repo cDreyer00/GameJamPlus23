@@ -67,11 +67,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c34a9ec52e15246a17264c8ab2f9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackAudio: {fileID: 0}
   ignoreList: []
   cooldown: 0
   damage: 20
   collisionEmitter: {fileID: 8781063013087613678}
+  attackAudio: {fileID: 0}
 --- !u!114 &8781063013087613678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,11 +151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c34a9ec52e15246a17264c8ab2f9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackAudio: {fileID: 8300000, guid: bf215ea7b8c49444f963138d5875fd7c, type: 3}
   ignoreList: []
   cooldown: 1
   damage: 20
   collisionEmitter: {fileID: 1518173422149889911}
+  attackAudio: {fileID: 8300000, guid: bf215ea7b8c49444f963138d5875fd7c, type: 3}
 --- !u!114 &1518173422149889911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3856e993b621f574cae69c608c710c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slamRange: 4
+  slamRange: 7
   slamCooldown: 0.5
   dashCooldown: {x: 3, y: 7}
   animator: {fileID: 7577314980058005502}
