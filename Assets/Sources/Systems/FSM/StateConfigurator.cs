@@ -8,7 +8,7 @@ namespace Sources.Systems.FSM
         readonly TEnum                         _state;
         public StateConfigurator(TEnum state, StateMachine<TContext, TEnum> stateMachine)
         {
-            this._stateMachine = stateMachine;
+            _stateMachine = stateMachine;
             _state = state;
         }
         public StateConfigurator<TContext, TEnum> Transition(TEnum dst, Func<TContext, bool> predicate = null)
@@ -24,11 +24,6 @@ namespace Sources.Systems.FSM
         public StateConfigurator<TContext, TEnum> RemoveListener(LifeCycle lifeCycle, Action<TContext> action)
         {
             _stateMachine[lifeCycle, _state] -= action;
-            return this;
-        }
-        public StateConfigurator<TContext, TEnum> SetCallback(LifeCycle lifeCycle, Action<TContext> action)
-        {
-            _stateMachine[lifeCycle, _state] = action;
             return this;
         }
         public StateConfigurator<TContext, TEnum> SetSubState(TEnum parent, TEnum child)

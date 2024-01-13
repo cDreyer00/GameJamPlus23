@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 {
-    [SerializeField] EffectType effectType;
-    [SerializeField] float radius = 1f;
-    [SerializeField] float effectDuration;
-    [SerializeField] float lifeTime;
-    [SerializeField] Material baseMat, interactableMat;
+    [SerializeField] EffectType   effectType;
+    [SerializeField] float        radius = 1f;
+    [SerializeField] float        effectDuration;
+    [SerializeField] float        lifeTime;
+    [SerializeField] Material     baseMat, interactableMat;
     [SerializeField] MeshRenderer botao;
     [SerializeField] AudioClip interactAudio;
 
-    Effect effect;
-    Direction direction;
+    Effect                  effect;
+    Direction               direction;
     GenericPool<EffectSign> _pool;
     Direction _curCameraDir;
-    float _curLifeTime;
+    float     _curLifeTime;
 
     [SerializeField] ParticleSystem effectParticle;
 
@@ -51,10 +51,10 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         // set effect
         effect = effectType switch
         {
-            EffectType.Freeze => new FreezeEffect(),
+            EffectType.Freeze    => new FreezeEffect(),
             EffectType.Confusion => new ConfusionEffect(),
-            EffectType.Damage => new DamageEffect(),
-            _ => null
+            EffectType.Damage    => new DamageEffect(),
+            _                    => null
         };
         effect.duration = effectDuration;
         effect.damage = effectDuration;
@@ -83,15 +83,13 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     void Update()
     {
         _curLifeTime -= Time.deltaTime;
-        if (_curLifeTime <= 0)
-        {
+        if (_curLifeTime <= 0) {
             // Pool.Release(this);
             Destroy(gameObject);
             return;
         }
 
-        if (CheckInteraction())
-        {
+        if (CheckInteraction()) {
             ApplyEffect();
 
             if (interactAudio != null)
@@ -108,6 +106,8 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
         var player = GameManager.Instance.Player;
         if(player == null) return false;
 
+        if (!GameManager.Instance.Player) return false;
+
         float dist = Vector3.Distance(transform.position, GameManager.Instance.Player.Position);
         return dist <= radius;
     }
@@ -120,16 +120,14 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
 
     void ApplyEffect()
     {
-        var spawner = GlobalInstancesBehaviour.GlobalInstances.GetInstance<Spawner>("spawner");/* GameManager.Instance.Spawner */;
+        var spawner = GlobalInstancesBehaviour.GlobalInstances.GetInstance<Spawner>("spawner"); /* GameManager.Instance.Spawner */
+        ;
         var enemies = spawner.GetInstancesByTag<Character>("Enemy");
         foreach (var e in enemies)
             effect.ApplyEffect(e);
     }
 
-    public void OnGet()
-    {
-
-    }
+    public void OnGet() {}
 
     void SetColor()
     {
@@ -144,15 +142,9 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
             effectParticle.Stop();
     }
 
-    public void OnRelease()
-    {
+    public void OnRelease() {}
 
-    }
-
-    public void OnCreated()
-    {
-
-    }
+    public void OnCreated() {}
 }
 
 public enum EffectType { Freeze, Confusion, Damage }

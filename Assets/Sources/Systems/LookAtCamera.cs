@@ -8,7 +8,7 @@ namespace Sources.Systems
         
         Transform cam;
 
-        private void Start()
+        void Start()
         {
             if (CompareTag("Enemy"))
             {
@@ -19,6 +19,8 @@ namespace Sources.Systems
         }
         void Update()
         {
+            if (!cam) return;
+            
             if (atSameDirection)
             {
                 transform.rotation = cam.transform.rotation;

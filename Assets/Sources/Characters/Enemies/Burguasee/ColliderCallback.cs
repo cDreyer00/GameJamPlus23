@@ -3,22 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 [RequireComponent(typeof(Collider))]
-public class ColliderCallback : MonoBehaviour
+public class CollisionEmitter : MonoBehaviour, IEventEmitter<Action<Object, Collider>>
 {
-    event Action<Collider> TriggerEventCallback;
+    event Action<Object, Collider> Event;
     void OnTriggerEnter(Collider other)
     {
         if (!enabled) return;
-        TriggerEventCallback?.Invoke(other);
+        Event?.Invoke(this, other);
     }
-    public void AddListener(Action<Collider> action)
+    public void AddListener(Action<Object, Collider> action)
     {
-        TriggerEventCallback += action;
+        Event += action;
     }
-    public void RemoveListener(Action<Collider> action)
+    public void RemoveListener(Action<Object, Collider> action)
     {
-        TriggerEventCallback -= action;
+        Event -= action;
     }
 }

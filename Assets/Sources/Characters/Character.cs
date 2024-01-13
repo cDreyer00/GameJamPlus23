@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sources;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
 {
     readonly HashSet<CharacterModule> _modules = new();
     readonly CharacterEvents          _events  = new();
-
-    public string team = "";
+    public   string                   team = "";
     public Vector3 Position => transform.position;
     public CharacterEvents Events => _events;
     public IReadOnlyCollection<CharacterModule> Modules => _modules;
@@ -24,25 +26,33 @@ public class Character : MonoBehaviour, ICharacter, IPoolable<MonoBehaviour>
     {
         _modules.UnionWith(GetComponentsInChildren<CharacterModule>());
     }
+    virtual protected void OnEnable() {}
+    virtual protected void OnDisable() {}
+    void ToggleModules(Object obj, bool arg)
+    {
+        if (arg) {
+            foreach (var characterModule in _modules) {
+                characterModule.enabled = false;
+            }
+        }
+    }
     public GenericPool<MonoBehaviour> Pool { get; set; }
     public void OnGet() => _events.Initialized();
+
     public void OnRelease()
     {
         foreach (var characterModule in _modules) {
             characterModule.CancelInvoke();
         }
     }
+
     public void OnCreated() {}
     public enum State
     {
         // InControl:
-        InControl,
-        Idle,
-        Chasing,
+        InControl, Idle, Chasing,
         Attacking,
         // Yielded:
-        Yielded,
-        Controlled,
-        Dying,
+        Yielded, Controlled, Dying,
     }
 }

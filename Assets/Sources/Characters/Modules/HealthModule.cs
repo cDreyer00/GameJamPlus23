@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using MoreMountains.Feedbacks;
+using UnityEngine.Events;
+
 
 public class HealthModule : CharacterModule
 {
-    [SerializeField] Canvas canvas;
-    [SerializeField] Slider healthSlider;
+    [SerializeField] Canvas                  canvas;
+    [SerializeField] Slider                  healthSlider;
     [SerializeField] ClampedPrimitive<float> health;
-    [SerializeField] MMFeedbacks hitFeedback;
-    [SerializeField] AudioClip hitAudio;
-    [SerializeField] AudioClip dieAudio;
-
+    [SerializeField] AudioClip               hitAudio;
+    [SerializeField] AudioClip               dieAudio;
+    public event Action<float> OnTakeDamage = delegate {};
     public float BaseHealth { get; private set; }
 
     public float Health
@@ -36,8 +39,8 @@ public class HealthModule : CharacterModule
         }
     }
 
-    float audioDelay = 0.3f;
-    bool playingAudio = false;
+    float audioDelay   = 0.3f;
+    bool  playingAudio = false;
 
     public void OnEnable()
     {
@@ -64,14 +67,10 @@ public class HealthModule : CharacterModule
 
     public void TakeDamage(float amount)
     {
-        health.Value -= amount;
-        if (hitFeedback != null) hitFeedback.PlayFeedbacks();
-        if (health <= 0) {
-            Character.Events.Died(Character);
-
-            if(dieAudio != null) dieAudio.Play();
-        }
-
+        float damageTaken = health.Value - amount;
+        if (damageTaken > 0) OnTakeDamage.Invoke(damageTaken);
+        health.Value = damageTaken;
+        if(health <= 0 && dieAudio) dieAudio.Play(); 
         UpdateSlider();
 
         if (hitAudio != null && !playingAudio) {

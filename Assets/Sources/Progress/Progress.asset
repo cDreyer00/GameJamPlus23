@@ -30,8 +30,8 @@ MonoBehaviour:
       min: 0
       max: 10
     attackSpeedLevel:
-      value: 0
+      value: 100000
       min: 0
-      max: 10
+      max: 100000
   currency:
-    money: 0
+    money: 50

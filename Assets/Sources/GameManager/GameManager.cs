@@ -1,15 +1,17 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public class GameManager : Singleton<GameManager>
 {
 
     public bool useController = true;
 
-    bool  fading;
+    public bool fading;
 
-    bool RotateLeft => Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Q);
+    bool RotateLeft => Input.GetKeyDown(KeyCode.A)  || Input.GetKeyDown(KeyCode.Q);
     bool RotateRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.E);
     bool ChangeInputs => Input.GetKeyDown(KeyCode.Space);
 
@@ -30,6 +32,18 @@ public class GameManager : Singleton<GameManager>
             return false;
         }
     }
+    Action _reloadScene;
+    void OnEnable()
+    {
+        _reloadScene ??= ReloadScene;
+        GameEvents.OnRestart.AddListener(_reloadScene);
+    }
+    void OnDisable()
+    {
+        if (!GameEvents.OnRestart.RemoveListener(_reloadScene)) {
+            Debug.LogWarning("Could not remove listener from restartEvent");
+        }
+    }
 
     Character _player;
     public Character Player => _player = _player != null ? _player : FindObjectOfType<PlayerController>();
@@ -41,7 +55,6 @@ public class GameManager : Singleton<GameManager>
     {
         Timer = new();
     }
-
     void Update()
     {
         if (!IsTimerPaused)
@@ -58,16 +71,7 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
     }
-
-    public void GameOver(){
-        
-        ReloadScene();
-
-        // if(gameOverAudio != null)
-            // gameOverAudio.Play();
-    }
-
-    public void ReloadScene()
+    void ReloadScene()
     {
         if (fading) return;
         fading = true;
@@ -77,9 +81,9 @@ public class GameManager : Singleton<GameManager>
             foreach (var go in root) {
                 if (go.GetComponentInChildren<Camera>()) continue;
                 go.SetActive(false);
-            } 
+            }
             LoadingManager.Instance.SetLoading(true)
-                 .LoadScene(SceneType.GAMEPLAY);
+                .LoadScene(SceneType.GAMEPLAY);
             IsGameOver = false;
             fading = false;
         });
@@ -95,7 +99,7 @@ public class GameManager : Singleton<GameManager>
         static IEnumerator GetGlobalInstanceCoroutine(string key, float timeout, System.Action<T> callback)
         {
             float startTime = Time.time;
-            T     instance  = null;
+            T instance = null;
 
             while (Time.time - startTime < timeout) {
                 instance = GlobalInstancesBehaviour.GlobalInstances.GetInstance<T>(key);

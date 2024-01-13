@@ -58,7 +58,22 @@ public class LoadingManager : Singleton<LoadingManager>
         SceneManager.sceneLoaded += sceneLoadedHandler;
 
     }
+    public void LoadScene(Scene scene, Action onComplete = null)
+    {
+        SceneManager.LoadScene(scene.name);
 
+        UnityAction<Scene, LoadSceneMode> sceneLoadedHandler = null;
+        sceneLoadedHandler = (s, mode) =>
+        {
+            onComplete?.Invoke();
+
+            // Unsubscribe from the event to avoid memory leaks.
+            SceneManager.sceneLoaded -= sceneLoadedHandler;
+        };
+
+        SceneManager.sceneLoaded += sceneLoadedHandler;
+
+    }
     public void LoadSceneAsync(SceneType scene, Action onComplete = null)
     {
         currentScene = scene;

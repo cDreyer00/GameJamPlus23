@@ -156,6 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04375db3a0544475a9eaef79266fecbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitFeedBack: {fileID: 3644564527234627577, guid: 481b6a48a21bcc74688cb5d3987ea087, type: 3}
+  deathFeedBack: {fileID: 3664771585793818250, guid: 3d7b71ed7a2efcf4887c4879eb8ac9cc, type: 3}
 --- !u!114 &2321365576416800683
 MonoBehaviour:
   m_ObjectHideFlags: 0

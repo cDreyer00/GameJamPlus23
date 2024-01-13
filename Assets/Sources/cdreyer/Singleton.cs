@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
@@ -7,8 +8,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
         get
         {
-            if (_instance == null)
-            {
+            if (_instance == null) {
+                if (FindObjectOfType<T>() is {} instance) {
+                    return _instance = instance;
+                }
                 GameObject go = new($"{typeof(T).Name}_Singleton");
                 _instance = go.AddComponent<T>();
             }
@@ -24,22 +27,20 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     protected virtual void Awake()
     {
         if (_instance == this) return;
-        if (_instance != null)
-        {
+        if (_instance != null) {
             Destroy(gameObject);
             return;
         }
 
         _instance = this as T;
 
-        if (dontDestroyOnLoad)
-        {
+        if (dontDestroyOnLoad) {
             transform.SetParent(null);
             DontDestroyOnLoad(this);
         }
     }
 
-    public virtual void Dispose()
+    void OnDisable()
     {
         Destroy(gameObject);
     }

@@ -1,5 +1,4 @@
 using System;
-using Sources.Characters.Modules;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -33,7 +32,7 @@ public class CharacterEvents
         OnDied?.Invoke(character);
         if (character is Character c) {
             if (c.Pool == null) {
-                Object.Destroy(c);
+                Object.Destroy(c.gameObject);
             }
             else {
                 c.Pool.Release(c);

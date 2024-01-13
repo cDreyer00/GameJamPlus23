@@ -4,94 +4,106 @@ using MoreMountains.Feedbacks;
 using System;
 using UnityEngine.InputSystem;
 using static Progress;
+using Object = UnityEngine.Object;
 
 public class PlayerController : Character
 {
-    [SerializeField] GameObject model;
-    [SerializeField] Projectile projPrefab;
-    [SerializeField] Transform anchor;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] PlayerAim aim;
-    [SerializeField] float damage = 5;
-    [SerializeField] float recoilForce = 3;
-    [SerializeField] float shootDelay = 1.3f;
-    [SerializeField] float braking = 5f;
-    [SerializeField] AudioClip[] shootAudios;
-    [SerializeField] AudioClip damageAudio;
+//<<<<<<< HEAD
+    [SerializeField]        GameObject  model;
+    [SerializeField]        Projectile  projPrefab;
+    [SerializeField]        Transform   anchor;
+    [SerializeField]        Rigidbody   rb;
+    [SerializeField]        PlayerAim   aim;
+    [SerializeField]        float       damage      = 5;
+    [SerializeField]        float       recoilForce = 3;
+    [SerializeField]        float       shootDelay  = 1.3f;
+    [SerializeField]        float       braking     = 5f;
+    [Space, SerializeField] AudioClip[] shootAudios;
+    [SerializeField]        AudioClip   damageAudio;
 
     [SerializeField] MMFeedbacks shoot;
-    [SerializeField] Animator animator;
+    [SerializeField] MMFeedbacks damageFeedback;
+    [SerializeField] Animator    animator;
+
+    HealthModule _healthModule;
 
     readonly int _hIsShoot = Animator.StringToHash("isShoot");
 
     Camera _cam;
-    float _curDelay;
-    float _baseDrag;
+    float  _curDelay;
+    float  _baseDrag;
     public float CurDelay => _curDelay;
     public float ShootDelay => shootDelay - (Progress.Instance.upgrades.attackSpeedLevel * 0.02f);
 
-    Progress.Upgrades Upgrades => Progress.Instance.upgrades;
+    Upgrades Upgrades => Progress.Instance.upgrades;
 
-    PlayerInputs inputs;
+    PlayerInputs             _inputs;
     [SerializeField] Vector2 inputRot;
 
-    bool shooting;
+    bool _shooting;
 
     void OnValidate()
     {
         if (!animator) animator = GetComponentInChildren<Animator>();
     }
-
     Action<InputAction.CallbackContext> _shootPerformed;
     Action<InputAction.CallbackContext> _shootCanceled;
     Action<InputAction.CallbackContext> _aimPerformed;
     Action<InputAction.CallbackContext> _aimCanceled;
     Action<InputAction.CallbackContext> _rotateCameraPerformed;
-    Action<Upgrades.Type, int> _onUpgrade;
+    Action<Upgrades.Type, int>          _onUpgrade;
+    Action<float>                       _onTakeDamage;
+    Action<ICharacter>                  _onDied;
     void Awake()
     {
-        inputs = new PlayerInputs();
-        _shootPerformed ??= _ => shooting = true;
-        _shootCanceled ??= _ => shooting = false;
-        _aimPerformed ??= ctx => inputRot = ctx.ReadValue<Vector2>();
-        _aimCanceled ??= _ => inputRot = Vector2.zero;
-        _rotateCameraPerformed ??= ctx =>
-        {
+        _healthModule = GetModule<HealthModule>();
+        _inputs = new PlayerInputs();
+        _shootPerformed = _ => _shooting = true;
+        _shootCanceled = _ => _shooting = false;
+        _aimPerformed = ctx => inputRot = ctx.ReadValue<Vector2>();
+        _aimCanceled = _ => inputRot = Vector2.zero;
+        _rotateCameraPerformed = ctx => {
             if (ctx.ReadValue<float>() < 0)
                 CameraController.Instance.RotateLeft();
             else
                 CameraController.Instance.RotateRight();
         };
-        _onUpgrade ??= OnUpgrade;
+        _onUpgrade = OnUpgrade;
+        _onTakeDamage = OnTakeDamage;
+        _onDied = OnDied;
     }
-
     void Start()
     {
         team = tag;
         _cam = CameraController.Instance.Cam;
         _baseDrag = rb.drag;
-
-        Events.OnDied += OnDied;
     }
-    void OnEnable()
+    protected override void OnEnable()
     {
-        inputs.Gameplay.Shoot.performed += _shootPerformed;
-        inputs.Gameplay.Shoot.canceled += _shootCanceled;
-        inputs.Gameplay.Aim.performed += _aimPerformed;
-        inputs.Gameplay.Aim.canceled += _aimCanceled;
-        inputs.Gameplay.RotateCamera.performed += _rotateCameraPerformed;
+        base.OnEnable();
+        _inputs.Gameplay.Shoot.performed += _shootPerformed;
+        _inputs.Gameplay.Shoot.canceled += _shootCanceled;
+        _inputs.Gameplay.Aim.performed += _aimPerformed;
+        _inputs.Gameplay.Aim.canceled += _aimCanceled;
+        _inputs.Gameplay.RotateCamera.performed += _rotateCameraPerformed;
         Progress.Instance.upgrades.OnUpgrade += _onUpgrade;
-        inputs.Gameplay.Enable();
+        Events.OnTakeDamage += _onTakeDamage;
+        Events.OnDied += _onDied;
+        _inputs.Gameplay.Enable();
     }
-    void OnDisable()
+    protected override void OnDisable()
     {
-        inputs.Gameplay.Disable();
-        inputs.Gameplay.Shoot.performed -= _shootPerformed;
-        inputs.Gameplay.Shoot.canceled -= _shootCanceled;
-        inputs.Gameplay.Aim.performed -= _aimPerformed;
-        inputs.Gameplay.Aim.canceled -= _aimCanceled;
-        inputs.Gameplay.RotateCamera.performed -= _rotateCameraPerformed;
+        base.OnDisable();
+        _inputs.Gameplay.Disable();
+        _inputs.Gameplay.Shoot.performed -= _shootPerformed;
+        _inputs.Gameplay.Shoot.canceled -= _shootCanceled;
+        _inputs.Gameplay.Aim.performed -= _aimPerformed;
+        _inputs.Gameplay.Aim.canceled -= _aimCanceled;
+        _inputs.Gameplay.RotateCamera.performed -= _rotateCameraPerformed;
         Progress.Instance.upgrades.OnUpgrade -= _onUpgrade;
+        Events.OnTakeDamage -= _onTakeDamage;
+        Events.OnDied -= _onDied;
+        _inputs.Gameplay.Disable();
     }
 
     void Update()
@@ -101,8 +113,7 @@ public class PlayerController : Character
 
         _curDelay += Time.deltaTime;
 
-        if (GameManager.Instance.useController)
-        {
+        if (GameManager.Instance.useController) {
             // Get the camera's rotation
             Quaternion cameraRotation = CameraController.Instance.Cam.transform.rotation;
 
@@ -114,22 +125,17 @@ public class PlayerController : Character
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
             aim.SetAim(anchor.forward);
-
-            if (shooting)
-            {
-                if (_curDelay >= ShootDelay)
-                {
+            
+            if (_shooting) {
+                if (_curDelay >= ShootDelay) {
                     Shoot();
                     _curDelay = 0;
                 }
             }
         }
-        else
-        {
-            if (Input.GetMouseButton(0))
-            {
-                if (_curDelay >= ShootDelay)
-                {
+        else {
+            if (Input.GetMouseButton(0)) {
+                if (_curDelay >= ShootDelay) {
                     Shoot();
                     _curDelay = 0;
                 }
@@ -137,24 +143,21 @@ public class PlayerController : Character
 
             Rotate();
 
-            if (Input.GetKey(KeyCode.Space))
-            {
+            if (Input.GetKey(KeyCode.Space)) {
                 // rb.drag = _baseDrag * braking;
-                rb.drag = _baseDrag * Upgrades.GetModValue(braking, Progress.Upgrades.Type.Braking);
+                rb.drag = _baseDrag * Upgrades.GetModValue(braking, Upgrades.Type.Braking);
             }
-            else
-            {
+            else {
                 rb.drag = _baseDrag;
             }
         }
 
 
-        if (transform.position.y <= -1)
-        {
-            GameManager.Instance.ReloadScene();
+        if (transform.position.y <= -1) {
+            //GameManager.Instance.ReloadScene();
+            GameEvents.OnRestart.Invoke(null, null);
         }
     }
-
     Vector3 GetPosBasedOnCameraView(Vector3 pos)
     {
         var cam = CameraController.Instance.Cam;
@@ -165,20 +168,16 @@ public class PlayerController : Character
         var proj = camPos + camDir * dot;
         return proj;
     }
-
-
     void Rotate()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100))
-        {
+        if (Physics.Raycast(ray, out RaycastHit hit, 100)) {
             Vector3 lookAtPos = hit.point;
             lookAtPos.y = anchor.position.y;
             anchor.LookAt(lookAtPos, Vector3.up);
             aim.SetAim(anchor.forward);
         }
     }
-
     void Shoot()
     {
         animator.SetTrigger(_hIsShoot);
@@ -193,18 +192,15 @@ public class PlayerController : Character
         if (shootAudios.Length > 0)
             shootAudios.GetRandom().Play();
     }
-
     void Dash(Vector3 dir)
     {
         rb.velocity = Vector3.zero;
         rb.AddForce(dir * Upgrades.GetModValue(recoilForce, Progress.Upgrades.Type.Recoil, 0.5f), ForceMode.Impulse);
     }
-
     static void OnDied(ICharacter character)
     {
-        GameManager.Instance.GameOver();
+        GameEvents.OnGameOver.Invoke(null, null);
     }
-
     void OnUpgrade(Upgrades.Type type, int level) => OnUpgrade(type);
     void OnUpgrade(Upgrades.Type type)
     {
@@ -214,5 +210,14 @@ public class PlayerController : Character
             hm.MaxHealth = Upgrades.GetModValue(hm.BaseHealth, type);
 
         hm.Health = hm.MaxHealth;
+    }
+    void OnTakeDamage(float dmg)
+    {
+        if (dmg            <= 0) return;
+        if (damageFeedback != null) damageFeedback.PlayFeedbacks();
+        if (damageAudio    != null) SoundManager.Instance.PlayClip(damageAudio);
+        if (_healthModule && _healthModule.Health <= 0) {
+            Events.Died(this);
+        }
     }
 }
