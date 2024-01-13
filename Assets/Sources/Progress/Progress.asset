@@ -34,4 +34,4 @@ MonoBehaviour:
       min: 0
       max: 10
   currency:
-    money: 0
+    money: 150

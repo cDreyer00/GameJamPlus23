@@ -27,9 +27,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         set => target = value;
     }
     IEnumerator   _chaseCoroutine;
-    Action        _toggleMovement;
     Action<float> _freeze;
-    void ToggleMovement() => agent.isStopped = !agent.isStopped;
     void OnValidate()
     {
         if (!agent) agent = GetComponentInChildren<NavMeshAgent>();
@@ -44,11 +42,13 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     public void StartChase()
     {
-        agent.isStopped = false;
+        if(agent.isOnNavMesh) agent.isStopped = false;
         StartCoroutine(_chaseCoroutine);
     }
     public void StartDash()
     {
+        if (!target) return;
+        
         agent.isStopped = false;
 
         agent.transform.LookAt(target);
@@ -62,7 +62,7 @@ public class NavMeshMovement : CharacterModule, IMovementModule
     }
     public void StopMovement()
     {
-        agent.isStopped = true;
+        if(agent.isOnNavMesh) agent.isStopped = true;
         StopCoroutine(_chaseCoroutine);
     }
     protected override void Init()
@@ -70,12 +70,12 @@ public class NavMeshMovement : CharacterModule, IMovementModule
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
         _chaseCoroutine = ChaseCoroutine();
-        _toggleMovement = ToggleMovement;
         _freeze = OnFreeze;
     }
     IEnumerator ChaseCoroutine()
     {
         while (true) {
+            if (!target) yield return null;
             agent.SetDestination(target.position);
             yield return null;
         }

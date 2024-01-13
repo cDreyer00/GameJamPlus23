@@ -79,14 +79,14 @@ public static class Helpers
     #region Delay
 
     class AsyncHolder : MonoBehaviour { }
-    static AsyncHolder ayncHolder;
+    static AsyncHolder _asyncHolder;
 
     public static void DelayFrames(int frames, Action action)
     {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+        if (_asyncHolder == null)
+            _asyncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
 
-        ayncHolder.StartCoroutine(C(action, frames));
+        _asyncHolder.StartCoroutine(C(action, frames));
 
         static IEnumerator C(Action e, int frames)
         {
@@ -98,10 +98,10 @@ public static class Helpers
     }
     public static void DelayFrames<TState>(int frames, Action<TState> action, TState state)
     {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+        if (_asyncHolder == null)
+            _asyncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
 
-        ayncHolder.StartCoroutine(C(frames, action, state));
+        _asyncHolder.StartCoroutine(C(frames, action, state));
 
         static IEnumerator C(int frames, Action<TState> e, TState state)
         {
@@ -114,10 +114,11 @@ public static class Helpers
 
     public static void Delay(float secs, Action action)
     {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+        if (_asyncHolder == null)
+            _asyncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
 
-        ayncHolder.StartCoroutine(C(action, secs));
+        _asyncHolder.StartCoroutine(C(action, secs));
+        return;
 
         static IEnumerator C(Action action, float secs)
         {
@@ -131,6 +132,7 @@ public static class Helpers
         if (m == null || m.IsDestroyed() || !m.isActiveAndEnabled) return;
 
         m.StartCoroutine(C(secs, action, m));
+        return;
 
         static IEnumerator C(float secs, Action<TState> action, TState state)
         {
@@ -138,12 +140,27 @@ public static class Helpers
             action?.Invoke(state);
         }
     }
+    public static void Delay<TState>(float secs, Action<TState> action, TState state)
+    {
+         if (_asyncHolder == null)
+            _asyncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+         
+         _asyncHolder.StartCoroutine(C(secs, action, state));
+         return;
+
+         static IEnumerator C(float secs, Action<TState> action, TState state)
+         {
+             yield return GetWait(secs);
+             action?.Invoke(state);
+         }
+    }
     public static void Repeat<TState>(float delay, float period, Action<TState> action, TState state)
     {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+        if (_asyncHolder == null)
+            _asyncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
 
-        ayncHolder.StartCoroutine(C(delay, period, action, state));
+        _asyncHolder.StartCoroutine(C(delay, period, action, state));
+        return;
 
         static IEnumerator C(float delay, float period, Action<TState> action, TState state)
         {
@@ -157,15 +174,57 @@ public static class Helpers
     }
     public static void WaitUntil(Func<bool> predicate, Action action)
     {
-        if (ayncHolder == null)
-            ayncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+        if (_asyncHolder == null)
+            _asyncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
 
-        ayncHolder.StartCoroutine(C(action, predicate));
+        _asyncHolder.StartCoroutine(C(action, predicate));
+        return;
 
         static IEnumerator C(Action action, Func<bool> predicate)
         {
             yield return new WaitUntil(predicate);
             action?.Invoke();
+        }
+    }
+    
+    public static void WaitUntil<TState>(this TState state, Func<TState,bool> predicate, Action<TState> action)
+        where TState : MonoBehaviour
+    {
+        state.StartCoroutine(C(action, predicate, state));
+        return;
+
+        static IEnumerator C(Action<TState> action, Func<TState,bool> predicate, TState state)
+        {
+            while (!predicate(state))
+                yield return null;
+            action?.Invoke(state);
+        }
+    }
+    
+    public static void OnComplete(IEnumerator coroutine, Action action)
+    {
+        if (_asyncHolder == null)
+            _asyncHolder = new GameObject("Async_Holder").AddComponent<AsyncHolder>();
+
+        _asyncHolder.StartCoroutine(C(action, coroutine));
+        return;
+
+        static IEnumerator C(Action action, IEnumerator coroutine)
+        {
+            yield return coroutine;
+            action?.Invoke();
+        }
+    } 
+    public static void OnComplete<TState>(this TState state, IEnumerator coroutine, Action<TState> action)
+        where TState : MonoBehaviour
+    {
+        state.StartCoroutine(C(action, coroutine, state));
+        return;
+
+        static IEnumerator C(Action<TState> action, IEnumerator coroutine, TState state)
+        {
+            yield return coroutine;
+            action?.Invoke(state);
         }
     }
 

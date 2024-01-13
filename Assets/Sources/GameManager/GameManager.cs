@@ -72,7 +72,7 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
     }
-    public void ReloadScene()
+    void ReloadScene()
     {
         if (fading) return;
         fading = true;

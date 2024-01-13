@@ -30,14 +30,14 @@ public class AttackEmitter : MonoBehaviour, IEventEmitter<Action>
     IEnumerator EmmitCoroutine()
     {
         while (true) {
+            EventNoArgs?.Invoke();
+            Event?.Invoke(this, null);
             if (cooldown == 0) {
                 yield return null;
             }
             else {
                 yield return Helpers.GetWait(cooldown);
             }
-            EventNoArgs?.Invoke();
-            Event?.Invoke(this, null);
         }
     }
     void Awake()

@@ -26,11 +26,6 @@ namespace Sources.Systems.FSM
             _stateMachine[lifeCycle, _state] -= action;
             return this;
         }
-        public StateConfigurator<TContext, TEnum> SetCallback(LifeCycle lifeCycle, Action<TContext> action)
-        {
-            _stateMachine[lifeCycle, _state] = action;
-            return this;
-        }
         public StateConfigurator<TContext, TEnum> SetSubState(TEnum parent, TEnum child)
         {
             _stateMachine.SetSubState(parent, child);

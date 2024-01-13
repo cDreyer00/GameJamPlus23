@@ -11,9 +11,28 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "ScriptableObjectEvent", menuName = "ScriptableObjectEvent")]
 public class ScriptableObjectEvent : ScriptableObject
 {
-    public List<EventListener> listeners;
+    public List<EventListener> listeners = new();
     public void Invoke<TObject, TArgs>(TObject sender, TArgs args)
         where TObject : Object
+    {
+        for (int i = listeners.Count - 1; i >= 0; i--) {
+            listeners[i].OnInvoke(sender, args);
+        }
+    }
+    public void Invoke<TArgs>(Object sender, TArgs args)
+    {
+        for (int i = listeners.Count - 1; i >= 0; i--) {
+            listeners[i].OnInvoke(sender, args);
+        }
+    }
+    public void Invoke<TObject>(TObject sender, object args)
+        where TObject : Object
+    {
+        for (int i = listeners.Count - 1; i >= 0; i--) {
+            listeners[i].OnInvoke(sender, args);
+        }
+    } 
+    public void Invoke(Object sender, object args)
     {
         for (int i = listeners.Count - 1; i >= 0; i--) {
             listeners[i].OnInvoke(sender, args);
@@ -31,8 +50,7 @@ public class ScriptableObjectEvent : ScriptableObject
     {
         var eventListener = new EventListener();
         eventListener.SetEvent(listener);
-        if (!listeners.Contains(eventListener))
-            listeners.Add(eventListener);
+        if (!listeners.Contains(eventListener)) listeners.Add(eventListener);
     }
     public bool RemoveListener<TSender, TArgs>(Action<TSender, TArgs> listener)
         where TSender : Object
@@ -43,13 +61,16 @@ public class ScriptableObjectEvent : ScriptableObject
     }
     public void AddListener(Action listener)
     {
+        if (listener == null) return;
+        
         var eventListener = new EventListener();
         eventListener.SetEvent(listener);
-        if (!listeners.Contains(eventListener))
-            listeners.Add(eventListener);
+        if (!listeners.Contains(eventListener)) listeners.Add(eventListener);
     }
     public bool RemoveListener(Action listener)
     {
+        if (listener == null) return false;
+
         var eventListener = new EventListener();
         eventListener.SetEvent(listener);
         return listeners.Remove(eventListener);

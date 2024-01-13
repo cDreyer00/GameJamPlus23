@@ -914,8 +914,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4614540273096614027}
-  - {fileID: 4202388335196954727}
   - {fileID: 7427607724718597705}
+  - {fileID: 4202388335196954727}
   m_Father: {fileID: 4864197767820366391}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1067,7 +1067,7 @@ MonoBehaviour:
   dashDistance: 0
   dashDuration: 0
   dashEase: 0
-  freezeFeedback: {fileID: 0}
+  freezeFeedback: {fileID: 123175631257003155}
 --- !u!114 &2793757733321064199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1093,6 +1093,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ebe89d2d4a4213bc5a6822e453b897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 602080613274426449}
+  hitFeedBack: {fileID: 3565708497735909073}
+  explosionFeedBack: {fileID: 8648616203057105833}
+  poolCollectDelay: 1
 --- !u!114 &3978397051715090874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1109,6 +1113,7 @@ MonoBehaviour:
   _range: 3
   _delay: 0.3
   _coolDown: 0
+  isAttacking: 0
 --- !u!114 &-5722214101768234806
 MonoBehaviour:
   m_ObjectHideFlags: 0

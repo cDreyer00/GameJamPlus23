@@ -69,7 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreList: []
   cooldown: 0
-  damage: 10
+  damage: 20
   collisionEmitter: {fileID: 8781063013087613678}
 --- !u!114 &8781063013087613678
 MonoBehaviour:
@@ -136,8 +136,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.025901325
-  m_Center: {x: -0.00036551166, y: 0.0052196686, z: -0.0007199691}
+  m_Radius: 0.029492948
+  m_Center: {x: 0.003226112, y: 0.0052196714, z: -0.0007199688}
 --- !u!114 &5471473074406424210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +265,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6089110235842682470}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2.5
+  m_Radius: 1
   m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -309,7 +309,6 @@ MonoBehaviour:
   dashDuration: 2
   dashEase: 10
   freezeFeedback: {fileID: 0}
-  onPause: {fileID: 0}
 --- !u!114 &-4291083372791572725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,6 +325,10 @@ MonoBehaviour:
   slamCooldown: 0.5
   dashCooldown: {x: 3, y: 7}
   animator: {fileID: 7577314980058005502}
+  poolCollectDelay: 1
+  explosionFeedback: {fileID: 1126368659805982328}
+  hitFeedback: {fileID: 2678753734528980821}
+  lowLifeFeedback: {fileID: 2430351503873646994}
   hammerAttack: {fileID: 5471473074406424210}
   dashAttack: {fileID: 7125467496695489876}
   state: 0
@@ -528,6 +531,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossRobo
       objectReference: {fileID: 0}
+    - target: {fileID: 681423678299852875, guid: ef6197d040af66244ac8b4a13ef8b9a5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -539,11 +546,44 @@ PrefabInstance:
       addedObject: {fileID: 6590939413906380252}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef6197d040af66244ac8b4a13ef8b9a5, type: 3}
+--- !u!114 &1126368659805982328 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3066232267243685467, guid: ef6197d040af66244ac8b4a13ef8b9a5, type: 3}
+  m_PrefabInstance: {fileID: 2678753735046907939}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 841b72de2996c5c40bfb394f3d0e0a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1551692631603745728 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3505032437601000419, guid: ef6197d040af66244ac8b4a13ef8b9a5, type: 3}
   m_PrefabInstance: {fileID: 2678753735046907939}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2430351503873646994 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 330609422466378161, guid: ef6197d040af66244ac8b4a13ef8b9a5, type: 3}
+  m_PrefabInstance: {fileID: 2678753735046907939}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 841b72de2996c5c40bfb394f3d0e0a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2678753734528980821 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1633754998, guid: ef6197d040af66244ac8b4a13ef8b9a5, type: 3}
+  m_PrefabInstance: {fileID: 2678753735046907939}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 841b72de2996c5c40bfb394f3d0e0a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2815857805688488658 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 161909224768146161, guid: ef6197d040af66244ac8b4a13ef8b9a5, type: 3}

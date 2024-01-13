@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -5,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using MoreMountains.Feedbacks;
-
+using UnityEngine.Events;
 
 
 public class HealthModule : CharacterModule
@@ -13,8 +14,8 @@ public class HealthModule : CharacterModule
     [SerializeField] Canvas                  canvas;
     [SerializeField] Slider                  healthSlider;
     [SerializeField] ClampedPrimitive<float> health;
-    [SerializeField] MMFeedbacks             hitFeedback;
-
+    
+    public event Action<float> OnTakeDamage = delegate { };
     public float BaseHealth { get; private set; }
 
     public float Health
@@ -60,10 +61,9 @@ public class HealthModule : CharacterModule
 
     public void TakeDamage(float amount)
     {
-        health.Value -= amount;
-        if (hitFeedback != null) hitFeedback.PlayFeedbacks();
-        if (health <= 0) Character.Events.Died(Character);
-
+        float damageTaken = health.Value - amount;
+        if(damageTaken > 0) OnTakeDamage.Invoke(damageTaken);
+        health.Value = damageTaken;
         UpdateSlider();
     }
 
