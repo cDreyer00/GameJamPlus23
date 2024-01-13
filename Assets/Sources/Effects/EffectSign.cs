@@ -23,11 +23,7 @@ public class EffectSign : MonoBehaviour, IPoolable<EffectSign>
     public GenericPool<EffectSign> Pool
     {
         get => _pool;
-//<<<<<<< HEAD
-        set { _pool = value; }
-// =======
-//         set => _pool = value;
-// >>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
+        set => _pool = value;
     }
 
     public Effect Effect

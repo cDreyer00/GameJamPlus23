@@ -71,20 +71,7 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
     }
-//<<<<<<< HEAD
     void ReloadScene()
-//=======
-//
-//    public void GameOver(){
-//        
-//        ReloadScene();
-//
-//        // if(gameOverAudio != null)
-//            // gameOverAudio.Play();
-//    }
-//
-//    public void ReloadScene()
-//>>>>>>> 27b73a94e1852dba9c401135c90eb2ed5c6bae1b
     {
         if (fading) return;
         fading = true;
