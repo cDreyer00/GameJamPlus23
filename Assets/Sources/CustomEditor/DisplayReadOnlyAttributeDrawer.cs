@@ -11,5 +11,5 @@ public class DisplayReadOnlyAttributeDrawer : DecoratorDrawer
         GUI.enabled = false;
     }
 }
-#endif
 public class SerializeReadOnlyAttribute : PropertyAttribute {}
+#endif

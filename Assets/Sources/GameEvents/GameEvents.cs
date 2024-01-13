@@ -1,17 +1,16 @@
 ﻿using System;
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 public static class GameEvents
 {
-    const string _basePath = "Assets/Sources/GameEvents";
+    public static ScriptableObjectEvent OnPause =
+        Resources.Load<ScriptableObjectEvent>("GameEvents/Pause");
 
-    public readonly static ScriptableObjectEvent OnPause =
-        AssetDatabase.LoadAssetAtPath<ScriptableObjectEvent>(Path.Combine(_basePath, "Pause.asset"));
+    public static ScriptableObjectEvent OnGameOver =
+        Resources.Load<ScriptableObjectEvent>("GameEvents/GameOver");
 
-    public readonly static ScriptableObjectEvent OnGameOver =
-        AssetDatabase.LoadAssetAtPath<ScriptableObjectEvent>(Path.Combine(_basePath, "GameOver.asset"));
-
-    public readonly static ScriptableObjectEvent OnRestart =
-        AssetDatabase.LoadAssetAtPath<ScriptableObjectEvent>(Path.Combine(_basePath, "Restart.asset"));
+    public static ScriptableObjectEvent OnRestart =
+        Resources.Load<ScriptableObjectEvent>("GameEvents/Restart");
 }
