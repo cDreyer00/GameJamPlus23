@@ -56,6 +56,7 @@ public class GameManager : Singleton<GameManager>
             useController = !useController;
 
         if (Input.GetKeyDown(KeyCode.R)) ReloadScene();
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
     }
 
     public void GameOver(){

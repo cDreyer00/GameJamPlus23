@@ -17,6 +17,11 @@ public class UIInput : MonoBehaviour
             image = transform.GetChild(0).GetComponent<Image>();
     }
 
+    void Awake(){
+        Button button = GetComponent<Button>() != null ? GetComponent<Button>() : gameObject.AddComponent<Button>();
+        button.onClick.AddListener(() => GameManager.Instance.useController = !GameManager.Instance.useController);
+    }
+
     void Update()
     {
         if(IsDirty(GameManager.Instance.useController))

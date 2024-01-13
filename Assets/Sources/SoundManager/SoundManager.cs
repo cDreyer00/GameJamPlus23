@@ -1,7 +1,21 @@
+using System;
 using UnityEngine;
 
 public class SoundManager : Singleton<SoundManager>
 {
+    bool soundEnabled = true;
+    public bool SoundEnabled
+    {
+        get => soundEnabled;
+        set
+        {
+            soundEnabled = value;
+            OnSoundEnabled?.Invoke(soundEnabled);
+        }
+    }
+
+    public event Action<bool> OnSoundEnabled;
+
     AudioSource source;
 
     protected override void Awake()
@@ -16,6 +30,9 @@ public class SoundManager : Singleton<SoundManager>
 
     public void PlayClip(AudioClip clip)
     {
+        if (!soundEnabled)
+            return;
+
         source.PlayOneShot(clip);
     }
 

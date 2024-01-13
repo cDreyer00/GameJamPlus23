@@ -1586,7 +1586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30c6f7c0b9557fd42b623eb84240313f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _battleConfig: {fileID: 11400000, guid: a5e41fcc1a53d1b46b2d5ee2d5d35f97, type: 2}
+  _battleConfig: {fileID: 11400000, guid: 0c29a4537cbfdac4083e7f8073c0950c, type: 2}
   elapsedTime: 0
   navMeshSurface: {fileID: 4930184713420487662}
 --- !u!1 &1353566045525805457
